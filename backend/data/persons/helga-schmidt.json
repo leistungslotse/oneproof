@@ -1,0 +1,22 @@
+{
+  "givenName": "Helga",
+  "familyName": "Schmidt",
+  "dateOfBirth": "1951-02-09",
+  "evidence": {
+    "residenceCertificate": {
+      "address": {
+        "street": "Am Hang 7",
+        "postalCode": "12503",
+        "city": "Auenthal"
+      },
+      "movedIn": "1998-04-01",
+      "household": ["Helga Schmidt"]
+    },
+    "pensionStatement": {
+      "pensionType": "Witwenrente",
+      "monthlyCents": 118740,
+      "since": "2021-07-01",
+      "adjustedOn": "2026-07-01"
+    }
+  }
+}

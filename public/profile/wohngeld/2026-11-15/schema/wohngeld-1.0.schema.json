@@ -1,0 +1,3409 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oneproof:format:wohngeld:1.0",
+  "title": "Wohngeldantrag im OneProof Format",
+  "description": "Wohngeld (Mietzuschuss und Lastenzuschuss) im OneProof Format: der Rahmen mit den Fachdaten Wohngeld und ihren Codes. Ein Thema mit „vorhanden“ beantwortet die Ja/Nein-Frage des Antrags: Bei false trägt es keine weiteren Angaben. Beträge in Euro mit höchstens zwei Nachkommastellen, Flächen in Quadratmetern.",
+  "allOf": [
+    {
+      "$ref": "urn:oneproof:format:rahmen:1.0"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "1.0"
+    },
+    "leistung": {
+      "type": "object",
+      "properties": {
+        "art": {
+          "const": "wohngeld"
+        }
+      }
+    },
+    "personen": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "properties": {
+          "rolle": {
+            "$ref": "#/$defs/Rolle"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "rolle": {
+                  "const": "haushaltsmitglied"
+                }
+              },
+              "required": [
+                "rolle"
+              ],
+              "type": "object"
+            },
+            "then": {
+              "properties": {
+                "kommunikation": false,
+                "familienstand": {
+                  "enum": [
+                    "single",
+                    "married",
+                    "divorced",
+                    "separated",
+                    "widow"
+                  ]
+                }
+              },
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    "fachdaten": {
+      "$ref": "#/$defs/Fachdaten"
+    },
+    "anlagen": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dokumentart": {
+            "$ref": "#/$defs/Dokumentart"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Dokumentart": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "identity_document",
+          "title": "Ausweisdokument"
+        },
+        {
+          "const": "registration_certificate",
+          "title": "Meldebescheinigung / Haushaltsbescheinigung"
+        },
+        {
+          "const": "move_in_confirmation",
+          "title": "Wohnungsgeberbestätigung"
+        },
+        {
+          "const": "power_of_attorney",
+          "title": "Vollmacht / Betreuerausweis"
+        },
+        {
+          "const": "residence_permit",
+          "title": "Aufenthaltstitel / Fiktionsbescheinigung"
+        },
+        {
+          "const": "death_certificate",
+          "title": "Sterbeurkunde"
+        },
+        {
+          "const": "public_grant_proof",
+          "title": "Nachweis Kostenübernahme / öffentlicher Zuschuss"
+        },
+        {
+          "const": "housing_right_deed",
+          "title": "Urkunde über Wohnrecht oder Nießbrauch"
+        },
+        {
+          "const": "obligation_declaration",
+          "title": "Verpflichtungserklärung (§ 68 AufenthG)"
+        },
+        {
+          "const": "ns_persecution_proof",
+          "title": "Nachweis Opfer nationalsozialistischer Verfolgung"
+        },
+        {
+          "const": "birth_custody_certificate",
+          "title": "Geburtsurkunde / Sorgerechts- oder Umgangsnachweis"
+        },
+        {
+          "const": "rent_contract",
+          "title": "Mietvertrag"
+        },
+        {
+          "const": "care_home_contract",
+          "title": "Heimvertrag / Wohn- und Betreuungsvertrag"
+        },
+        {
+          "const": "rent_certificate",
+          "title": "Vermieter-/Mietbescheinigung"
+        },
+        {
+          "const": "rent_change_notice",
+          "title": "Mietänderungs-/Mieterhöhungsschreiben"
+        },
+        {
+          "const": "utility_statement",
+          "title": "Nebenkosten-/Betriebskostenabrechnung"
+        },
+        {
+          "const": "heating_statement",
+          "title": "Heizkosten-/Warmwasserabrechnung"
+        },
+        {
+          "const": "rent_payment_proof",
+          "title": "Mietzahlungsnachweis / Dauerauftrag / Mietquittung"
+        },
+        {
+          "const": "parking_service_proof",
+          "title": "Nachweis Garage, Stellplatz oder Servicepauschale"
+        },
+        {
+          "const": "shared_accommodation_proof",
+          "title": "Nachweis Wohngemeinschaft"
+        },
+        {
+          "const": "sublease_proof",
+          "title": "Nachweis über Untermieteinnahmen"
+        },
+        {
+          "const": "land_register_extract",
+          "title": "Grundbuchauszug"
+        },
+        {
+          "const": "purchase_contract",
+          "title": "Kaufvertrag (Immobilie)"
+        },
+        {
+          "const": "inheritance_certificate",
+          "title": "Erbschein / Erbnachweis"
+        },
+        {
+          "const": "gift_contract",
+          "title": "Schenkungs- oder Übergabevertrag"
+        },
+        {
+          "const": "loan_contract",
+          "title": "Darlehens-/Kreditvertrag zur Immobilienfinanzierung"
+        },
+        {
+          "const": "loan_amortization_plan",
+          "title": "Zins- und Tilgungsplan / Jahreskontoauszug Darlehen"
+        },
+        {
+          "const": "loan_payment_proof",
+          "title": "Zahlungsnachweis Kapitaldienst / Dauerauftrag Darlehensrate"
+        },
+        {
+          "const": "property_tax_notice",
+          "title": "Grundsteuerbescheid"
+        },
+        {
+          "const": "homeowner_fee_statement",
+          "title": "Hausgeldabrechnung / Wirtschaftsplan WEG"
+        },
+        {
+          "const": "ground_lease_proof",
+          "title": "Erbbaurechtsvertrag / Erbbauzinsnachweis"
+        },
+        {
+          "const": "living_space_proof",
+          "title": "Wohnflächenberechnung / Grundriss"
+        },
+        {
+          "const": "parking_rental_contract",
+          "title": "Mietvertrag über vermietete Garage/Stellplatz"
+        },
+        {
+          "const": "payslip",
+          "title": "Lohn-/Gehaltsabrechnung"
+        },
+        {
+          "const": "income_certificate",
+          "title": "Verdienstbescheinigung des Arbeitgebers"
+        },
+        {
+          "const": "employment_contract",
+          "title": "Arbeitsvertrag"
+        },
+        {
+          "const": "employment_termination",
+          "title": "Kündigung / Aufhebungs- oder Änderungsvertrag"
+        },
+        {
+          "const": "income_tax_statement",
+          "title": "Lohnsteuerbescheinigung"
+        },
+        {
+          "const": "minijob_proof",
+          "title": "Minijob-Vertrag / Minijob-Bescheinigung"
+        },
+        {
+          "const": "special_payment_proof",
+          "title": "Nachweis Sonderzahlung (Prämie, Urlaubs-/Weihnachtsgeld)"
+        },
+        {
+          "const": "self_employment_accounts",
+          "title": "EÜR / BWA / Gewinn- und Verlustrechnung"
+        },
+        {
+          "const": "business_registration",
+          "title": "Gewerbeanmeldung / Gewerbeabmeldung"
+        },
+        {
+          "const": "tax_assessment",
+          "title": "Einkommensteuerbescheid"
+        },
+        {
+          "const": "work_expenses_proof",
+          "title": "Werbungskostennachweis"
+        },
+        {
+          "const": "insurance_contribution_proof",
+          "title": "Beitragsnachweis Kranken-/Pflege-/Altersvorsorge"
+        },
+        {
+          "const": "pension_notice",
+          "title": "Renten- oder Pensionsbescheid"
+        },
+        {
+          "const": "company_pension_notice",
+          "title": "Betriebsrenten-/Zusatzversorgungsbescheid"
+        },
+        {
+          "const": "unemployment_benefit_notice",
+          "title": "Arbeitslosengeld-I-Bescheid"
+        },
+        {
+          "const": "sick_pay_notice",
+          "title": "Krankengeld-/Kinderkrankengeldbescheid"
+        },
+        {
+          "const": "parental_allowance_notice",
+          "title": "Elterngeldbescheid"
+        },
+        {
+          "const": "maternity_benefit_notice",
+          "title": "Mutterschaftsgeldbescheid"
+        },
+        {
+          "const": "provision_notice",
+          "title": "Versorgungsbescheid (BVG/SGB XIV)"
+        },
+        {
+          "const": "wage_replacement_notice",
+          "title": "Übergangs-/Verletzten-/Kurzarbeitergeldbescheid"
+        },
+        {
+          "const": "rental_income_proof",
+          "title": "Nachweis über Mieteinnahmen"
+        },
+        {
+          "const": "housing_benefit_notice",
+          "title": "Wohngeldbescheid / Wohngeld-Negativbescheinigung"
+        },
+        {
+          "const": "request_to_apply",
+          "title": "Aufforderung zur Beantragung vorrangiger Leistungen"
+        },
+        {
+          "const": "citizen_benefit_notice",
+          "title": "Grundsicherungsgeld-/Bürgergeld-Bescheid (SGB II)"
+        },
+        {
+          "const": "social_assistance_notice",
+          "title": "Sozialhilfebescheid (SGB XII)"
+        },
+        {
+          "const": "asylum_benefit_notice",
+          "title": "Bescheid nach AsylbLG"
+        },
+        {
+          "const": "bvg_assistance_notice",
+          "title": "Leistungen zum Lebensunterhalt nach SGB XIV / BVG"
+        },
+        {
+          "const": "youth_welfare_notice",
+          "title": "Bescheid Kinder- und Jugendhilfe (SGB VIII)"
+        },
+        {
+          "const": "school_certificate",
+          "title": "Schulbescheinigung"
+        },
+        {
+          "const": "child_care_cost_proof",
+          "title": "Nachweis Kinderbetreuungskosten"
+        },
+        {
+          "const": "enrollment_certificate",
+          "title": "Immatrikulations-/Studienbescheinigung"
+        },
+        {
+          "const": "bafoeg_notice",
+          "title": "BAföG-Bescheid (auch Ablehnung/Negativbescheinigung)"
+        },
+        {
+          "const": "scholarship_proof",
+          "title": "Stipendien- oder Studienkreditnachweis"
+        },
+        {
+          "const": "training_contract",
+          "title": "Ausbildungsvertrag"
+        },
+        {
+          "const": "training_certificate",
+          "title": "Ausbildungsbescheinigung"
+        },
+        {
+          "const": "bab_notice",
+          "title": "BAB-/Ausbildungsgeldbescheid (auch Ablehnung)"
+        },
+        {
+          "const": "child_benefit_notice",
+          "title": "Kindergeldbescheid"
+        },
+        {
+          "const": "child_supplement_notice",
+          "title": "Kinderzuschlagsbescheid"
+        },
+        {
+          "const": "advance_maintenance_notice",
+          "title": "Unterhaltsvorschussbescheid"
+        },
+        {
+          "const": "maintenance_title",
+          "title": "Unterhaltstitel / Jugendamtsurkunde / notarielle Vereinbarung"
+        },
+        {
+          "const": "maintenance_payment_proof",
+          "title": "Zahlungsnachweis Unterhalt (erhalten/geleistet)"
+        },
+        {
+          "const": "third_party_support_proof",
+          "title": "Unterstützungserklärung / Zuwendungen Dritter"
+        },
+        {
+          "const": "asset_proof",
+          "title": "Vermögens-/Kapitalertragsnachweis"
+        },
+        {
+          "const": "property_valuation",
+          "title": "Immobilienwertgutachten"
+        },
+        {
+          "const": "disability_notice",
+          "title": "Schwerbehindertenausweis / GdB-Bescheid / Pflegegradbescheid"
+        },
+        {
+          "const": "bank_statement",
+          "title": "Kontoauszug"
+        },
+        {
+          "const": "secondary_residence_certificate",
+          "title": "Bescheinigung über einen Nebenwohnsitz"
+        },
+        {
+          "const": "other_document",
+          "title": "Sonstiger Nachweis"
+        }
+      ]
+    },
+    "Eigentumsform": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "flat",
+          "title": "Eigene Wohnung / Eigentumswohnung"
+        },
+        {
+          "const": "house",
+          "title": "Eigenes Haus"
+        },
+        {
+          "const": "farming",
+          "title": "Eigener landwirtschaftlicher Betrieb"
+        },
+        {
+          "const": "heritage",
+          "title": "Erbbaurecht für Haus oder Wohnung"
+        },
+        {
+          "const": "living_usufruct",
+          "title": "Nießbrauchrecht für Haus oder Wohnung"
+        },
+        {
+          "const": "living_right",
+          "title": "Eigentumsähnliches Wohnrecht"
+        },
+        {
+          "const": "living_other",
+          "title": "Sonstiges Recht auf Überlassung"
+        }
+      ]
+    },
+    "Einkommensart": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "salary",
+          "title": "Gehalt oder Lohn"
+        },
+        {
+          "const": "income_freelance",
+          "title": "Einkommen aus selbstständiger Tätigkeit / Gewerbe"
+        },
+        {
+          "const": "income_agri",
+          "title": "Einkommen aus Land- und Forstwirtschaft"
+        },
+        {
+          "const": "asylum",
+          "title": "Leistungen nach dem Asylbewerberleistungsgesetz"
+        },
+        {
+          "const": "provision",
+          "title": "Leistungen nach dem Bundesversorgungsgesetz"
+        },
+        {
+          "const": "pension",
+          "title": "Rente oder Pension"
+        },
+        {
+          "const": "unemployed",
+          "title": "Arbeitslosengeld"
+        },
+        {
+          "const": "sickness",
+          "title": "Krankengeld"
+        },
+        {
+          "const": "sickness_transfer",
+          "title": "Übergangsgeld"
+        },
+        {
+          "const": "short_time",
+          "title": "Kurzarbeiter- oder Schlechtwettergeld"
+        },
+        {
+          "const": "interest",
+          "title": "Zinsen oder Kapitalerträge"
+        },
+        {
+          "const": "alimony",
+          "title": "Unterhalt"
+        },
+        {
+          "const": "rent",
+          "title": "Einnahmen aus Vermietung"
+        },
+        {
+          "const": "parental_allowance",
+          "title": "Elterngeld"
+        },
+        {
+          "const": "maternity",
+          "title": "Mutterschaftsgeld/ - zuschuss"
+        },
+        {
+          "const": "student_support",
+          "title": "BAföG"
+        },
+        {
+          "const": "vocational_allowance",
+          "title": "BAB"
+        },
+        {
+          "const": "citizens_allowance",
+          "title": "Grundsicherung (ehem. Bürgergeld)"
+        },
+        {
+          "const": "child_support",
+          "title": "Kindergeld"
+        },
+        {
+          "const": "child_support_complement",
+          "title": "Kinderzuschlag"
+        },
+        {
+          "const": "alimony_aid",
+          "title": "Unterhaltsvorschuss"
+        },
+        {
+          "const": "other",
+          "title": "Sonstige"
+        }
+      ]
+    },
+    "Flaeche": {
+      "title": "Fläche",
+      "description": "In Quadratmetern, höchstens zwei Nachkommastellen. Der Absender rundet; das Schema zählt die Nachkommastellen nicht.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 999999.99
+    },
+    "GradDerBehinderung": {
+      "type": "integer",
+      "oneOf": [
+        {
+          "const": 20,
+          "title": "GdB 20"
+        },
+        {
+          "const": 30,
+          "title": "GdB 30"
+        },
+        {
+          "const": 40,
+          "title": "GdB 40"
+        },
+        {
+          "const": 50,
+          "title": "GdB 50"
+        },
+        {
+          "const": 60,
+          "title": "GdB 60"
+        },
+        {
+          "const": 70,
+          "title": "GdB 70"
+        },
+        {
+          "const": 80,
+          "title": "GdB 80"
+        },
+        {
+          "const": 90,
+          "title": "GdB 90"
+        },
+        {
+          "const": 100,
+          "title": "GdB 100"
+        }
+      ]
+    },
+    "Lebensmittelpunkt": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "object",
+          "title": "Wohnraum für den ich Wohngeld beantrage"
+        },
+        {
+          "const": "secondary",
+          "title": "Zweitwohnsitz"
+        }
+      ]
+    },
+    "Pflegeform": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "home_care",
+          "title": "Häusliche Pflege"
+        },
+        {
+          "const": "part_stationary",
+          "title": "Teilstationäre Pflege"
+        },
+        {
+          "const": "full_stationary",
+          "title": "Vollstationäre Pflege"
+        },
+        {
+          "const": "short_care",
+          "title": "Kurzzeitpflege"
+        }
+      ]
+    },
+    "Pflegegrad": {
+      "type": "integer",
+      "oneOf": [
+        {
+          "const": 1,
+          "title": "Pflegegrad 1"
+        },
+        {
+          "const": 2,
+          "title": "Pflegegrad 2"
+        },
+        {
+          "const": 3,
+          "title": "Pflegegrad 3"
+        },
+        {
+          "const": 4,
+          "title": "Pflegegrad 4"
+        },
+        {
+          "const": 5,
+          "title": "Pflegegrad 5"
+        }
+      ]
+    },
+    "RichtungDerAenderung": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "change_up",
+          "title": "Erhöhung"
+        },
+        {
+          "const": "change_down",
+          "title": "Verringerung"
+        }
+      ]
+    },
+    "RichtungDerEinkommensaenderung": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "higher",
+          "title": "Erhöhung"
+        },
+        {
+          "const": "lower",
+          "title": "Reduzierung"
+        }
+      ]
+    },
+    "Rolle": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "antragsteller",
+          "title": "Antragstellende Person"
+        },
+        {
+          "const": "haushaltsmitglied",
+          "title": "Haushaltsmitglied"
+        }
+      ]
+    },
+    "StellungMietverhaeltnis": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "tenant",
+          "title": "Hauptmieter*in"
+        },
+        {
+          "const": "resident",
+          "title": "Heimbewohner*in"
+        },
+        {
+          "const": "resident_special",
+          "title": "Bewohner*in einer besonderen Wohnform"
+        },
+        {
+          "const": "subtenant",
+          "title": "Untermieter*in"
+        },
+        {
+          "const": "resident_family",
+          "title": "Bewohner* im eigenen Mehrfamilienhaus"
+        },
+        {
+          "const": "different",
+          "title": "Sonstige"
+        }
+      ]
+    },
+    "Transferleistung": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "other_citizen",
+          "title": "Grundsicherung (ehem. Bürgergeld, SGB II)"
+        },
+        {
+          "const": "other_trainee_living",
+          "title": "Zuschuss für Auszubildende"
+        },
+        {
+          "const": "other_living",
+          "title": "Kosten der Unterkunft nach SGB II"
+        },
+        {
+          "const": "other_injured",
+          "title": "Verletztengeld in Höhe der Grundsicherung (ehem. Bürgergeld, SGB II)"
+        },
+        {
+          "const": "other_advance_pension",
+          "title": "Vorschuss auf Leistung der Rentenversicherung in Höhe der Grundsicherung (ehem. Bürgergeld, SGB II)"
+        },
+        {
+          "const": "other_aid",
+          "title": "Grundsicherung im Alter oder bei Erwerbsminderung nach SGB XII"
+        },
+        {
+          "const": "other_aid_living",
+          "title": "Hilfe zum Lebensunterhalt (SGB XII)"
+        },
+        {
+          "const": "other_bvg",
+          "title": "Ergänzende Hilfe zum Lebensunterhalt nach BVG"
+        },
+        {
+          "const": "other_kid_support",
+          "title": "Leistungen der Kinder- und Jugendhilfe nach SGB VIII"
+        },
+        {
+          "const": "other_asylum",
+          "title": "Asylbewerberleistung"
+        }
+      ]
+    },
+    "Turnus": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "monthly",
+          "title": "monatlich"
+        },
+        {
+          "const": "weekly",
+          "title": "wöchentlich"
+        },
+        {
+          "const": "yearly",
+          "title": "jährlich"
+        }
+      ]
+    },
+    "WohngeldBezug": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "extension_no",
+          "title": "Nein"
+        },
+        {
+          "const": "extension_yes",
+          "title": "Ja und ich möchte mein Wohngeld verlängern"
+        },
+        {
+          "const": "extension_no_change_member",
+          "title": "Ja, aber die Personenzahl hat sich geändert"
+        },
+        {
+          "const": "extension_no_change_income",
+          "title": "Ja, aber das Einkommen hat sich geändert"
+        },
+        {
+          "const": "extension_no_change_rent",
+          "title": "Ja, aber die Miete/Belastung hat sich geändert"
+        }
+      ]
+    },
+    "Wohnrecht": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "yes_house",
+          "title": "Ja, für diesen Wohnraum"
+        },
+        {
+          "const": "yes_other",
+          "title": "Ja, für anderen Wohnraum"
+        }
+      ]
+    },
+    "Wohnverhaeltnis": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "tenant",
+          "title": "Ich bin Mieter*in/ Untermieterin"
+        },
+        {
+          "const": "owner",
+          "title": "Ich bin Eigentümer*in"
+        },
+        {
+          "const": "tenant_alike",
+          "title": "Ich bin Inhaber*in eines mietähnlichen Dauerwohnrechts"
+        },
+        {
+          "const": "tenant_care",
+          "title": "Ich wohne in einem Heim im Sinne des Heimgesetzes."
+        },
+        {
+          "const": "owner_alike",
+          "title": "Ich bin Inhaber*in eines eigentumsähnlichen Dauerwohnrechts"
+        },
+        {
+          "const": "owner_claim",
+          "title": "Ich habe Anspruch auf das Eigentum oder ein eigentumsähnliches Recht"
+        }
+      ]
+    },
+    "Zahlungsempfaenger": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "tenant_pay",
+          "title": "Haushaltsmitglied"
+        },
+        {
+          "const": "landlord_pay",
+          "title": "Vermieter"
+        }
+      ]
+    },
+    "ZweckDesFremdmittels": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "repair",
+          "title": "Kosten für Hausbau / Herstellungskosten"
+        },
+        {
+          "const": "price",
+          "title": "Kaufpreis"
+        },
+        {
+          "const": "development",
+          "title": "Nachträglicher Ausbau"
+        },
+        {
+          "const": "expansion",
+          "title": "Erweiterung"
+        },
+        {
+          "const": "renew",
+          "title": "Bauliche Verbesserung / Modernisierung"
+        }
+      ]
+    },
+    "Vertretungsart": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "legal_representative",
+          "title": "Gesetzliche Vertretung, etwa eine rechtliche Betreuung"
+        },
+        {
+          "const": "authorized_representative",
+          "title": "Bevollmächtigte Person"
+        }
+      ]
+    },
+    "Fachdaten": {
+      "title": "Fachdaten Wohngeld",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wohnraum"
+      ],
+      "properties": {
+        "antrag": {
+          "title": "Angaben zum Antrag",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "wohngeldBezug": {
+              "title": "Bezieht die antragstellende Person bereits Wohngeld?",
+              "description": "„extension_no“ ist ein Erstantrag, „extension_yes“ ein Weiterleistungsantrag; die übrigen Werte nennen, was sich bei laufendem Bezug geändert hat.",
+              "$ref": "#/$defs/WohngeldBezug"
+            },
+            "wohngeldnummer": {
+              "title": "Wohngeldnummer",
+              "description": "Nur bei laufendem Bezug (nicht bei „extension_no“).",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            },
+            "antragOderBezugInDenLetzten12Monaten": {
+              "title": "In den vergangenen zwölf Monaten Wohngeld beantragt oder erhalten, auch für eine andere Wohnung",
+              "type": "boolean"
+            },
+            "aufforderungDurchAndereStelle": {
+              "title": "Von einer anderen Behörde zum Wohngeldantrag aufgefordert",
+              "type": "boolean"
+            },
+            "weitereHinweise": {
+              "title": "Weitere Hinweise",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000,
+              "pattern": "\\S"
+            },
+            "vertretung": {
+              "title": "Vertretung der antragstellenden Person",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Die antragstellende Person wird vertreten",
+                  "type": "boolean"
+                },
+                "art": {
+                  "title": "Art der Vertretung",
+                  "$ref": "#/$defs/Vertretungsart"
+                },
+                "vertreter": {
+                  "title": "Vertretende Person oder Stelle",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/PersonOderStelle"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              },
+              "else": {
+                "required": [
+                  "art"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+        "wohnraum": {
+          "title": "Wohnraum",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "wohnverhaeltnis"
+          ],
+          "properties": {
+            "wohnverhaeltnis": {
+              "title": "Wohnverhältnis",
+              "description": "Entscheidet zwischen Mietzuschuss und Lastenzuschuss: Mieterinnen und Mieter, Inhaber eines mietähnlichen Dauerwohnrechts und Bewohner eines Heims geben „mietzuschuss“ an, Eigentümer „lastenzuschuss“ — außer im eigenen Haus mit mehr als zwei Wohnungen.",
+              "$ref": "#/$defs/Wohnverhaeltnis"
+            },
+            "eigentumMitMehrAlsZweiWohnungen": {
+              "title": "Wohnung im eigenen Haus mit mehr als zwei Wohnungen",
+              "description": "Nur bei „owner“: Ja führt zum Mietzuschuss, Nein zum Lastenzuschuss.",
+              "type": "boolean"
+            },
+            "anschrift": {
+              "title": "Anschrift des Wohnraums",
+              "description": "Die Postleitzahl bestimmt auch, ob der bayerische Fragensatz gilt.",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "strasse": {
+                  "title": "Straße",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "\\S"
+                },
+                "hausnummer": {
+                  "title": "Hausnummer",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "\\S"
+                },
+                "postleitzahl": {
+                  "title": "Postleitzahl",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 5,
+                  "pattern": "^[0-9]{5}$"
+                },
+                "ort": {
+                  "title": "Ort",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "\\S"
+                }
+              }
+            },
+            "oeffentlichGefoerdert": {
+              "title": "Wohnraum mit öffentlichen Mitteln gefördert",
+              "type": "boolean"
+            },
+            "wohnflaeche": {
+              "title": "Gesamtfläche des Wohnraums in Quadratmetern",
+              "$ref": "#/$defs/Flaeche"
+            },
+            "bisherigeWohnung": {
+              "title": "Bisherige Wohnung",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Die antragstellende Person wohnt noch nicht im Wohnraum, sie zieht erst ein",
+                  "type": "boolean"
+                },
+                "anschrift": {
+                  "title": "Derzeitige Anschrift",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "strasse": {
+                      "title": "Straße",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "pattern": "\\S"
+                    },
+                    "hausnummer": {
+                      "title": "Hausnummer",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "pattern": "\\S"
+                    },
+                    "postleitzahl": {
+                      "title": "Postleitzahl",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5,
+                      "pattern": "^[0-9]{5}$"
+                    },
+                    "ort": {
+                      "title": "Ort",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "pattern": "\\S"
+                    }
+                  }
+                },
+                "umzugsdatum": {
+                  "title": "Datum des geplanten Umzugs",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "zweitwohnsitz": {
+              "title": "Zweitwohnsitz",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Zweitwohnsitz vorhanden",
+                  "type": "boolean"
+                },
+                "anschrift": {
+                  "title": "Anschrift des Zweitwohnsitzes",
+                  "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "strasse": {
+                      "title": "Straße",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "pattern": "\\S"
+                    },
+                    "hausnummer": {
+                      "title": "Hausnummer",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "pattern": "\\S"
+                    },
+                    "postleitzahl": {
+                      "title": "Postleitzahl",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5,
+                      "pattern": "^[0-9]{5}$"
+                    },
+                    "ort": {
+                      "title": "Ort",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 255,
+                      "pattern": "\\S"
+                    }
+                  }
+                },
+                "lebensmittelpunkt": {
+                  "title": "Mittelpunkt der Lebensbeziehungen",
+                  "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                  "$ref": "#/$defs/Lebensmittelpunkt"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "umzugOderAuszugGeplant": {
+              "title": "In den kommenden zwölf Monaten ist ein Umzug oder Auszug geplant",
+              "description": "Nicht im bayerischen Fragensatz.",
+              "type": "boolean"
+            },
+            "unentgeltlichesWohnrecht": {
+              "title": "Notariell verbrieftes unentgeltliches Wohnrecht",
+              "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Einem Haushaltsmitglied steht ein solches Wohnrecht zu",
+                  "type": "boolean"
+                },
+                "fuer": {
+                  "title": "Wofür das Wohnrecht besteht",
+                  "$ref": "#/$defs/Wohnrecht"
+                },
+                "anschriftAndererWohnraum": {
+                  "title": "Anschrift des anderen Wohnraums",
+                  "description": "Nur bei „yes_other“.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "\\S"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              },
+              "else": {
+                "required": [
+                  "fuer"
+                ],
+                "type": "object"
+              }
+            },
+            "andereNutzung": {
+              "title": "Gewerbliche Nutzung oder Überlassung von Wohnfläche",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Ein Teil der Wohnfläche wird gewerblich oder beruflich genutzt oder einer Person außerhalb des Haushalts überlassen",
+                  "type": "boolean"
+                },
+                "gewerblichGenutzt": {
+                  "title": "Gewerblich oder beruflich genutzt, in Quadratmetern",
+                  "$ref": "#/$defs/Flaeche"
+                },
+                "ueberlassen": {
+                  "title": "Einer anderen Person überlassen, in Quadratmetern",
+                  "$ref": "#/$defs/Flaeche"
+                },
+                "mitbewohnt": {
+                  "title": "Von einer anderen Person mitbewohnt, in Quadratmetern",
+                  "$ref": "#/$defs/Flaeche"
+                },
+                "untermieteMonat": {
+                  "title": "Entgelt für eine Untervermietung pro Monat",
+                  "description": "Wie die drei Beträge danach nur, wenn Fläche überlassen oder mitbewohnt wird.",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "davonWarmwasserMonat": {
+                  "title": "Darin enthaltene Kosten für Warmwasser pro Monat",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "davonEnergieMonat": {
+                  "title": "Darin enthaltene Kosten für Energie (Strom, Gas) pro Monat",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "davonStellplatzMonat": {
+                  "title": "Darin enthaltene Kosten für einen Stellplatz pro Monat",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "type": "object",
+                "properties": {
+                  "wohnverhaeltnis": {
+                    "const": "owner"
+                  }
+                },
+                "required": [
+                  "wohnverhaeltnis"
+                ]
+              },
+              "then": {
+                "type": "object",
+                "required": [
+                  "eigentumMitMehrAlsZweiWohnungen"
+                ]
+              },
+              "else": {
+                "type": "object",
+                "properties": {
+                  "eigentumMitMehrAlsZweiWohnungen": false
+                }
+              }
+            }
+          ]
+        },
+        "personen": {
+          "title": "Angaben je Person",
+          "description": "Höchstens ein Eintrag je Person.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "title": "Angaben zu einer Person",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "person"
+            ],
+            "minProperties": 1,
+            "properties": {
+              "person": {
+                "title": "Person, um die es geht",
+                "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+              },
+              "einkommen": {
+                "title": "Einkommen",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "vorhanden"
+                ],
+                "properties": {
+                  "vorhanden": {
+                    "title": "Einkommen vorhanden",
+                    "type": "boolean"
+                  },
+                  "eintraege": {
+                    "title": "Einnahmen",
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 50,
+                    "items": {
+                      "title": "Einnahme",
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "art",
+                        "betrag",
+                        "zahlweise"
+                      ],
+                      "minProperties": 1,
+                      "properties": {
+                        "art": {
+                          "title": "Art der Einnahme",
+                          "$ref": "#/$defs/Einkommensart"
+                        },
+                        "beschreibung": {
+                          "title": "Bezeichnung des sonstigen Einkommens",
+                          "description": "Nur bei „other“.",
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 255,
+                          "pattern": "\\S"
+                        },
+                        "betrag": {
+                          "title": "Bruttobetrag",
+                          "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                        },
+                        "zahlweise": {
+                          "title": "Turnus",
+                          "$ref": "#/$defs/Turnus"
+                        },
+                        "steuernGezahlt": {
+                          "title": "Auf die Einnahme werden Steuern gezahlt",
+                          "type": "boolean"
+                        },
+                        "aktivrenteSteuerfrei": {
+                          "title": "Ein Teil der Einnahme ist als Aktivrente steuerfrei",
+                          "description": "Nur bei „salary“ und ab dem 60. Geburtstag der Person.",
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  },
+                  "rentenversicherungsbeitraegeGezahlt": {
+                    "title": "Beiträge zur gesetzlichen Rentenversicherung oder einer privaten Lebensversicherung werden gezahlt",
+                    "type": "boolean"
+                  },
+                  "krankenUndPflegeversicherungsbeitraegeGezahlt": {
+                    "title": "Beiträge zur Kranken- und Pflegeversicherung werden gezahlt",
+                    "type": "boolean"
+                  },
+                  "werbungskostenJahr": {
+                    "title": "Werbungskosten pro Jahr",
+                    "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                  }
+                },
+                "if": {
+                  "properties": {
+                    "vorhanden": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "vorhanden"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "maxProperties": 1,
+                  "type": "object"
+                }
+              },
+              "behinderung": {
+                "title": "Schwerbehinderung oder Pflegebedürftigkeit",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "vorhanden"
+                ],
+                "properties": {
+                  "vorhanden": {
+                    "title": "Eine Schwerbehinderung oder ein Pflegegrad liegt vor",
+                    "type": "boolean"
+                  },
+                  "gradDerBehinderung": {
+                    "title": "Grad der Behinderung",
+                    "$ref": "#/$defs/GradDerBehinderung"
+                  },
+                  "pflegegrad": {
+                    "title": "Pflegegrad",
+                    "$ref": "#/$defs/Pflegegrad"
+                  },
+                  "pflegeform": {
+                    "title": "Art der Pflege",
+                    "$ref": "#/$defs/Pflegeform"
+                  }
+                },
+                "if": {
+                  "properties": {
+                    "vorhanden": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "vorhanden"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "maxProperties": 1,
+                  "type": "object"
+                }
+              },
+              "transferleistung": {
+                "title": "Transferleistung",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "vorhanden"
+                ],
+                "properties": {
+                  "vorhanden": {
+                    "title": "Bezieht Grundsicherung, Sozialhilfe oder eine andere Transferleistung",
+                    "type": "boolean"
+                  },
+                  "art": {
+                    "title": "Art der Leistung",
+                    "$ref": "#/$defs/Transferleistung"
+                  },
+                  "beantragtAm": {
+                    "title": "Datum der Beantragung",
+                    "description": "Nicht im bayerischen Fragensatz.",
+                    "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                  },
+                  "bewilligtAm": {
+                    "title": "Datum der Bewilligung",
+                    "description": "Nicht im bayerischen Fragensatz.",
+                    "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                  },
+                  "weggefallenAm": {
+                    "title": "Datum des Wegfalls",
+                    "description": "Nicht im bayerischen Fragensatz.",
+                    "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                  },
+                  "abgelehntAm": {
+                    "title": "Datum der Ablehnung",
+                    "description": "Nicht im bayerischen Fragensatz.",
+                    "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                  },
+                  "vomWohngeldAusgeschlossen": {
+                    "title": "Vom Wohngeld ausgeschlossen, beantragt Wohngeld für eine andere Person",
+                    "description": "Nicht im bayerischen Fragensatz. Nur bei der antragstellenden Person.",
+                    "type": "boolean"
+                  }
+                },
+                "if": {
+                  "properties": {
+                    "vorhanden": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "vorhanden"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "maxProperties": 1,
+                  "type": "object"
+                }
+              },
+              "nsVerfolgt": {
+                "title": "Verfolgte oder Verfolgter des Nationalsozialismus",
+                "type": "boolean"
+              }
+            }
+          },
+          "x-eindeutig": "person"
+        },
+        "haushalt": {
+          "title": "Haushalt",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "verpflichtungserklaerung": {
+              "title": "Verpflichtungserklärung nach § 68 Aufenthaltsgesetz",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Jemand hat sich verpflichtet, die Kosten für Lebensunterhalt und Wohnraum eines Haushaltsmitglieds zu tragen",
+                  "type": "boolean"
+                },
+                "person": {
+                  "title": "Haushaltsmitglied, für das die Verpflichtung gilt",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                },
+                "verpflichtetePerson": {
+                  "title": "Verpflichtete Person",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/PersonOderStelle"
+                },
+                "uebernommeneKosten": {
+                  "title": "Höhe der übernommenen Kosten",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "gesetzlicheBetreuung": {
+              "title": "Gesetzliche Betreuung",
+              "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Ein volljähriges Haushaltsmitglied steht unter gesetzlicher Betreuung",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Betreuungen",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 12,
+                  "items": {
+                    "title": "Betreuung",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "person"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "person": {
+                        "title": "Betreute Person",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                      },
+                      "betreuendePerson": {
+                        "title": "Betreuende Person oder Stelle",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/PersonOderStelle"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "weitererWohnraum": {
+              "title": "Weiterer Wohnraum",
+              "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Ein Haushaltsmitglied hat noch weiteren Wohnraum",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Weiterer Wohnraum",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Weiterer Wohnraum eines Haushaltsmitglieds",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "person"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "person": {
+                        "title": "Haushaltsmitglied mit weiterem Wohnraum",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                      },
+                      "anschrift": {
+                        "title": "Anschrift des weiteren Wohnraums",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "wohngeldBeantragtOderBezogen": {
+                        "title": "Für den weiteren Wohnraum wird Wohngeld bezogen oder wurde es beantragt",
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "geteilteKinderbetreuung": {
+              "title": "Geteilte Betreuung durch getrennt lebende Eltern",
+              "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Die Eltern teilen sich die Betreuung eines Kindes",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Kinder",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Kind",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "name"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "name": {
+                        "title": "Name des Kindes",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Name"
+                      },
+                      "geburtsdatum": {
+                        "title": "Geburtsdatum des Kindes",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                      },
+                      "andererElternteil": {
+                        "title": "Anderer Elternteil",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/PersonOderStelle"
+                      },
+                      "betreuungsanteilProzent": {
+                        "title": "Betreuungsanteil des Elternteils im Haushalt in Prozent",
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 100
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "mitbewohner": {
+              "title": "Mitbewohnerinnen und Mitbewohner",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Es wohnen Personen mit, die nicht zum Haushalt gehören",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Mitbewohnerinnen und Mitbewohner",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Mitbewohnerin oder Mitbewohner",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "properties": {
+                      "vorname": {
+                        "title": "Vorname",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "familienname": {
+                        "title": "Familienname",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "todesfall": {
+              "title": "Tod eines Haushaltsmitglieds",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "In den vergangenen zwölf Monaten ist ein Haushaltsmitglied verstorben",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Verstorbene Haushaltsmitglieder",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 12,
+                  "items": {
+                    "title": "Verstorbenes Haushaltsmitglied",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "name"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "name": {
+                        "title": "Name der verstorbenen Person",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Name"
+                      },
+                      "sterbedatum": {
+                        "title": "Sterbedatum",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                      },
+                      "transferleistung": {
+                        "title": "Bezogene Transferleistung",
+                        "$ref": "#/$defs/Transferleistung"
+                      },
+                      "leistendeBehoerde": {
+                        "title": "Behörde, die die Leistung erbracht hat",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      }
+                    }
+                  }
+                },
+                "umzugNachTodesfall": {
+                  "title": "Nach dem Todesfall umgezogen",
+                  "type": "boolean"
+                },
+                "neuesHaushaltsmitglied": {
+                  "title": "Danach aufgenommenes Haushaltsmitglied",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                },
+                "neuesHaushaltsmitgliedSeit": {
+                  "title": "Aufgenommen am",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "aenderungHaushaltsgroesse": {
+              "title": "Änderung der Haushaltsgröße in den kommenden zwölf Monaten",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Die Zahl der Haushaltsmitglieder wird sich ändern",
+                  "type": "boolean"
+                },
+                "richtung": {
+                  "title": "Richtung der Änderung",
+                  "$ref": "#/$defs/RichtungDerAenderung"
+                },
+                "grund": {
+                  "title": "Grund der Änderung",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "\\S"
+                },
+                "datum": {
+                  "title": "Datum der Änderung",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              },
+              "else": {
+                "required": [
+                  "richtung"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+        "kinderUndUnterhalt": {
+          "title": "Kinder und Unterhalt",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kinderbetreuungskosten": {
+              "title": "Kinderbetreuungskosten",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Ein Haushaltsmitglied zahlt Kinderbetreuungskosten, etwa für KiTa oder Kindergarten",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Kinderbetreuungskosten",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Kinderbetreuungskosten einer Person",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "person"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "person": {
+                        "title": "Haushaltsmitglied, das die Kosten zahlt",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                      },
+                      "betragMonat": {
+                        "title": "Ausgaben pro Monat",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "kindergeld": {
+              "title": "Kindergeld",
+              "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Für ein Haushaltsmitglied wird Kindergeld gezahlt",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Kindergeld",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Kindergeld für ein Kind",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "kind"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "kind": {
+                        "title": "Kind, für das Kindergeld gezahlt wird",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                      },
+                      "empfaenger": {
+                        "title": "Empfängerin oder Empfänger des Kindergelds",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Name"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "unterhaltszahlungen": {
+              "title": "Unterhaltszahlungen",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Ein Haushaltsmitglied zahlt Unterhalt",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Unterhaltszahlungen",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Unterhaltszahlung",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "person"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "person": {
+                        "title": "Haushaltsmitglied, das Unterhalt zahlt",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                      },
+                      "berechtigtePerson": {
+                        "title": "Unterhaltsberechtigte Person",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "vorname": {
+                            "title": "Vorname",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255,
+                            "pattern": "\\S"
+                          },
+                          "familienname": {
+                            "title": "Familienname",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255,
+                            "pattern": "\\S"
+                          },
+                          "geburtsdatum": {
+                            "title": "Geburtsdatum",
+                            "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                          },
+                          "anschrift": {
+                            "title": "Anschrift",
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 255,
+                            "pattern": "\\S"
+                          }
+                        }
+                      },
+                      "verhaeltnis": {
+                        "title": "Verwandtschaftsverhältnis zur unterhaltsberechtigten Person",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "betragMonat": {
+                        "title": "Unterhalt pro Monat",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "unterhaltsanspruch": {
+              "title": "Noch nicht durchgesetzter Unterhaltsanspruch",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Einem Haushaltsmitglied steht Unterhalt zu, der noch nicht durchgesetzt wurde",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Unterhaltsansprüche",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Unterhaltsanspruch",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "person"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "person": {
+                        "title": "Haushaltsmitglied, dem Unterhalt zustünde",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                      },
+                      "hoeheBekannt": {
+                        "title": "Die Höhe ist bekannt",
+                        "type": "boolean"
+                      },
+                      "betrag": {
+                        "title": "Höhe des Unterhaltsanspruchs",
+                        "description": "Nur wenn die Höhe bekannt ist.",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "art": {
+                        "title": "Art des Unterhaltsanspruchs",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      }
+                    }
+                  }
+                },
+                "titelVorhanden": {
+                  "title": "Es gibt eine notariell beurkundete Vereinbarung, einen Unterhaltstitel oder einen Unterhaltsbescheid",
+                  "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                  "type": "boolean"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            }
+          }
+        },
+        "einkommensentwicklung": {
+          "title": "Einmalige Zahlungen und Einkommensänderungen",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "einmaligeZahlungen": {
+              "title": "Einmalige Zahlungen",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Ein Haushaltsmitglied hat in den vergangenen zwölf Monaten eine einmalige Zahlung erhalten oder erhält sie in den kommenden zwölf Monaten",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Einmalige Zahlungen",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Einmalige Zahlung",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "person"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "person": {
+                        "title": "Haushaltsmitglied, das die Zahlung erhält",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                      },
+                      "art": {
+                        "title": "Art der Zahlung",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "betrag": {
+                        "title": "Betrag",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "datum": {
+                        "title": "Datum der Zahlung",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                      },
+                      "sonderzuwendung": {
+                        "title": "Sonderzuwendung wie Weihnachts- oder Urlaubsgeld",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "einkommensaenderungen": {
+              "title": "Einkommensänderungen in den kommenden zwölf Monaten",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Das Einkommen eines Haushaltsmitglieds wird sich ändern",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Einkommensänderungen",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Einkommensänderung",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "person"
+                    ],
+                    "minProperties": 1,
+                    "properties": {
+                      "person": {
+                        "title": "Haushaltsmitglied, dessen Einkommen sich ändert",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+                      },
+                      "einkommensart": {
+                        "title": "Art des Einkommens",
+                        "$ref": "#/$defs/Einkommensart"
+                      },
+                      "richtung": {
+                        "title": "Erhöhung oder Reduzierung",
+                        "$ref": "#/$defs/RichtungDerEinkommensaenderung"
+                      },
+                      "datum": {
+                        "title": "Datum der Änderung",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                      },
+                      "grund": {
+                        "title": "Grund der Änderung",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "kuenftigesBruttoMonat": {
+                        "title": "Künftiges Bruttoeinkommen pro Monat",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            }
+          }
+        },
+        "vermoegen": {
+          "title": "Vermögen",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "vorhanden"
+          ],
+          "properties": {
+            "vorhanden": {
+              "title": "Der Haushalt hat Vermögen",
+              "type": "boolean"
+            },
+            "immobilienUndGrundstuecke": {
+              "title": "Gesamtwert der Immobilien und Grundstücke",
+              "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+            },
+            "geldvermoegen": {
+              "title": "Geldvermögen, Forderungen und Ähnliches",
+              "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+            },
+            "wertgegenstaende": {
+              "title": "Gesamtwert der Wertgegenstände",
+              "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+            },
+            "sonstiges": {
+              "title": "Sonstige Vermögenswerte",
+              "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+            }
+          },
+          "if": {
+            "properties": {
+              "vorhanden": {
+                "const": false
+              }
+            },
+            "required": [
+              "vorhanden"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "maxProperties": 1,
+            "type": "object"
+          }
+        },
+        "mietzuschuss": {
+          "title": "Mietzuschuss",
+          "description": "Nur beim Mietzuschuss.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "stellung": {
+              "title": "Was auf die antragstellende Person zutrifft",
+              "$ref": "#/$defs/StellungMietverhaeltnis"
+            },
+            "verwandtMitVermieter": {
+              "title": "Verwandtschaftsverhältnis mit der Vermieterin oder dem Vermieter",
+              "type": "boolean"
+            },
+            "vermieter": {
+              "title": "Vermieterin oder Vermieter",
+              "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/PersonOderStelle"
+            },
+            "miete": {
+              "title": "Miete pro Monat",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "gesamtmiete": {
+                  "title": "Warmmiete pro Monat",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "heizkosten": {
+                  "title": "Darin enthaltene Heizkosten",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "heizkostenBetragUnbekannt": {
+                  "title": "Heizkosten enthalten, Betrag unbekannt",
+                  "type": "boolean"
+                },
+                "warmwasserkosten": {
+                  "title": "Darin enthaltene Warmwasserkosten",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "warmwasserkostenBetragUnbekannt": {
+                  "title": "Warmwasserkosten enthalten, Betrag unbekannt",
+                  "type": "boolean"
+                },
+                "stellplatzkosten": {
+                  "title": "Darin enthaltene Kosten für Stellplätze",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "servicepauschale": {
+                  "title": "Servicepauschale, etwa für Pflege, Betreuung oder Notfalldienste",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "energiekosten": {
+                  "title": "Darin enthaltene Energiekosten (Strom, Gas für Haushaltsgeräte)",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "sonstigeKostenAnDritte": {
+                  "title": "Sonstige Kosten an Dritte",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                }
+              }
+            },
+            "zuschussDritter": {
+              "title": "Mietzuschuss von anderen",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Eine andere Person oder Stelle trägt einen Teil der Miete",
+                  "type": "boolean"
+                },
+                "zuschussgeber": {
+                  "title": "Person oder Stelle, die den Zuschuss gibt",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/PersonOderStelle"
+                },
+                "art": {
+                  "title": "Art der Förderung",
+                  "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "\\S"
+                },
+                "betragMonat": {
+                  "title": "Betrag pro Monat",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "seit": {
+                  "title": "Seit wann",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "aenderungMiete": {
+              "title": "Änderung der Miete in den kommenden zwölf Monaten",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Die Miete wird sich ändern",
+                  "type": "boolean"
+                },
+                "richtung": {
+                  "title": "Richtung der Änderung",
+                  "$ref": "#/$defs/RichtungDerAenderung"
+                },
+                "datum": {
+                  "title": "Datum der Änderung",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                },
+                "grund": {
+                  "title": "Grund der Änderung",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "\\S"
+                },
+                "kuenftigeGesamtmieteMonat": {
+                  "title": "Künftige Gesamtmiete pro Monat",
+                  "allOf": [
+                    {
+                      "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                    },
+                    {
+                      "minimum": 0.01,
+                      "type": "number"
+                    }
+                  ]
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              },
+              "else": {
+                "required": [
+                  "richtung"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+        "lastenzuschuss": {
+          "title": "Lastenzuschuss",
+          "description": "Nur beim Lastenzuschuss.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "eigentumsform": {
+              "title": "Was auf die antragstellende Person zutrifft",
+              "$ref": "#/$defs/Eigentumsform"
+            },
+            "miteigentuemer": {
+              "title": "Miteigentümerinnen und Miteigentümer",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Der Wohnraum gehört auch anderen Personen",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Miteigentümerinnen und Miteigentümer",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Miteigentümerin oder Miteigentümer",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "properties": {
+                      "vorname": {
+                        "title": "Vorname",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "familienname": {
+                        "title": "Familienname",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "anschrift": {
+                        "title": "Anschrift",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "fremdmittel": {
+              "title": "Fremdmittel für den Wohnraum, etwa Kredite",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Für den Wohnraum wurden Fremdmittel aufgenommen",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Fremdmittel",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Fremdmittel",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "properties": {
+                      "zweck": {
+                        "title": "Wofür das Fremdmittel aufgenommen wurde",
+                        "$ref": "#/$defs/ZweckDesFremdmittels"
+                      },
+                      "glaeubiger": {
+                        "title": "Gläubiger",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "nennbetrag": {
+                        "title": "Nennbetrag",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "restbetrag": {
+                        "title": "Restbetrag",
+                        "description": "Nicht im bayerischen Fragensatz.",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "restlaufzeitBis": {
+                        "title": "Restlaufzeit bis",
+                        "description": "Nicht im bayerischen Fragensatz.",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                      },
+                      "kapitaldienstMonat": {
+                        "title": "Kapitaldienst pro Monat",
+                        "description": "Nicht im bayerischen Fragensatz.",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "zinsenJahr": {
+                        "title": "Zinsen pro Jahr",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "tilgungJahr": {
+                        "title": "Tilgung pro Jahr",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "nebenleistungenJahr": {
+                        "title": "Nebenleistungen, etwa Verwaltungsgebühren, pro Jahr",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "jahresleistungGesamt": {
+                        "title": "Gesamte Jahresleistung",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "tilgungsvertraege": {
+              "title": "Personenversicherungen und Bausparverträge zur Tilgung",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Es werden Beiträge zu einer Personenversicherung oder einem Bausparvertrag gezahlt, die der Rückzahlung eines Fremdmittels dienen",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Verträge",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Vertrag",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "properties": {
+                      "beitragMonat": {
+                        "title": "Beitrag pro Monat",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "fuerFremdmittel": {
+                        "title": "Fremdmittel, dem der Vertrag dient",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "art": {
+                        "title": "Art des Vertrags",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "fruehereFremdmittel": {
+              "title": "Abgelöste frühere Fremdmittel",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Ein früheres Fremdmittel wurde durch ein neues ersetzt",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Frühere Fremdmittel",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Früheres Fremdmittel",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "properties": {
+                      "art": {
+                        "title": "Art des früheren Fremdmittels",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "glaeubiger": {
+                        "title": "Gläubiger",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "nennbetrag": {
+                        "title": "Nennbetrag",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "restbetragBeiAbloesung": {
+                        "title": "Restbetrag bei der Ablösung",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "abgeloestAm": {
+                        "title": "Abgelöst am",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                      },
+                      "rateMonat": {
+                        "title": "Monatliche Rate (Zinsen und Tilgung)",
+                        "description": "Nicht im bayerischen Fragensatz.",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "laufendeKosten": {
+              "title": "Laufende Kosten pro Monat",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "buergschaften": {
+                  "title": "Kosten für laufende Bürgschaften",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "erbbauzinsen": {
+                  "title": "Erbbauzinsen",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "grundsteuer": {
+                  "title": "Grundsteuer",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "verwaltungskosten": {
+                  "title": "Verwaltungskosten",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "nutzungsentgelt": {
+                  "title": "Nutzungsentgelt",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "waermeUndWarmwasser": {
+                  "title": "Wärme- und Warmwasserkosten aus gewerblicher Lieferung durch Dritte",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                },
+                "sonstigeRentenUndLeistungen": {
+                  "title": "Sonstige Renten oder zu zahlende Leistungen",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                }
+              }
+            },
+            "zuschuesseDritter": {
+              "title": "Zuschüsse von anderen zu den Wohnkosten",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Ein Haushaltsmitglied bekommt Zuschüsse von anderen, um die Wohnkosten zu bezahlen",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Zuschüsse",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Zuschuss",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "properties": {
+                      "zuschussgeber": {
+                        "title": "Person oder Stelle, die den Zuschuss gibt",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/PersonOderStelle"
+                      },
+                      "art": {
+                        "title": "Art der Förderung",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "betragMonat": {
+                        "title": "Betrag pro Monat",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      },
+                      "seit": {
+                        "title": "Seit wann",
+                        "description": "Nur im bayerischen Fragensatz (Wohngeldstellen in Bayern).",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "garagenstellplaetze": {
+              "title": "(Tief-)Garagenstellplätze",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Zum Gebäude gehören (Tief-)Garagenstellplätze",
+                  "type": "boolean"
+                },
+                "anzahl": {
+                  "title": "Anzahl",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9999
+                },
+                "finanziertDurchFremdmittel": {
+                  "title": "Durch eines der genannten Fremdmittel finanziert",
+                  "type": "boolean"
+                },
+                "selbstGenutzt": {
+                  "title": "Davon selbst genutzt",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9999
+                },
+                "vermietetOderUeberlassen": {
+                  "title": "Davon vermietet oder anderen überlassen",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9999
+                },
+                "einnahmenMonat": {
+                  "title": "Einnahmen daraus pro Monat",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "offeneStellplaetze": {
+              "title": "Offene Stellplätze oder Carports",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Zum Gebäude gehören offene Stellplätze oder Carports",
+                  "type": "boolean"
+                },
+                "anzahl": {
+                  "title": "Anzahl",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9999
+                },
+                "finanziertDurchFremdmittel": {
+                  "title": "Durch eines der genannten Fremdmittel finanziert",
+                  "type": "boolean"
+                },
+                "selbstGenutzt": {
+                  "title": "Davon selbst genutzt",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9999
+                },
+                "vermietetOderUeberlassen": {
+                  "title": "Davon vermietet oder anderen überlassen",
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9999
+                },
+                "einnahmenMonat": {
+                  "title": "Einnahmen daraus pro Monat",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            },
+            "aenderungBelastung": {
+              "title": "Änderung der Belastung in den kommenden zwölf Monaten",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Der monatliche Betrag für ein Fremdmittel wird sich ändern",
+                  "type": "boolean"
+                },
+                "richtung": {
+                  "title": "Richtung der Änderung",
+                  "$ref": "#/$defs/RichtungDerAenderung"
+                },
+                "datum": {
+                  "title": "Datum der Änderung",
+                  "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Datum"
+                },
+                "grund": {
+                  "title": "Grund der Änderung",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255,
+                  "pattern": "\\S"
+                },
+                "kuenftigerBetragMonat": {
+                  "title": "Künftiger Betrag pro Monat",
+                  "allOf": [
+                    {
+                      "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                    },
+                    {
+                      "minimum": 0.01,
+                      "type": "number"
+                    }
+                  ]
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              },
+              "else": {
+                "required": [
+                  "richtung"
+                ],
+                "type": "object"
+              }
+            },
+            "ueberlasseneGrundstuecksteile": {
+              "title": "Anderen überlassene Teile des Grundstücks",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vorhanden"
+              ],
+              "properties": {
+                "vorhanden": {
+                  "title": "Teile des Grundstücks, die nicht zum Wohnraum gehören, sind anderen Personen überlassen",
+                  "type": "boolean"
+                },
+                "eintraege": {
+                  "title": "Überlassene Grundstücksteile",
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "title": "Überlassener Grundstücksteil",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "properties": {
+                      "art": {
+                        "title": "Art des Gebäudes, der Anlage oder der Einrichtung",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "\\S"
+                      },
+                      "entgeltMonat": {
+                        "title": "Entgelt pro Monat",
+                        "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Geldbetrag"
+                      }
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "vorhanden": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "vorhanden"
+                ],
+                "type": "object"
+              },
+              "then": {
+                "maxProperties": 1,
+                "type": "object"
+              }
+            }
+          }
+        },
+        "zahlung": {
+          "title": "Auszahlung des Wohngelds",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "empfaenger": {
+              "title": "An wen das Wohngeld überwiesen wird",
+              "description": "Nur beim Mietzuschuss. Beim Lastenzuschuss geht das Wohngeld immer an ein Haushaltsmitglied.",
+              "$ref": "#/$defs/Zahlungsempfaenger"
+            },
+            "person": {
+              "title": "Haushaltsmitglied, an das überwiesen wird",
+              "description": "Beim Mietzuschuss nur bei „tenant_pay“.",
+              "$ref": "urn:oneproof:format:rahmen:1.0#/$defs/Personenverweis"
+            },
+            "iban": {
+              "title": "IBAN",
+              "description": "Ohne Leerzeichen, in Großbuchstaben.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 34,
+              "pattern": "^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$"
+            },
+            "kreditinstitut": {
+              "title": "Name der Bank",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            }
+          }
+        },
+        "erklaerungen": {
+          "title": "Erklärungen",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kontoauszuegeUndRechtsbehelfsbelehrung": {
+              "title": "Einverständnis zu Kontoauszügen und Kenntnisnahme der Rechtsbehelfsbelehrung",
+              "type": "boolean"
+            },
+            "elektronischeKommunikation": {
+              "title": "Die Behörde darf elektronisch oder per E-Mail kommunizieren",
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "wohnraum": {
+                "properties": {
+                  "wohnverhaeltnis": {
+                    "enum": [
+                      "tenant",
+                      "tenant_alike",
+                      "tenant_care"
+                    ]
+                  }
+                },
+                "required": [
+                  "wohnverhaeltnis"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "wohnraum"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "lastenzuschuss": false
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "wohnraum": {
+                "properties": {
+                  "wohnverhaeltnis": {
+                    "enum": [
+                      "owner"
+                    ]
+                  },
+                  "eigentumMitMehrAlsZweiWohnungen": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "wohnverhaeltnis",
+                  "eigentumMitMehrAlsZweiWohnungen"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "wohnraum"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "lastenzuschuss": false
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "wohnraum": {
+                "properties": {
+                  "wohnverhaeltnis": {
+                    "enum": [
+                      "owner"
+                    ]
+                  },
+                  "eigentumMitMehrAlsZweiWohnungen": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "wohnverhaeltnis",
+                  "eigentumMitMehrAlsZweiWohnungen"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "wohnraum"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "mietzuschuss": false
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "wohnraum": {
+                "properties": {
+                  "wohnverhaeltnis": {
+                    "enum": [
+                      "owner_alike",
+                      "owner_claim"
+                    ]
+                  }
+                },
+                "required": [
+                  "wohnverhaeltnis"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "wohnraum"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "mietzuschuss": false
+            },
+            "type": "object"
+          }
+        }
+      ]
+    }
+  }
+}

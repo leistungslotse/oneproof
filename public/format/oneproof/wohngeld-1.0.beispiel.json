@@ -1,0 +1,384 @@
+{
+  "$schema": "urn:oneproof:format:wohngeld:1.0",
+  "standard": "oneproof-format",
+  "version": "1.0",
+  "nachricht": {
+    "nachrichtenUUID": "3f2b8c1e-5d4a-4e7b-9c21-8a6f0d4e2b19",
+    "nachrichtentyp": "antrag",
+    "erstellungszeitpunkt": "2026-10-21T09:15:00+02:00",
+    "autor": {
+      "name": "Wohngeld-Portal Auenthal",
+      "kennung": "WG-PORTAL-01",
+      "produkt": "Antragsportal",
+      "produkthersteller": "Muster Software GmbH",
+      "produktversion": "4.2.0"
+    },
+    "leser": {
+      "name": "Wohngeldstelle Landkreis Auenthal",
+      "kennung": "09999000"
+    }
+  },
+  "leistung": {
+    "art": "wohngeld"
+  },
+  "antragstellung": {
+    "zeitpunkt": "2026-10-21T09:12:47+02:00",
+    "zeichenAbsender": "WG-2026-004711"
+  },
+  "personen": [
+    {
+      "id": "p1",
+      "rolle": "antragsteller",
+      "name": {
+        "vorname": "Anna",
+        "familienname": "Beispiel",
+        "geburtsname": "Muster"
+      },
+      "geburt": {
+        "datum": "1985-03-14",
+        "ort": "Auenthal"
+      },
+      "geschlecht": "female",
+      "staatsangehoerigkeit": "DE",
+      "familienstand": "married",
+      "erwerb": {
+        "status": "worker"
+      },
+      "kommunikation": {
+        "email": "anna.beispiel@example.org",
+        "telefon": "0221 1234567"
+      }
+    },
+    {
+      "id": "p2",
+      "rolle": "haushaltsmitglied",
+      "name": {
+        "vorname": "Jonas",
+        "familienname": "Beispiel"
+      },
+      "geburt": {
+        "datum": "1983-07-02",
+        "ort": "Auenthal"
+      },
+      "geschlecht": "male",
+      "staatsangehoerigkeit": "DE",
+      "familienstand": "married",
+      "verhaeltnisZumAntragsteller": {
+        "art": "married"
+      },
+      "erwerb": {
+        "status": "worker"
+      }
+    },
+    {
+      "id": "p3",
+      "rolle": "haushaltsmitglied",
+      "name": {
+        "vorname": "Lea",
+        "familienname": "Beispiel"
+      },
+      "geburt": {
+        "datum": "2016-09-21",
+        "ort": "Auenthal"
+      },
+      "geschlecht": "female",
+      "staatsangehoerigkeit": "DE",
+      "familienstand": "single",
+      "verhaeltnisZumAntragsteller": {
+        "art": "child"
+      },
+      "erwerb": {
+        "status": "pupil"
+      }
+    }
+  ],
+  "fachdaten": {
+    "antrag": {
+      "wohngeldBezug": "extension_no",
+      "antragOderBezugInDenLetzten12Monaten": false,
+      "aufforderungDurchAndereStelle": false,
+      "vertretung": {
+        "vorhanden": false
+      }
+    },
+    "wohnraum": {
+      "wohnverhaeltnis": "tenant",
+      "anschrift": {
+        "strasse": "Lindenweg",
+        "hausnummer": "12",
+        "postleitzahl": "99999",
+        "ort": "Auenthal"
+      },
+      "oeffentlichGefoerdert": false,
+      "wohnflaeche": 78.5,
+      "bisherigeWohnung": {
+        "vorhanden": false
+      },
+      "zweitwohnsitz": {
+        "vorhanden": false
+      },
+      "umzugOderAuszugGeplant": false,
+      "andereNutzung": {
+        "vorhanden": false
+      }
+    },
+    "personen": [
+      {
+        "person": "p1",
+        "einkommen": {
+          "vorhanden": true,
+          "eintraege": [
+            {
+              "art": "salary",
+              "betrag": 2450,
+              "zahlweise": "monthly",
+              "steuernGezahlt": true
+            }
+          ],
+          "rentenversicherungsbeitraegeGezahlt": true,
+          "krankenUndPflegeversicherungsbeitraegeGezahlt": true,
+          "werbungskostenJahr": 1230
+        },
+        "behinderung": {
+          "vorhanden": false
+        },
+        "transferleistung": {
+          "vorhanden": false
+        },
+        "nsVerfolgt": false
+      },
+      {
+        "person": "p2",
+        "einkommen": {
+          "vorhanden": true,
+          "eintraege": [
+            {
+              "art": "salary",
+              "betrag": 1100,
+              "zahlweise": "monthly",
+              "steuernGezahlt": true
+            }
+          ],
+          "rentenversicherungsbeitraegeGezahlt": true,
+          "krankenUndPflegeversicherungsbeitraegeGezahlt": true
+        },
+        "behinderung": {
+          "vorhanden": false
+        },
+        "transferleistung": {
+          "vorhanden": false
+        },
+        "nsVerfolgt": false
+      },
+      {
+        "person": "p3",
+        "einkommen": {
+          "vorhanden": false
+        },
+        "behinderung": {
+          "vorhanden": true,
+          "gradDerBehinderung": 50
+        },
+        "transferleistung": {
+          "vorhanden": false
+        },
+        "nsVerfolgt": false
+      }
+    ],
+    "haushalt": {
+      "verpflichtungserklaerung": {
+        "vorhanden": false
+      },
+      "mitbewohner": {
+        "vorhanden": false
+      },
+      "todesfall": {
+        "vorhanden": false
+      },
+      "aenderungHaushaltsgroesse": {
+        "vorhanden": false
+      }
+    },
+    "kinderUndUnterhalt": {
+      "kinderbetreuungskosten": {
+        "vorhanden": true,
+        "eintraege": [
+          {
+            "person": "p1",
+            "betragMonat": 180
+          }
+        ]
+      },
+      "unterhaltszahlungen": {
+        "vorhanden": false
+      },
+      "unterhaltsanspruch": {
+        "vorhanden": false
+      }
+    },
+    "einkommensentwicklung": {
+      "einmaligeZahlungen": {
+        "vorhanden": true,
+        "eintraege": [
+          {
+            "person": "p1",
+            "art": "Weihnachtsgeld",
+            "betrag": 1200,
+            "datum": "2026-11-30"
+          }
+        ]
+      },
+      "einkommensaenderungen": {
+        "vorhanden": false
+      }
+    },
+    "vermoegen": {
+      "vorhanden": false
+    },
+    "mietzuschuss": {
+      "stellung": "tenant",
+      "verwandtMitVermieter": false,
+      "vermieter": {
+        "organisation": "Wohnungsbau Rheinblick GmbH",
+        "anschrift": "Am Hafen 3, 99999 Auenthal"
+      },
+      "miete": {
+        "gesamtmiete": 980,
+        "heizkosten": 95,
+        "warmwasserkosten": 25
+      },
+      "zuschussDritter": {
+        "vorhanden": false
+      },
+      "aenderungMiete": {
+        "vorhanden": true,
+        "richtung": "change_up",
+        "datum": "2027-01-01",
+        "grund": "Staffelmiete laut Mietvertrag",
+        "kuenftigeGesamtmieteMonat": 1010
+      }
+    },
+    "zahlung": {
+      "empfaenger": "tenant_pay",
+      "person": "p1",
+      "iban": "DE89370400440532013000",
+      "kreditinstitut": "Beispielbank Auenthal"
+    },
+    "erklaerungen": {
+      "kontoauszuegeUndRechtsbehelfsbelehrung": true,
+      "elektronischeKommunikation": true
+    }
+  },
+  "anlagen": [
+    {
+      "dateiname": "antrag-wg-2026-004711.pdf",
+      "zweck": "antragsdokument",
+      "mimeType": "application/pdf",
+      "hashwert": {
+        "algorithmus": "sha512",
+        "wert": "7816d61f13f4f5f50206b61daeb711fcbe69aba3c290de266062f12efa3c7972f0add690985eaea7a3a604e49c19ff19929fcc41db1394a362ef9a84ee41567c"
+      }
+    },
+    {
+      "dateiname": "lohnabrechnung-september-2026.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "payslip",
+      "beschreibung": "Lohnabrechnung September 2026",
+      "person": "p1",
+      "bezuege": [
+        {
+          "stelle": "/fachdaten/personen/0/einkommen/eintraege/0"
+        }
+      ],
+      "mimeType": "application/pdf"
+    },
+    {
+      "dateiname": "mietvertrag.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "rent_contract",
+      "beschreibung": "Mietvertrag",
+      "bezuege": [
+        {
+          "stelle": "/fachdaten/mietzuschuss/miete"
+        },
+        {
+          "stelle": "/fachdaten/wohnraum/anschrift"
+        },
+        {
+          "stelle": "/fachdaten/wohnraum/wohnflaeche"
+        }
+      ],
+      "mimeType": "application/pdf"
+    },
+    {
+      "dateiname": "ausweis-anna-beispiel.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "identity_document",
+      "beschreibung": "Personalausweis Anna Beispiel",
+      "person": "p1",
+      "bezuege": [
+        {
+          "stelle": "/personen/0/name"
+        },
+        {
+          "stelle": "/personen/0/geburt"
+        },
+        {
+          "stelle": "/personen/0/staatsangehoerigkeit"
+        }
+      ],
+      "mimeType": "application/pdf"
+    },
+    {
+      "dateiname": "lohnabrechnung-jonas-september-2026.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "payslip",
+      "beschreibung": "Lohnabrechnung September 2026 (Jonas Beispiel)",
+      "person": "p2",
+      "bezuege": [
+        {
+          "stelle": "/fachdaten/personen/1/einkommen/eintraege/0"
+        }
+      ],
+      "mimeType": "application/pdf"
+    },
+    {
+      "dateiname": "bescheinigung-weihnachtsgeld-2026.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "special_payment_proof",
+      "beschreibung": "Bescheinigung des Arbeitgebers über das Weihnachtsgeld",
+      "person": "p1",
+      "bezuege": [
+        {
+          "stelle": "/fachdaten/einkommensentwicklung/einmaligeZahlungen/eintraege/0"
+        }
+      ],
+      "mimeType": "application/pdf"
+    },
+    {
+      "dateiname": "kita-beitragsbescheid-2026.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "child_care_cost_proof",
+      "beschreibung": "Beitragsbescheid der Kindertagesstätte",
+      "bezuege": [
+        {
+          "stelle": "/fachdaten/kinderUndUnterhalt/kinderbetreuungskosten/eintraege/0"
+        }
+      ],
+      "mimeType": "application/pdf"
+    },
+    {
+      "dateiname": "schwerbehindertenausweis-lea.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "disability_notice",
+      "beschreibung": "Schwerbehindertenausweis Lea Beispiel",
+      "person": "p3",
+      "bezuege": [
+        {
+          "stelle": "/fachdaten/personen/2/behinderung"
+        }
+      ],
+      "mimeType": "application/pdf"
+    }
+  ]
+}

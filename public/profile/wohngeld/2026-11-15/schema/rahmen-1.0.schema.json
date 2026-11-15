@@ -1,0 +1,802 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:oneproof:format:rahmen:1.0",
+  "title": "Rahmen des OneProof Formats",
+  "description": "Was jede Antragsdatei im OneProof Format hat, gleich für welche Leistung: Kopf der Nachricht, Leistung, Antragstellung, Personen, Fachdaten, Anlagen und Erweiterungen. Den Aufbau der Fachdaten und die Codes legt das Schema der Leistung fest, das diesen Rahmen einbindet. Eine Angabe, die fehlt, gilt als nicht beantwortet — nie als „Nein“. Leere Texte und null sind nicht erlaubt; eine Angabe ohne Wert wird weggelassen.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "standard",
+    "version",
+    "nachricht",
+    "leistung",
+    "antragstellung",
+    "personen",
+    "fachdaten"
+  ],
+  "properties": {
+    "$schema": {
+      "title": "Verweis auf das JSON-Schema",
+      "description": "Optional. Wird beim Einlesen nicht ausgewertet.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "\\S"
+    },
+    "standard": {
+      "title": "Name des Formats",
+      "type": "string",
+      "const": "oneproof-format"
+    },
+    "version": {
+      "title": "Version des Schemas der Leistung",
+      "description": "Hauptversion und Nebenversion, etwa „1.0“.",
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "nachricht": {
+      "$ref": "#/$defs/Nachricht"
+    },
+    "leistung": {
+      "$ref": "#/$defs/Leistung"
+    },
+    "antragstellung": {
+      "$ref": "#/$defs/Antragstellung"
+    },
+    "personen": {
+      "$ref": "#/$defs/Personen"
+    },
+    "fachdaten": {
+      "title": "Fachdaten",
+      "description": "Die Angaben des Antrags. Ihren Aufbau legt das Schema der Leistung fest.",
+      "type": "object",
+      "minProperties": 1
+    },
+    "anlagen": {
+      "$ref": "#/$defs/Anlagen"
+    },
+    "erweiterungen": {
+      "title": "Erweiterungen",
+      "description": "Angaben des absendenden Dienstes, die das Format nicht beschreibt: je Schlüssel ein Namensraum, etwa die Domain des Herstellers („de.muster-software“), darunter beliebige Werte. Sie gehen nicht in den Antrag ein.",
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$": {}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "Nachricht": {
+      "title": "Nachricht",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nachrichtenUUID",
+        "nachrichtentyp",
+        "erstellungszeitpunkt",
+        "autor"
+      ],
+      "properties": {
+        "nachrichtenUUID": {
+          "title": "Kennung der Nachricht",
+          "description": "Vom absendenden Dienst vergeben und je Antrag eindeutig. Daran erkennt der Empfänger, dass ein Antrag schon einmal eingelesen wurde.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 36,
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+          "format": "uuid"
+        },
+        "nachrichtentyp": {
+          "title": "Art der Nachricht",
+          "type": "string",
+          "const": "antrag"
+        },
+        "erstellungszeitpunkt": {
+          "title": "Zeitpunkt der Erstellung der Datei",
+          "$ref": "#/$defs/Zeitpunkt"
+        },
+        "autor": {
+          "title": "Absender",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "title": "Name des absendenden Dienstes oder der Stelle",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            },
+            "kennung": {
+              "title": "Kennung des Absenders",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            },
+            "produkt": {
+              "title": "Software, die die Datei erzeugt hat",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            },
+            "produkthersteller": {
+              "title": "Hersteller der Software",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            },
+            "produktversion": {
+              "title": "Version der Software",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "pattern": "\\S"
+            }
+          }
+        },
+        "leser": {
+          "title": "Empfänger",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "title": "Name der empfangenden Behörde",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            },
+            "kennung": {
+              "title": "Kennung der empfangenden Behörde",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            }
+          }
+        }
+      }
+    },
+    "Leistung": {
+      "title": "Leistung",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "art"
+      ],
+      "properties": {
+        "art": {
+          "title": "Art der Leistung",
+          "description": "Welche Fachdaten folgen. Zusammen mit „version“ bestimmt sie das Schema: „<art>-<version>.schema.json“.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,63}$"
+        }
+      }
+    },
+    "Antragstellung": {
+      "title": "Antragstellung",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "zeitpunkt"
+      ],
+      "properties": {
+        "zeitpunkt": {
+          "title": "Zeitpunkt der Antragstellung",
+          "description": "Gilt als Antragsdatum. Der Absender setzt es nicht vor den 02.01.1970 und höchstens einen Tag in die Zukunft; das Schema prüft nur die Form.",
+          "$ref": "#/$defs/Zeitpunkt"
+        },
+        "zeichenAbsender": {
+          "title": "Zeichen des Antrags beim absendenden Dienst",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "Personen": {
+      "title": "Personen",
+      "description": "Jede Person, die der Antrag nennt, genau einmal — die antragstellende eingeschlossen. Genau eine Person hat die Rolle „antragsteller“.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "$ref": "#/$defs/Person"
+      },
+      "contains": {
+        "type": "object",
+        "properties": {
+          "rolle": {
+            "const": "antragsteller"
+          }
+        },
+        "required": [
+          "rolle"
+        ]
+      },
+      "minContains": 1,
+      "maxContains": 1
+    },
+    "Person": {
+      "title": "Person",
+      "description": "Eine Person des Antrags. Alle Personen zusammen sind der Haushalt, für den der Antrag gestellt wird.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "rolle",
+        "name"
+      ],
+      "minProperties": 1,
+      "properties": {
+        "id": {
+          "title": "Kennung der Person",
+          "description": "Frei wählbar, innerhalb der Datei eindeutig. Jede andere Angabe verweist mit dieser Kennung auf die Person.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$"
+        },
+        "rolle": {
+          "title": "Rolle im Antrag",
+          "description": "Welche Rollen es gibt, legt das Schema der Leistung fest; „antragsteller“ gibt es immer.",
+          "$ref": "#/$defs/Rolle"
+        },
+        "name": {
+          "title": "Name",
+          "$ref": "#/$defs/Name"
+        },
+        "geburt": {
+          "title": "Geburt",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "datum": {
+              "title": "Geburtsdatum",
+              "$ref": "#/$defs/Datum"
+            },
+            "ort": {
+              "title": "Geburtsort",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            }
+          }
+        },
+        "geschlecht": {
+          "title": "Geschlecht",
+          "$ref": "#/$defs/Geschlecht"
+        },
+        "staatsangehoerigkeit": {
+          "title": "Staatsangehörigkeit",
+          "$ref": "#/$defs/Staat"
+        },
+        "familienstand": {
+          "title": "Familienstand",
+          "description": "„partner“ und „not_married“ nur bei der antragstellenden Person.",
+          "$ref": "#/$defs/Familienstand"
+        },
+        "verhaeltnisZumAntragsteller": {
+          "title": "Verhältnis zur antragstellenden Person",
+          "description": "Nur bei Haushaltsmitgliedern.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "art": {
+              "title": "Verhältnis",
+              "$ref": "#/$defs/Verhaeltnis"
+            },
+            "beschreibung": {
+              "title": "Sonstiges Verhältnis",
+              "description": "Nur bei „other“.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            }
+          }
+        },
+        "erwerb": {
+          "title": "Erwerb",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "title": "Erwerbsstatus",
+              "$ref": "#/$defs/Erwerbsstatus"
+            },
+            "taetigkeit": {
+              "title": "Aktuelle Tätigkeit",
+              "description": "Wo das Schema der Leistung danach fragt.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "pattern": "\\S"
+            }
+          }
+        },
+        "kommunikation": {
+          "title": "Erreichbarkeit",
+          "description": "Nur bei der antragstellenden Person.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "email": {
+              "title": "E-Mail-Adresse",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "format": "email"
+            },
+            "telefon": {
+              "title": "Telefonnummer",
+              "description": "Mit mindestens fünf Ziffern, etwa „+49 (0)221 1234567“ oder „0221/1234567“.",
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 40,
+              "pattern": "^\\+?(?=(?:[^0-9]*[0-9]){5})[0-9 ()/.-]+$"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "rolle": {
+                "const": "antragsteller"
+              }
+            },
+            "required": [
+              "rolle"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "verhaeltnisZumAntragsteller": false
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "Rolle": {
+      "title": "Rolle",
+      "description": "„antragsteller“ oder eine Rolle, die das Schema der Leistung nennt.",
+      "type": "string",
+      "pattern": "^[a-z][A-Za-z0-9]{0,63}$"
+    },
+    "Name": {
+      "title": "Name einer Person",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vorname",
+        "familienname"
+      ],
+      "properties": {
+        "vorname": {
+          "title": "Vorname",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        },
+        "familienname": {
+          "title": "Familienname",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        },
+        "geburtsname": {
+          "title": "Geburtsname",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        }
+      },
+      "description": "Vorname und Familienname getrennt — so findet die Prüfung die Person auf einem Nachweis wieder."
+    },
+    "PersonOderStelle": {
+      "title": "Person oder Stelle",
+      "description": "Eine Person mit Vor- und Familienname oder eine Organisation, etwa ein Betreuungsverein.",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "vorname": {
+          "title": "Vorname",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        },
+        "familienname": {
+          "title": "Familienname",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        },
+        "organisation": {
+          "title": "Name der Organisation oder Stelle",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        },
+        "anschrift": {
+          "title": "Anschrift",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "familienname"
+          ],
+          "type": "object"
+        },
+        {
+          "required": [
+            "organisation"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Anlagen": {
+      "title": "Anlagen",
+      "description": "Die Dateien zum Antrag: höchstens ein Antragsdokument des absendenden Dienstes, sonst Nachweise. Die Dateien selbst werden getrennt übergeben; abgeglichen wird über den Dateinamen. Ein Nachweis nennt mit „bezuege“ die Stellen der Datei, die er belegen soll.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "items": {
+        "$ref": "#/$defs/Anlage"
+      },
+      "contains": {
+        "type": "object",
+        "properties": {
+          "zweck": {
+            "const": "antragsdokument"
+          }
+        },
+        "required": [
+          "zweck"
+        ]
+      },
+      "minContains": 0,
+      "maxContains": 1
+    },
+    "Anlage": {
+      "title": "Anlage",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dateiname",
+        "zweck"
+      ],
+      "minProperties": 1,
+      "properties": {
+        "dateiname": {
+          "title": "Dateiname",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        },
+        "zweck": {
+          "title": "Zweck der Datei",
+          "description": "Höchstens eine Datei ist das Antragsdokument.",
+          "$ref": "#/$defs/Dateizweck"
+        },
+        "dokumentart": {
+          "title": "Art des Nachweises",
+          "description": "Was die Anlage ist, etwa eine Lohnabrechnung: ein Code aus dem Katalog des Schemas der Leistung. Nur bei einem Nachweis.",
+          "$ref": "#/$defs/Code"
+        },
+        "beschreibung": {
+          "title": "Beschreibung",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "\\S"
+        },
+        "person": {
+          "title": "Person, zu der die Datei gehört",
+          "$ref": "#/$defs/Personenverweis"
+        },
+        "bezuege": {
+          "title": "Bezüge",
+          "description": "Was die Anlage nachweist: die Stellen der Antragsdatei, die sie belegen soll. Eine Anlage kann mehrere Stellen nennen und mehrere Anlagen dieselbe Stelle. Ohne Bezug ist die Anlage ein Nachweis, zu dem die Antragsdatei keine Angabe macht. Ein Bezug sagt nur, wofür die Anlage gedacht ist — ob sie die Angabe belegt, prüft die Behörde.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 200,
+          "items": {
+            "title": "Bezug",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "stelle"
+            ],
+            "minProperties": 1,
+            "properties": {
+              "stelle": {
+                "title": "Stelle der Antragsdatei, die die Anlage nachweist",
+                "description": "Ein JSON-Pointer (RFC 6901) auf eine Angabe unter „personen“ oder „fachdaten“, etwa „/personen/0“ für die erste Person mit allen ihren Angaben. Zahlen zählen die Einträge einer Liste ab 0. Der Bezug gilt für die Angabe und alles darunter.",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512,
+                "pattern": "^/(personen|fachdaten)(/([^/~]|~[01])+)*$",
+                "format": "json-pointer"
+              }
+            }
+          },
+          "uniqueItems": true
+        },
+        "mimeType": {
+          "title": "Medientyp",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 127,
+          "pattern": "^[a-z]+/[A-Za-z0-9.+-]+$"
+        },
+        "hashwert": {
+          "title": "Prüfsumme",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "algorithmus",
+            "wert"
+          ],
+          "properties": {
+            "algorithmus": {
+              "title": "Verfahren",
+              "type": "string",
+              "const": "sha512"
+            },
+            "wert": {
+              "title": "Prüfsumme, hexadezimal in Kleinbuchstaben",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[0-9a-f]{128}$"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "zweck": {
+                "const": "antragsdokument"
+              }
+            },
+            "required": [
+              "zweck"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "dokumentart": false,
+              "bezuege": false
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "Code": {
+      "title": "Code",
+      "description": "Ein Code aus einer Liste des Schemas der Leistung.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,63}$"
+    },
+    "Datum": {
+      "title": "Datum",
+      "description": "JJJJ-MM-TT, ein Tag, den es gibt.",
+      "type": "string",
+      "format": "date",
+      "pattern": "^(19|20|21)[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "Zeitpunkt": {
+      "title": "Zeitpunkt",
+      "description": "Nach RFC 3339, immer mit Zeitzone: „Z“ oder ein Versatz wie „+02:00“.",
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(19|20|21)[0-9]{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]{1,9})?(Z|[+-](0[0-9]|1[0-4]):[0-5][0-9])$"
+    },
+    "Geldbetrag": {
+      "title": "Geldbetrag",
+      "description": "In Euro, höchstens zwei Nachkommastellen — wie der Geldwert in XSozial-basis. Der Absender rundet; das Schema zählt die Nachkommastellen nicht.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 99999999.99
+    },
+    "Staat": {
+      "title": "Staat",
+      "description": "Ländercode nach ISO 3166-1 alpha-2 in Großbuchstaben (DE, FR, …).",
+      "type": "string",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "Geschlecht": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "male",
+          "title": "männlich"
+        },
+        {
+          "const": "female",
+          "title": "weiblich"
+        },
+        {
+          "const": "diverse",
+          "title": "divers"
+        },
+        {
+          "const": "no_details",
+          "title": "keine Angabe"
+        }
+      ]
+    },
+    "Familienstand": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "single",
+          "title": "Ledig"
+        },
+        {
+          "const": "married",
+          "title": "Verheiratet"
+        },
+        {
+          "const": "divorced",
+          "title": "Geschieden"
+        },
+        {
+          "const": "separated",
+          "title": "Getrennt lebend"
+        },
+        {
+          "const": "widow",
+          "title": "Verwitwet"
+        },
+        {
+          "const": "partner",
+          "title": "Eingetragene Lebenspartnerschaft"
+        },
+        {
+          "const": "not_married",
+          "title": "Nichteheliche Lebensgemeinschaft"
+        }
+      ]
+    },
+    "Verhaeltnis": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "child",
+          "title": "Kind"
+        },
+        {
+          "const": "married",
+          "title": "EhepartnerIn oder LebensgefährtIn"
+        },
+        {
+          "const": "father",
+          "title": "Vater"
+        },
+        {
+          "const": "mother",
+          "title": "Mutter"
+        },
+        {
+          "const": "sibling",
+          "title": "Geschwister"
+        },
+        {
+          "const": "partner",
+          "title": "nichteheliche LebenspartnerIn"
+        },
+        {
+          "const": "uncle",
+          "title": "Onkel"
+        },
+        {
+          "const": "aunt",
+          "title": "Tante"
+        },
+        {
+          "const": "cousin",
+          "title": "Cousine oder Cousin"
+        },
+        {
+          "const": "other",
+          "title": "Sonstiges Verhältnis"
+        }
+      ]
+    },
+    "Erwerbsstatus": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "worker",
+          "title": "Arbeitnehmer/in"
+        },
+        {
+          "const": "freelance",
+          "title": "Selbstständig"
+        },
+        {
+          "const": "official",
+          "title": "Beamter/Beamtin"
+        },
+        {
+          "const": "trainee",
+          "title": "Auszubildende/r"
+        },
+        {
+          "const": "student",
+          "title": "Student/in"
+        },
+        {
+          "const": "pupil",
+          "title": "Schüler/in"
+        },
+        {
+          "const": "pension",
+          "title": "Rentner/in oder in Pension"
+        },
+        {
+          "const": "jobseeking",
+          "title": "Arbeitslos"
+        },
+        {
+          "const": "unemployed",
+          "title": "Sonst nicht erwerbstätig"
+        }
+      ]
+    },
+    "Personenverweis": {
+      "title": "Verweis auf eine Person",
+      "description": "Die Kennung (`id`) einer Person aus `personen`.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$"
+    },
+    "Dateizweck": {
+      "type": "string",
+      "oneOf": [
+        {
+          "const": "antragsdokument",
+          "title": "Antragsdokument des absendenden Dienstes"
+        },
+        {
+          "const": "nachweis",
+          "title": "Nachweis"
+        }
+      ]
+    }
+  }
+}

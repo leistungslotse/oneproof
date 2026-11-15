@@ -1,0 +1,21 @@
+{
+  "givenName": "Mila",
+  "familyName": "Feldmann",
+  "dateOfBirth": "2026-08-02",
+  "evidence": {
+    "birthCertificate": {
+      "registerNumber": "G 388/2026",
+      "placeOfBirth": "Auenthal",
+      "parents": ["Nora Feldmann"]
+    },
+    "residenceCertificate": {
+      "address": {
+        "street": "Lindenweg 12",
+        "postalCode": "12503",
+        "city": "Auenthal"
+      },
+      "movedIn": "2026-08-02",
+      "household": ["Nora Feldmann", "Mila Feldmann"]
+    }
+  }
+}

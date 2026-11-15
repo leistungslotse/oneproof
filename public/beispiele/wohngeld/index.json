@@ -1,0 +1,55 @@
+{
+  "beispiele": [
+    {
+      "id": "berger",
+      "titel": "Familie Berger – Mietzuschuss, alles in einem Scan",
+      "beschreibung": "Erstantrag eines Paares mit Kind. Ein Scan mit 13 Seiten enthält die Unterlagen durcheinander: den Mietvertrag auf drei verstreuten Seiten, drei Gehaltsabrechnungen, den Arbeitslosengeld-Bescheid über zwei Seiten, eine leere Rückseite und Unterlagen, nach denen der Antrag nicht fragt (Kindergeld, Bausparvertrag). Dazu ein Foto des Schwerbehindertenausweises.",
+      "antrag": "berger/antrag-berger-mietzuschuss.xml",
+      "nachweise": ["berger/scan-unterlagen-familie-berger.pdf", "berger/schwerbehindertenausweis-daniel-berger.jpg"]
+    },
+    {
+      "id": "yilmaz",
+      "titel": "Herr Yilmaz – Weiterleistung mit Untermieter",
+      "beschreibung": "Weiterleistungsantrag eines Rentners. Die Rentenanpassung ist ein Foto, die Minijob-Abrechnungen liegen in einer Datei (eine davon ist veraltet), und eine gemischte PDF enthält neben der Mietbescheinigung die Lohnabrechnung des Sohnes, der nicht im Haushalt lebt, und eine Ausweiskopie.",
+      "antrag": "yilmaz/antrag-yilmaz-weiterleistung.xml",
+      "nachweise": [
+        "yilmaz/rentenanpassung-2026-foto.jpg",
+        "yilmaz/lohnabrechnungen-minijob.pdf",
+        "yilmaz/untermietvertrag-albrecht.pdf",
+        "yilmaz/unterlagen-gemischt.pdf"
+      ]
+    },
+    {
+      "id": "schmidt",
+      "titel": "Frau Schmidt – Lastenzuschuss für eine Eigentumswohnung",
+      "beschreibung": "Erstantrag einer verwitweten Eigentümerin. Drei PDFs mit vermischten Seiten: Witwenrente und Sterbeurkunde, Darlehen und Grundsteuer, Grundbuch und Hausgeld durcheinander, dazu die Mitgliedsbescheinigung eines Gesangvereins, die mit dem Antrag nichts zu tun hat. Für die Wohnfläche fehlt ein Nachweis.",
+      "antrag": "schmidt/antrag-schmidt-lastenzuschuss.xml",
+      "nachweise": ["schmidt/rente-und-sterbeurkunde.pdf", "schmidt/finanzierung-wohnung.pdf", "schmidt/hausgeld-grundbuch-verein.pdf"]
+    },
+    {
+      "id": "einstein",
+      "titel": "Familie Einstein – Mietzuschuss mit vier einzelnen Nachweisen",
+      "beschreibung": "Der einfache Fall: Erstantrag auf Mietzuschuss mit vier Nachweisen, jeder in seiner eigenen Datei.",
+      "antrag": "antrag-einstein-wohngeld-1.7.0.xml",
+      "nachweise": [
+        "verdienstbescheinigung-des-arbeitgebers-albert-einstein.pdf",
+        "verdienstbescheinigung-des-arbeitgebers-silvia-einstein.pdf",
+        "kontoauszug-svenja-einstein.pdf",
+        "vermogens-kapitalertragsnachweis-svenja-einstein.pdf"
+      ]
+    },
+    {
+      "id": "einstein-oneproof",
+      "titel": "Familie Einstein – derselbe Antrag im OneProof Format",
+      "beschreibung": "Der Fall Einstein mit denselben vier Nachweisen, die Antragsdaten aber als JSON-Datei im OneProof Format statt als FIM-Instanz. Das Ergebnis entspricht dem des FIM-Antrags; das Antragspaket enthält antrag.json, dessen Anlagen auf die belegten Angaben verweisen.",
+      "antrag": "antrag-einstein-wohngeld-oneproof.json",
+      "nachweise": [
+        "verdienstbescheinigung-des-arbeitgebers-albert-einstein.pdf",
+        "verdienstbescheinigung-des-arbeitgebers-silvia-einstein.pdf",
+        "kontoauszug-svenja-einstein.pdf",
+        "vermogens-kapitalertragsnachweis-svenja-einstein.pdf"
+      ]
+    }
+  ],
+  "hinweis": "Alle Fälle sind erfunden: Namen, Anschriften, Beträge, Kontodaten und Behörden. Jede Seite ist als MUSTER gekennzeichnet."
+}

@@ -1,0 +1,702 @@
+openapi: 3.1.0
+
+info:
+  title: OneProof
+  version: 0.1.0-entwurf
+  summary: Fallbezogener Nachweisbedarf für Verwaltungsleistungen
+  description: |
+    OneProof beantwortet eine Frage, die im NOOTS bewusst offen bleibt:
+    **welche Nachweise braucht dieser eine Antrag?**
+
+    Das NOOTS liefert einen angeforderten Nachweistyp. Es entscheidet nicht, ob
+    er erforderlich ist. Das Datenmanagementkonzept sagt das ausdrücklich:
+
+    > „über das NOOTS werden keine Tatsachen übertragen, sondern nur Daten,
+    > der Data Consumer macht daraus eine Tatsache."
+    >
+    > — FITKO, Datenmanagementkonzept NOOTS v1.1
+
+    Genau diese Schicht ist OneProof.
+
+    ## Die Einheit ist die Tatsache, nicht die Datei
+
+    Eine Anforderung beschreibt eine zu belegende **Tatsache** mit Person und
+    Zeitraum — nicht ein Dokument. Ein Dokument ist nur einer von mehreren Wegen,
+    sie zu belegen; ein Registerabruf ist ein anderer.
+
+    ## OneProof entscheidet nichts
+
+    Der Bedarf wird nicht erfunden, sondern aus einem **Nachweisprofil**
+    abgeleitet, das die Behörde fachlich freigegeben hat. Das Profil ist
+    versioniert, die Ableitung deterministisch: dieselben Antragsdaten ergeben
+    immer dieselbe Liste. Jede Antwort trägt die Profilversion mit, gegen die sie
+    berechnet wurde.
+
+    Über Anspruch, Bewilligung oder Ablehnung entscheidet OneProof nicht. Es
+    erstellt auch keinen Risiko- oder Betrugsscore.
+
+    ## Anschluss an bestehende Standards
+
+    | Begriff hier | Herkunft |
+    |---|---|
+    | `Anforderung` | CCCEV `Requirement` |
+    | `zulaessigeQuellen` | CCCEV `EvidenceTypeList` |
+    | `nachweistyp` | XNachweis 2 / DAMAS-Kennung |
+    | `hash`, `mimeType` | FIT-Connect `contentStructure.attachments` |
+
+    Neu — und in keinem der drei Standards vorhanden — sind der **Status je
+    Anforderung**, der **Personen- und Zeitraumbezug** und das **Manifest** mit
+    Fundstelle und Prüfhistorie.
+
+    ## Stand
+
+    Entwurf. Die Beispiele zeigen denselben erfundenen Fall wie der Klick-Dummy:
+    ein Elterngeldantrag beim Landkreis Auenthal. Kein echter Verwaltungsdienst,
+    keine echte Registerabfrage.
+
+servers:
+  - url: https://api.oneproof.example/v1
+    description: Noch keine echte Instanz. „Test Request“ antwortet direkt im Browser mit den Beispielen dieser Seite.
+
+tags:
+  - name: Fall
+    description: Nachweisbedarf ermitteln und fortschreiben.
+  - name: Nachweise
+    description: Was kein Register belegt, kommt von der antragstellenden Person.
+  - name: Übergabe
+    description: Ergebnis für Fachverfahren, DMS oder E-Akte.
+
+paths:
+  /faelle:
+    post:
+      tags: [Fall]
+      operationId: fallAnlegen
+      summary: Nachweisbedarf ermitteln
+      description: |
+        Nimmt den Antrag als XFamilie-Nachricht `elterngeldantrag.antrag.0201`
+        entgegen, wendet das benannte Nachweisprofil an und gibt die
+        Anforderungen für genau diesen Fall zurück.
+
+        Anforderungen, die ein Register beantworten kann, werden dabei über das
+        NOOTS abgerufen. Der Abruf läuft synchron, solange er in wenigen Sekunden
+        antwortet; sonst steht die Anforderung zunächst auf `wird_geprueft`.
+      x-codeSamples:
+        - lang: javascript
+          label: JavaScript (fetch)
+          source: |
+            const xml = await fetch('/beispiele/erika-mustermann.xml').then((r) => r.text())
+
+            const res = await fetch(
+              'https://api.oneproof.example/v1/faelle?profil=elterngeld-bund@2026-08-01',
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/xml' },
+                body: xml,
+              },
+            )
+            const fall = await res.json()
+        - lang: shell
+          label: curl
+          source: |
+            curl -X POST 'https://api.oneproof.example/v1/faelle?profil=elterngeld-bund@2026-08-01' \
+              -H 'Content-Type: application/xml' \
+              --data-binary @erika-mustermann.xml
+      parameters:
+        - $ref: '#/components/parameters/profil'
+      requestBody:
+        required: true
+        content:
+          application/xml:
+            schema:
+              type: string
+              description: |
+                Nachricht `elterngeldantrag.antrag.0201` nach
+                [XFamilie 1.4.0](https://www.xrepository.de/api/xrepository/urn:xoev-de:kosit:standard:xfamilie_1.4.0:dokument:Spezifikation_1.4.0),
+                valide gegen `xfamilie-elterngeldantrag.xsd`. Das Beispiel enthält
+                nur Pflichtfelder und die drei Angaben, die das Profil auswertet.
+
+                Als Datei: [erika-mustermann.xml](/beispiele/erika-mustermann.xml)
+            example: |
+              <?xml version="1.0" encoding="UTF-8"?>
+              <xfe:elterngeldantrag.antrag.0201
+                  xmlns:xfe="http://www.xoev.de/xfamilie/elterngeldantrag/1.4.0"
+                  xmlns:xfb="http://www.xoev.de/xfamilie/baukasten/1.4.0"
+                  produkt="Elterngeld-Beispielportal" produkthersteller="Beispiel-Softwarehaus GmbH" standard="XFamilie" version="1.4.0">
+                <xfb:nachrichtenkopf>
+                  <xfb:identifikation.nachricht>
+                    <xfb:nachrichtenUUID>6f1c2a3e-8b4d-4e2a-9c1f-3d5e7a9b1c2d</xfb:nachrichtenUUID>
+                    <xfb:nachrichtentyp><code>0201</code></xfb:nachrichtentyp>
+                    <xfb:erstellungszeitpunkt>2026-09-10T12:00:00</xfb:erstellungszeitpunkt>
+                  </xfb:identifikation.nachricht>
+                  <xfb:leser>
+                    <xfb:behoerdenkennung>
+                      <xfb:praefix listVersionID="51"><code>egs</code></xfb:praefix>
+                      <xfb:kennung><code>auenthal</code></xfb:kennung>
+                    </xfb:behoerdenkennung>
+                    <xfb:behoerdenname>Elterngeldstelle Landkreis Auenthal</xfb:behoerdenname>
+                  </xfb:leser>
+                  <xfb:autor>
+                    <xfb:behoerdenkennung>
+                      <xfb:praefix listVersionID="51"><code>fap</code></xfb:praefix>
+                      <xfb:kennung><code>beispielportal</code></xfb:kennung>
+                    </xfb:behoerdenkennung>
+                    <xfb:erreichbarkeit>
+                      <xfb:kanal listVersionID="4.1"><code>01</code></xfb:kanal>
+                      <xfb:kennung>antrag@beispielportal.example</xfb:kennung>
+                    </xfb:erreichbarkeit>
+                    <xfb:anschrift>
+                      <xfb:postfach>
+                        <xfb:wohnort>Auenthal</xfb:wohnort>
+                        <xfb:postleitzahl>12345</xfb:postleitzahl>
+                      </xfb:postfach>
+                    </xfb:anschrift>
+                    <xfb:behoerdenname>Elterngeld-Beispielportal</xfb:behoerdenname>
+                  </xfb:autor>
+                </xfb:nachrichtenkopf>
+                <xfb:zeitstempelAntragsstellung>2026-09-10T12:00:00</xfb:zeitstempelAntragsstellung>
+                <xfb:transaktionsid>0b7e4d52-1a3c-4f6e-8d2b-5c9a1e3f7b40</xfb:transaktionsid>
+
+                <!-- OneProof: Geburtsdatum -> Geburt wird über NOOTS belegt -->
+                <xfe:kind>
+                  <xfe:nameKind>
+                    <xfb:familienname.unstrukturiert><xfb:name>Mustermann</xfb:name></xfb:familienname.unstrukturiert>
+                    <xfb:vornamen><xfb:name>Mila</xfb:name></xfb:vornamen>
+                  </xfe:nameKind>
+                  <xfe:geburtsdatum>
+                    <xfb:geburtsdatum><xfb:jahrMonatTag>2026-08-02</xfb:jahrMonatTag></xfb:geburtsdatum>
+                  </xfe:geburtsdatum>
+                  <xfe:besondersFruehGeborenesKind><xfe:besondersFruehGeborenesKind>false</xfe:besondersFruehGeborenesKind></xfe:besondersFruehGeborenesKind>
+                  <xfe:adoption><xfe:adoption>false</xfe:adoption></xfe:adoption>
+                  <xfe:mehrlingsgeburt><xfe:mehrlingsgeburt>false</xfe:mehrlingsgeburt></xfe:mehrlingsgeburt>
+                </xfe:kind>
+                <xfe:elterngeldantrag><code>04</code></xfe:elterngeldantrag>
+                <xfe:gesamteinkommen><code>13</code></xfe:gesamteinkommen>
+
+                <xfe:elternteilEins>
+                  <xfe:persoenlicheAngaben>
+                    <xfe:name>
+                      <xfb:familienname.unstrukturiert><xfb:name>Mustermann</xfb:name></xfb:familienname.unstrukturiert>
+                      <xfb:vornamen><xfb:name>Erika</xfb:name></xfb:vornamen>
+                    </xfe:name>
+                    <xfe:geburtsdatum>1994-05-12</xfe:geburtsdatum>
+                    <xfe:geschlecht><code>w</code></xfe:geschlecht>
+                    <xfe:familienstand><xfb:familienstand><code>VH</code></xfb:familienstand></xfe:familienstand>
+                    <xfe:unverheiratetesZusammenleben>false</xfe:unverheiratetesZusammenleben>
+                    <xfe:alleinerziehend>false</xfe:alleinerziehend>
+                    <xfe:staatsangehoerigkeit>
+                      <xfe:staatsangehoerigkeiten>
+                        <xfb:staatsangehoerigkeit listVersionID="2026-08-05"><code>000</code></xfb:staatsangehoerigkeit>
+                      </xfe:staatsangehoerigkeiten>
+                    </xfe:staatsangehoerigkeit>
+                  </xfe:persoenlicheAngaben>
+                  <xfe:anschrift>
+                    <xfe:anschriftInlandOderAusland>true</xfe:anschriftInlandOderAusland>
+                    <xfe:anschriftInland>
+                      <xfb:postleitzahl>12345</xfb:postleitzahl>
+                      <xfb:strasse>Lindenweg</xfb:strasse>
+                      <xfb:wohnort>Auenthal</xfb:wohnort>
+                    </xfe:anschriftInland>
+                  </xfe:anschrift>
+                  <xfe:gewoehnlicherAufenthalt>
+                    <xfe:wohnsitz><code>01</code></xfe:wohnsitz>
+                    <xfe:auslaendischesArbeitsverhaeltnis><xfe:auslaendischesArbeitsverhaeltnis>false</xfe:auslaendischesArbeitsverhaeltnis></xfe:auslaendischesArbeitsverhaeltnis>
+                    <xfe:mitgliedNatoZivilesGefolge>false</xfe:mitgliedNatoZivilesGefolge>
+                    <xfe:mitgliedDiplomatischeMissionOderKonsularischeVertretung>false</xfe:mitgliedDiplomatischeMissionOderKonsularischeVertretung>
+                  </xfe:gewoehnlicherAufenthalt>
+                  <xfe:kindschaftsverhaeltnis><xfe:kindschaftsverhaeltnis><code>01</code></xfe:kindschaftsverhaeltnis></xfe:kindschaftsverhaeltnis>
+                  <xfe:haushaltszugehoerigkeitDesKindes>
+                    <xfe:betreuungUndErziehungImEigenenHaushalt><xfb:liegtVor>true</xfb:liegtVor></xfe:betreuungUndErziehungImEigenenHaushalt>
+                  </xfe:haushaltszugehoerigkeitDesKindes>
+                  <xfe:beantragungElterngeld>
+                    <xfe:basisElterngeld>true</xfe:basisElterngeld>
+                    <xfe:elterngeldPlus>false</xfe:elterngeldPlus>
+                    <xfe:partnerschaftsBonusMonate>false</xfe:partnerschaftsBonusMonate>
+                  </xfe:beantragungElterngeld>
+                  <xfe:krankenversicherung><xfe:versicherungsart><code>02</code></xfe:versicherungsart></xfe:krankenversicherung>
+
+                  <!-- OneProof: vor der Geburt angestellt -> Einkommensnachweis 08/2025 bis 07/2026 offen -->
+                  <xfe:einkommenVorGeburt>
+                    <xfe:einkommenAusNichtselbststaendigerTaetigkeit>true</xfe:einkommenAusNichtselbststaendigerTaetigkeit>
+                    <xfe:selbstaendigeBeschaeftigung>false</xfe:selbstaendigeBeschaeftigung>
+                    <xfe:gewerbebetrieb>false</xfe:gewerbebetrieb>
+                    <xfe:landUndForstwirtschaft>false</xfe:landUndForstwirtschaft>
+                    <xfe:einkommensersatzleistungen><xfe:bezugEinkommensersatzleistungen>false</xfe:bezugEinkommensersatzleistungen></xfe:einkommensersatzleistungen>
+                  </xfe:einkommenVorGeburt>
+
+                  <!-- OneProof: im Bezugszeitraum keine Arbeit -> Nachweis entfällt -->
+                  <xfe:einkommenWaehrendBezugszeitraum>
+                    <xfe:selbstaendigeBeschaeftigung>false</xfe:selbstaendigeBeschaeftigung>
+                    <xfe:landUndForstwirtschaft>false</xfe:landUndForstwirtschaft>
+                    <xfe:gewerbebetrieb>false</xfe:gewerbebetrieb>
+                    <xfe:einkommensersatzleistungenBezugszeitraum>
+                      <xfe:bezugEinkommensersatzleistungen>false</xfe:bezugEinkommensersatzleistungen>
+                      <xfe:bezugSonstigeLeistungen><xfe:bezugElterngeldAusland>false</xfe:bezugElterngeldAusland></xfe:bezugSonstigeLeistungen>
+                    </xfe:einkommensersatzleistungenBezugszeitraum>
+                    <xfe:einkommenAusNichtselbststaendigerTaetigkeit>false</xfe:einkommenAusNichtselbststaendigerTaetigkeit>
+                  </xfe:einkommenWaehrendBezugszeitraum>
+
+                  <xfe:bankverbindung><xfb:iban>DE89370400440532013000</xfb:iban></xfe:bankverbindung>
+                  <xfe:steuerlicheIdentifikationsnummer>12345678901</xfe:steuerlicheIdentifikationsnummer>
+                  <xfe:erwerbstaetigkeitBezugszeitraum><xfe:einkuenfteErwerbstaetigkeitBezugszeitraum>false</xfe:einkuenfteErwerbstaetigkeitBezugszeitraum></xfe:erwerbstaetigkeitBezugszeitraum>
+                  <xfe:bescheidzustellungVersandweg><code>02</code></xfe:bescheidzustellungVersandweg>
+                </xfe:elternteilEins>
+
+                <xfe:mutterschaftsgeldArbeitgeberzuschussVglLeistungen>
+                  <xfe:mutterschaftsgeld>false</xfe:mutterschaftsgeld>
+                  <xfe:arbeitgeberzuschuss>false</xfe:arbeitgeberzuschuss>
+                  <xfe:krankentagegeld>false</xfe:krankentagegeld>
+                  <xfe:dienstAnwaerterbezug>false</xfe:dienstAnwaerterbezug>
+                  <xfe:beamtenSoldatenrecht>false</xfe:beamtenSoldatenrecht>
+                  <xfe:auslFamilienleistungen>false</xfe:auslFamilienleistungen>
+                </xfe:mutterschaftsgeldArbeitgeberzuschussVglLeistungen>
+                <xfe:weitereKinderImHaushalt>
+                  <xfe:anzahlAllerImHaushaltLebendenKinder>1</xfe:anzahlAllerImHaushaltLebendenKinder>
+                </xfe:weitereKinderImHaushalt>
+              </xfe:elterngeldantrag.antrag.0201>
+      responses:
+        '201':
+          description: Der Bedarf ist ermittelt.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fall'
+              example:
+                fallId: f_8Ktw2
+                leistung: elterngeld
+                profilVersion: elterngeld-bund@2026-08-01
+                ermitteltAm: '2026-09-09T17:42:11Z'
+                zusammenfassung:
+                  belegt: 3
+                  offen: 3
+                  unklar: 0
+                  entfaellt: 1
+                anforderungen:
+                  - id: geburt
+                    tatsache: Geburt und Abstammung des Kindes
+                    personen: [p2]
+                    zeitraum: { von: '2026-08-02', bis: '2026-08-02' }
+                    status: belegt
+                    beleg:
+                      art: register
+                      nachweistyp: Geburtsurkunde
+                      quelle: Standesamt Auenthal
+                      abgerufenAm: '2026-09-09T17:42:11Z'
+                      hash: 'sha512-9f2ac41b…'
+                  - id: einkommen
+                    tatsache: Einkommen in den zwölf Kalendermonaten vor der Geburt
+                    personen: [p1]
+                    zeitraum: { von: '2025-08-01', bis: '2026-07-31' }
+                    status: offen
+                    zulaessigeQuellen:
+                      - { art: dokument, nachweistyp: Lohnabrechnung }
+                      - { art: dokument, nachweistyp: Gehaltsabrechnung }
+                    hinweis: >-
+                      Ihre Lohn- oder Gehaltsabrechnungen. Ein Sammel-PDF mit allen
+                      Monaten genügt — die Seiten werden automatisch getrennt.
+                  - id: erwerb
+                    tatsache: Erwerbstätigkeit im Bezugszeitraum
+                    personen: [p1]
+                    zeitraum: { von: '2026-08-02', bis: '2027-08-01' }
+                    status: entfaellt
+                    grund: >-
+                      Im Antrag wurde angegeben, im Bezugszeitraum nicht zu
+                      arbeiten. § 1 Abs. 1 Nr. 4 BEEG greift damit nicht.
+        '422':
+          $ref: '#/components/responses/Fehler'
+
+  /faelle/{fallId}/anforderungen/{anforderungId}/dokumente:
+    post:
+      tags: [Nachweise]
+      operationId: dokumentEinreichen
+      x-codeSamples:
+        - lang: javascript
+          label: JavaScript (fetch)
+          source: |
+            const form = new FormData()
+            form.append('datei', datei) // File aus <input type="file">
+
+            const res = await fetch(
+              'https://api.oneproof.example/v1/faelle/f_8Ktw2/anforderungen/einkommen/dokumente',
+              { method: 'POST', body: form },
+            )
+            const anforderung = await res.json()
+      summary: Nachweis einreichen
+      description: |
+        Reicht ein Dokument für eine Anforderung ein. Es wird gelesen, den
+        Personen und Zeiträumen der Anforderung zugeordnet und mit den
+        Antragsangaben abgeglichen.
+
+        Der Status danach ist nicht zwingend `belegt`. Deckt das Dokument die
+        Anforderung nur teilweise ab, steht sie auf `unklar` — mit einer Notiz,
+        was konkret noch fehlt. Das ist der Unterschied zu einer Checkliste, die
+        nur „Datei vorhanden" kennt.
+      parameters:
+        - $ref: '#/components/parameters/fallId'
+        - $ref: '#/components/parameters/anforderungId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [datei]
+              properties:
+                datei:
+                  type: string
+                  format: binary
+                  description: PDF oder Bild, höchstens 50 MB.
+      responses:
+        '200':
+          description: Das Dokument ist geprüft und zugeordnet.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Anforderung'
+              example:
+                id: einkommen
+                tatsache: Einkommen in den zwölf Kalendermonaten vor der Geburt
+                personen: [p1]
+                zeitraum: { von: '2025-08-01', bis: '2026-07-31' }
+                status: unklar
+                notiz: >-
+                  Elf von zwölf Monaten erkannt und zugeordnet. Für März 2026
+                  fehlt die Abrechnung.
+                beleg:
+                  art: dokument
+                  nachweistyp: Gehaltsabrechnung
+                  quelle: Einreichung durch die antragstellende Person
+                  abgerufenAm: '2026-09-09T17:44:02Z'
+                  mimeType: application/pdf
+                  hash: 'sha512-1b77e0c4…'
+                  fundstelle: 'Seiten 1–11 von 11'
+        '404':
+          $ref: '#/components/responses/Fehler'
+        '413':
+          $ref: '#/components/responses/Fehler'
+
+  /faelle/{fallId}/manifest:
+    get:
+      tags: [Übergabe]
+      operationId: manifestAbrufen
+      x-codeSamples:
+        - lang: javascript
+          label: JavaScript (fetch)
+          source: |
+            const res = await fetch('https://api.oneproof.example/v1/faelle/f_8Ktw2/manifest')
+            const manifest = await res.json()
+      summary: Manifest abrufen
+      description: |
+        Das Ergebnis in der Form, in der es an Fachverfahren, DMS oder E-Akte
+        übergeben wird: je Anforderung die Tatsache, ihr Status, die Quelle, der
+        Abrufzeitpunkt, der Hash und die Prüfhistorie.
+
+        Die Sachbearbeitung erhält je Angabe eine belegte Aussage statt einzelner
+        Dokumente. Jede Aussage ist bis zur Fundstelle im Beleg nachvollziehbar.
+
+        Es wird auch dann ausgegeben, wenn Anforderungen offen sind. Eine
+        fristwahrende Einreichung darf nicht daran scheitern, dass noch etwas
+        fehlt.
+
+        Das Manifest nennt nur, was in diesem Fall zu belegen ist: je Anforderung
+        einen Eintrag mit dem Status `belegt`, `offen` oder `unklar`. Was nach den
+        Antworten im Antrag entfällt, steht nicht darin. Der Grund dafür ist die
+        Antwort im Antrag selbst, und die liegt dem Zielsystem vor.
+
+        Wird der Antrag als Paket eingereicht (Antragsdaten mit einer PDF-Datei je
+        Dokument), nennt `datei` je Beleg die Datei des Pakets. Die Antragsdaten
+        verweisen an der Stelle der Angabe auf denselben Namen.
+      parameters:
+        - $ref: '#/components/parameters/fallId'
+      responses:
+        '200':
+          description: Das Manifest zum aktuellen Stand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manifest'
+              example:
+                fallId: f_8Ktw2
+                aktenzeichen: EG-2026-04417
+                leistung: elterngeld
+                profilVersion: elterngeld-bund@2026-08-01
+                erstelltAm: '2026-09-09T17:51:38Z'
+                zusammenfassung:
+                  belegt: 5
+                  offen: 1
+                  unklar: 0
+                eintraege:
+                  - anforderungId: geburt
+                    tatsache: Geburt und Abstammung des Kindes
+                    status: belegt
+                    beleg:
+                      art: register
+                      nachweistyp: Geburtsurkunde
+                      quelle: Standesamt Auenthal
+                      abgerufenAm: '2026-09-09T17:42:11Z'
+                      hash: 'sha512-9f2ac41b…'
+                    historie:
+                      - zeitpunkt: '2026-09-09T17:42:11Z'
+                        status: belegt
+                        ausloeser: NOOTS-Abruf
+                  - anforderungId: einkommen
+                    tatsache: Einkommen in den zwölf Kalendermonaten vor der Geburt – Mara Okafor
+                    personen: [Mara Okafor]
+                    status: belegt
+                    beleg: &gehalt
+                      art: dokument
+                      nachweistyp: Lohn-/Gehaltsabrechnung
+                      datei: lohn-gehaltsabrechnung-mara-okafor.pdf
+                      quelle: scan-unterlagen.pdf
+                      mimeType: application/pdf
+                      hash: 'sha512-41c07e9d…'
+                      fundstelle: Seiten 2, 5, 9 von 13
+                    belege:
+                      - *gehalt
+                    historie:
+                      - zeitpunkt: '2026-09-09T17:49:02Z'
+                        status: belegt
+                        ausloeser: Nachweisprüfung (hochgeladene Unterlagen)
+        '404':
+          $ref: '#/components/responses/Fehler'
+
+components:
+  parameters:
+    fallId:
+      name: fallId
+      in: path
+      required: true
+      schema: { type: string }
+      example: f_8Ktw2
+    anforderungId:
+      name: anforderungId
+      in: path
+      required: true
+      description: Die `id` aus der Anforderungsliste, nicht der Nachweistyp.
+      schema: { type: string }
+      example: einkommen
+    profil:
+      name: profil
+      in: query
+      required: true
+      description: |
+        Das anzuwendende Nachweisprofil samt Version. Ohne Version keine
+        Anfrage — sonst ist das Ergebnis später nicht reproduzierbar.
+      schema:
+        type: string
+        pattern: '^[a-z0-9-]+@\d{4}-\d{2}-\d{2}$'
+      example: elterngeld-bund@2026-08-01
+
+  responses:
+    Fehler:
+      description: Die Anfrage wurde nicht ausgeführt.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Fehler'
+
+  schemas:
+    Fall:
+      type: object
+      properties:
+        fallId: { type: string }
+        leistung: { type: string }
+        profilVersion:
+          type: string
+          description: |
+            Die Version, gegen die gerechnet wurde. Gehört in jede Antwort und in
+            jede Akte — ohne sie lässt sich später nicht mehr belegen, warum
+            genau diese Nachweise verlangt wurden.
+        ermitteltAm: { type: string, format: date-time }
+        zusammenfassung: { $ref: '#/components/schemas/Zusammenfassung' }
+        anforderungen:
+          type: array
+          items: { $ref: '#/components/schemas/Anforderung' }
+
+    Anforderung:
+      type: object
+      description: Eine zu belegende Tatsache — kein Dokument.
+      required: [id, tatsache, status]
+      properties:
+        id: { type: string, example: einkommen }
+        tatsache:
+          type: string
+          description: In der Sprache der antragstellenden Person, nicht in Aktensprache.
+          example: Einkommen in den zwölf Kalendermonaten vor der Geburt
+        personen:
+          type: array
+          items: { type: string }
+          description: Wen die Tatsache betrifft, als Verweis in die Antragsdaten.
+        zeitraum: { $ref: '#/components/schemas/Zeitraum' }
+        status: { $ref: '#/components/schemas/Status' }
+        beleg: { $ref: '#/components/schemas/Beleg' }
+        zulaessigeQuellen:
+          type: array
+          description: |
+            Womit sich die Anforderung belegen lässt. Mehrere Einträge sind
+            Alternativen — eine davon genügt.
+          items: { $ref: '#/components/schemas/Quelle' }
+        hinweis:
+          type: string
+          description: Was die antragstellende Person tun soll, wenn `offen`.
+        notiz:
+          type: string
+          description: Was nach einer Prüfung noch fehlt, wenn `unklar`.
+        grund:
+          type: string
+          description: Warum die Anforderung `entfaellt` — mit Bezug zur Rechtsgrundlage.
+
+    Status:
+      type: string
+      enum: [belegt, offen, unklar, wird_geprueft, entfaellt]
+      description: |
+        | Wert | Bedeutung |
+        |---|---|
+        | `belegt` | Nachgewiesen — über ein Register oder ein geprüftes Dokument |
+        | `offen` | Es fehlt noch ein Nachweis |
+        | `unklar` | Ein Nachweis liegt vor, deckt die Tatsache aber nicht vollständig ab |
+        | `wird_geprueft` | Prüfung läuft |
+        | `entfaellt` | In diesem Fall nicht zu belegen |
+
+    Quelle:
+      type: object
+      properties:
+        art:
+          type: string
+          enum: [register, dokument]
+        nachweistyp:
+          type: string
+          description: Bezeichnung nach XNachweis 2 beziehungsweise DAMAS-Kennung.
+          example: Geburtsurkunde
+
+    Beleg:
+      type: object
+      description: Womit die Tatsache belegt wurde.
+      properties:
+        art:
+          type: string
+          enum: [register, dokument]
+        nachweistyp: { type: string }
+        datei:
+          type: string
+          description: |
+            Nur bei einem Dokument, das als Paket eingereicht wurde: der Name der
+            Datei im Paket, die das Dokument enthält. Die Antragsdaten verweisen an
+            der Stelle der Angabe auf diesen Namen.
+          example: lohn-gehaltsabrechnung-mara-okafor.pdf
+        quelle:
+          type: string
+          description: |
+            Für Menschen lesbar: bei einem Register die belegende Stelle, bei
+            einem Dokument die hochgeladene Datei, aus der seine Seiten stammen.
+          example: Standesamt Auenthal
+        abgerufenAm: { type: string, format: date-time }
+        mimeType:
+          type: [string, 'null']
+          description: '`null`, wenn der Dateityp nicht bekannt ist.'
+          example: application/pdf
+        hash:
+          type: [string, 'null']
+          description: |
+            SHA-512 über das Original, wie in FIT-Connect. Geschrieben wird er als Präfix `sha512-`
+            und 128 Hexadezimalziffern in Kleinbuchstaben, zusammen 135 Zeichen; in den Beispielen
+            ist er gekürzt. `null`, wenn kein Hash berechnet werden konnte.
+        fundstelle:
+          type: string
+          description: Wo im Beleg die Tatsache steht.
+          example: 'Seiten 1–11 von 11'
+
+    Zeitraum:
+      type: object
+      properties:
+        von: { type: string, format: date }
+        bis:
+          type: [string, 'null']
+          format: date
+          description: '`null` heißt: fortlaufend.'
+
+    Zusammenfassung:
+      type: object
+      properties:
+        belegt: { type: integer }
+        offen: { type: integer }
+        unklar: { type: integer }
+        entfaellt: { type: integer }
+
+    Manifest:
+      type: object
+      description: |
+        Die Übergabe an das Zielsystem. Verknüpft Anforderung, Quelle, Person,
+        Zeitraum, Fundstelle, Hash, Status und Prüfhistorie — für jede
+        Anforderung, die in diesem Fall zu belegen ist. Was nach dem Antrag
+        entfällt, steht nicht darin.
+      properties:
+        fallId: { type: string }
+        aktenzeichen: { type: string, example: EG-2026-04417 }
+        leistung: { type: string }
+        profilVersion: { type: string }
+        erstelltAm: { type: string, format: date-time }
+        zusammenfassung:
+          type: object
+          description: Wie viele Anforderungen in welchem Status sind.
+          properties:
+            belegt: { type: integer }
+            offen: { type: integer }
+            unklar: { type: integer }
+        eintraege:
+          type: array
+          items:
+            type: object
+            required: [anforderungId, tatsache, status]
+            properties:
+              anforderungId: { type: string }
+              tatsache: { type: string }
+              stelle:
+                type: string
+                description: |
+                  Nur bei einem Antrag im OneProof Format: die Angabe des Antrags, die
+                  zu belegen ist, als JSON-Pointer (RFC 6901), etwa
+                  `/fachdaten/personen/0/einkommen/eintraege/0`. Fehlt die Angabe im
+                  Antrag, ist es der nächste Wert darüber, zu dem sie gehört.
+                example: /fachdaten/personen/0/einkommen/eintraege/0
+              personen:
+                type: array
+                items: { type: string }
+                description: Wen die Tatsache betrifft, mit dem Namen aus dem Antrag.
+                example: [Mara Okafor]
+              status:
+                type: string
+                enum: [belegt, offen, unklar]
+              hinweis:
+                type: string
+                description: Was die antragstellende Person tun soll, wenn `offen`.
+              notiz:
+                type: string
+                description: Was nach der Prüfung noch fehlt, wenn `unklar`.
+              beleg:
+                $ref: '#/components/schemas/Beleg'
+              belege:
+                type: array
+                description: |
+                  Alle Belege der Anforderung, wenn mehrere Dokumente sie zusammen
+                  belegen (etwa drei Gehaltsabrechnungen); `beleg` ist der erste davon.
+                items: { $ref: '#/components/schemas/Beleg' }
+              historie:
+                type: array
+                description: Jede Statusänderung, damit die Akte prüffähig bleibt.
+                items:
+                  type: object
+                  properties:
+                    zeitpunkt: { type: string, format: date-time }
+                    status: { $ref: '#/components/schemas/Status' }
+                    ausloeser:
+                      type: string
+                      example: NOOTS-Abruf
+
+    Fehler:
+      type: object
+      description: Problem Details nach RFC 9457.
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }

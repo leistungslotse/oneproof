@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xfe:elterngeldantrag.antrag.0201
+    xmlns:xfe="http://www.xoev.de/xfamilie/elterngeldantrag/1.4.0"
+    xmlns:xfb="http://www.xoev.de/xfamilie/baukasten/1.4.0"
+    produkt="Elterngeld-Beispielportal" produkthersteller="Beispiel-Softwarehaus GmbH" standard="XFamilie" version="1.4.0">
+  <xfb:nachrichtenkopf>
+    <xfb:identifikation.nachricht>
+      <xfb:nachrichtenUUID>6f1c2a3e-8b4d-4e2a-9c1f-3d5e7a9b1c2d</xfb:nachrichtenUUID>
+      <xfb:nachrichtentyp><code>0201</code></xfb:nachrichtentyp>
+      <xfb:erstellungszeitpunkt>2026-09-10T12:00:00</xfb:erstellungszeitpunkt>
+    </xfb:identifikation.nachricht>
+    <xfb:leser>
+      <xfb:behoerdenkennung>
+        <xfb:praefix listVersionID="51"><code>egs</code></xfb:praefix>
+        <xfb:kennung><code>auenthal</code></xfb:kennung>
+      </xfb:behoerdenkennung>
+      <xfb:behoerdenname>Elterngeldstelle Landkreis Auenthal</xfb:behoerdenname>
+    </xfb:leser>
+    <xfb:autor>
+      <xfb:behoerdenkennung>
+        <xfb:praefix listVersionID="51"><code>fap</code></xfb:praefix>
+        <xfb:kennung><code>beispielportal</code></xfb:kennung>
+      </xfb:behoerdenkennung>
+      <xfb:erreichbarkeit>
+        <xfb:kanal listVersionID="4.1"><code>01</code></xfb:kanal>
+        <xfb:kennung>antrag@beispielportal.example</xfb:kennung>
+      </xfb:erreichbarkeit>
+      <xfb:anschrift>
+        <xfb:postfach>
+          <xfb:wohnort>Auenthal</xfb:wohnort>
+          <xfb:postleitzahl>12345</xfb:postleitzahl>
+        </xfb:postfach>
+      </xfb:anschrift>
+      <xfb:behoerdenname>Elterngeld-Beispielportal</xfb:behoerdenname>
+    </xfb:autor>
+  </xfb:nachrichtenkopf>
+  <xfb:zeitstempelAntragsstellung>2026-09-10T12:00:00</xfb:zeitstempelAntragsstellung>
+  <xfb:transaktionsid>0b7e4d52-1a3c-4f6e-8d2b-5c9a1e3f7b40</xfb:transaktionsid>
+
+  <!-- OneProof: Geburtsdatum -> Geburt wird über NOOTS belegt -->
+  <xfe:kind>
+    <xfe:nameKind>
+      <xfb:familienname.unstrukturiert><xfb:name>Mustermann</xfb:name></xfb:familienname.unstrukturiert>
+      <xfb:vornamen><xfb:name>Mila</xfb:name></xfb:vornamen>
+    </xfe:nameKind>
+    <xfe:geburtsdatum>
+      <xfb:geburtsdatum><xfb:jahrMonatTag>2026-08-02</xfb:jahrMonatTag></xfb:geburtsdatum>
+    </xfe:geburtsdatum>
+    <xfe:besondersFruehGeborenesKind><xfe:besondersFruehGeborenesKind>false</xfe:besondersFruehGeborenesKind></xfe:besondersFruehGeborenesKind>
+    <xfe:adoption><xfe:adoption>false</xfe:adoption></xfe:adoption>
+    <xfe:mehrlingsgeburt><xfe:mehrlingsgeburt>false</xfe:mehrlingsgeburt></xfe:mehrlingsgeburt>
+  </xfe:kind>
+  <xfe:elterngeldantrag><code>04</code></xfe:elterngeldantrag>
+  <xfe:gesamteinkommen><code>13</code></xfe:gesamteinkommen>
+
+  <xfe:elternteilEins>
+    <xfe:persoenlicheAngaben>
+      <xfe:name>
+        <xfb:familienname.unstrukturiert><xfb:name>Mustermann</xfb:name></xfb:familienname.unstrukturiert>
+        <xfb:vornamen><xfb:name>Erika</xfb:name></xfb:vornamen>
+      </xfe:name>
+      <xfe:geburtsdatum>1994-05-12</xfe:geburtsdatum>
+      <xfe:geschlecht><code>w</code></xfe:geschlecht>
+      <xfe:familienstand><xfb:familienstand><code>VH</code></xfb:familienstand></xfe:familienstand>
+      <xfe:unverheiratetesZusammenleben>false</xfe:unverheiratetesZusammenleben>
+      <xfe:alleinerziehend>false</xfe:alleinerziehend>
+      <xfe:staatsangehoerigkeit>
+        <xfe:staatsangehoerigkeiten>
+          <xfb:staatsangehoerigkeit listVersionID="2026-08-05"><code>000</code></xfb:staatsangehoerigkeit>
+        </xfe:staatsangehoerigkeiten>
+      </xfe:staatsangehoerigkeit>
+    </xfe:persoenlicheAngaben>
+    <xfe:anschrift>
+      <xfe:anschriftInlandOderAusland>true</xfe:anschriftInlandOderAusland>
+      <xfe:anschriftInland>
+        <xfb:postleitzahl>12345</xfb:postleitzahl>
+        <xfb:strasse>Lindenweg</xfb:strasse>
+        <xfb:wohnort>Auenthal</xfb:wohnort>
+      </xfe:anschriftInland>
+    </xfe:anschrift>
+    <xfe:gewoehnlicherAufenthalt>
+      <xfe:wohnsitz><code>01</code></xfe:wohnsitz>
+      <xfe:auslaendischesArbeitsverhaeltnis><xfe:auslaendischesArbeitsverhaeltnis>false</xfe:auslaendischesArbeitsverhaeltnis></xfe:auslaendischesArbeitsverhaeltnis>
+      <xfe:mitgliedNatoZivilesGefolge>false</xfe:mitgliedNatoZivilesGefolge>
+      <xfe:mitgliedDiplomatischeMissionOderKonsularischeVertretung>false</xfe:mitgliedDiplomatischeMissionOderKonsularischeVertretung>
+    </xfe:gewoehnlicherAufenthalt>
+    <xfe:kindschaftsverhaeltnis><xfe:kindschaftsverhaeltnis><code>01</code></xfe:kindschaftsverhaeltnis></xfe:kindschaftsverhaeltnis>
+    <xfe:haushaltszugehoerigkeitDesKindes>
+      <xfe:betreuungUndErziehungImEigenenHaushalt><xfb:liegtVor>true</xfb:liegtVor></xfe:betreuungUndErziehungImEigenenHaushalt>
+    </xfe:haushaltszugehoerigkeitDesKindes>
+    <xfe:beantragungElterngeld>
+      <xfe:basisElterngeld>true</xfe:basisElterngeld>
+      <xfe:elterngeldPlus>false</xfe:elterngeldPlus>
+      <xfe:partnerschaftsBonusMonate>false</xfe:partnerschaftsBonusMonate>
+    </xfe:beantragungElterngeld>
+    <xfe:krankenversicherung><xfe:versicherungsart><code>02</code></xfe:versicherungsart></xfe:krankenversicherung>
+
+    <!-- OneProof: vor der Geburt angestellt -> Einkommensnachweis 08/2025 bis 07/2026 offen -->
+    <xfe:einkommenVorGeburt>
+      <xfe:einkommenAusNichtselbststaendigerTaetigkeit>true</xfe:einkommenAusNichtselbststaendigerTaetigkeit>
+      <xfe:selbstaendigeBeschaeftigung>false</xfe:selbstaendigeBeschaeftigung>
+      <xfe:gewerbebetrieb>false</xfe:gewerbebetrieb>
+      <xfe:landUndForstwirtschaft>false</xfe:landUndForstwirtschaft>
+      <xfe:einkommensersatzleistungen><xfe:bezugEinkommensersatzleistungen>false</xfe:bezugEinkommensersatzleistungen></xfe:einkommensersatzleistungen>
+    </xfe:einkommenVorGeburt>
+
+    <!-- OneProof: im Bezugszeitraum keine Arbeit -> Nachweis entfällt -->
+    <xfe:einkommenWaehrendBezugszeitraum>
+      <xfe:selbstaendigeBeschaeftigung>false</xfe:selbstaendigeBeschaeftigung>
+      <xfe:landUndForstwirtschaft>false</xfe:landUndForstwirtschaft>
+      <xfe:gewerbebetrieb>false</xfe:gewerbebetrieb>
+      <xfe:einkommensersatzleistungenBezugszeitraum>
+        <xfe:bezugEinkommensersatzleistungen>false</xfe:bezugEinkommensersatzleistungen>
+        <xfe:bezugSonstigeLeistungen><xfe:bezugElterngeldAusland>false</xfe:bezugElterngeldAusland></xfe:bezugSonstigeLeistungen>
+      </xfe:einkommensersatzleistungenBezugszeitraum>
+      <xfe:einkommenAusNichtselbststaendigerTaetigkeit>false</xfe:einkommenAusNichtselbststaendigerTaetigkeit>
+    </xfe:einkommenWaehrendBezugszeitraum>
+
+    <xfe:bankverbindung><xfb:iban>DE89370400440532013000</xfb:iban></xfe:bankverbindung>
+    <xfe:steuerlicheIdentifikationsnummer>12345678901</xfe:steuerlicheIdentifikationsnummer>
+    <xfe:erwerbstaetigkeitBezugszeitraum><xfe:einkuenfteErwerbstaetigkeitBezugszeitraum>false</xfe:einkuenfteErwerbstaetigkeitBezugszeitraum></xfe:erwerbstaetigkeitBezugszeitraum>
+    <xfe:bescheidzustellungVersandweg><code>02</code></xfe:bescheidzustellungVersandweg>
+  </xfe:elternteilEins>
+
+  <xfe:mutterschaftsgeldArbeitgeberzuschussVglLeistungen>
+    <xfe:mutterschaftsgeld>false</xfe:mutterschaftsgeld>
+    <xfe:arbeitgeberzuschuss>false</xfe:arbeitgeberzuschuss>
+    <xfe:krankentagegeld>false</xfe:krankentagegeld>
+    <xfe:dienstAnwaerterbezug>false</xfe:dienstAnwaerterbezug>
+    <xfe:beamtenSoldatenrecht>false</xfe:beamtenSoldatenrecht>
+    <xfe:auslFamilienleistungen>false</xfe:auslFamilienleistungen>
+  </xfe:mutterschaftsgeldArbeitgeberzuschussVglLeistungen>
+  <xfe:weitereKinderImHaushalt>
+    <xfe:anzahlAllerImHaushaltLebendenKinder>1</xfe:anzahlAllerImHaushaltLebendenKinder>
+  </xfe:weitereKinderImHaushalt>
+</xfe:elterngeldantrag.antrag.0201>

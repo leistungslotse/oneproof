@@ -1,0 +1,1181 @@
+{
+  "format": 1,
+  "id": "wohngeld",
+  "version": "2026-11-07",
+  "name": "Wohngeld",
+  "beschreibung": "Nachweise zum Antrag auf Wohngeld (Mietzuschuss und Lastenzuschuss) nach den FIM-Schemata S01000000123 bis S01000000128, Version 1.7.0.",
+  "hinweis": "Beispielprofil für die Demo. Welche Unterlagen die zuständige Wohngeldbehörde tatsächlich anerkennt und wie viele Monate sie verlangt, ist mit ihr abzustimmen und hier anzupassen.",
+  "aktenzeichenPraefix": "WG",
+  "dokumenttypen": "dokumenttypen.json",
+  "antragsarten": [
+    {
+      "schema": "S01000000123",
+      "version": "1.7.0",
+      "name": "Wohngeld – Mietzuschuss, Erstantrag",
+      "datei": "schema/S01000000123V1.7.0.json",
+      "abbildungen": {
+        "1.6.1": "abbildung/S01000000123_1.6.1_nach_1.7.0.json"
+      }
+    },
+    {
+      "schema": "S01000000124",
+      "version": "1.7.0",
+      "name": "Wohngeld – Mietzuschuss, Weiterleistungsantrag",
+      "datei": "schema/S01000000124V1.7.0.json",
+      "abbildungen": {
+        "1.6.1": "abbildung/S01000000124_1.6.1_nach_1.7.0.json"
+      }
+    },
+    {
+      "schema": "S01000000125",
+      "version": "1.7.0",
+      "name": "Wohngeld – Mietzuschuss, Erhöhungsantrag",
+      "datei": "schema/S01000000125V1.7.0.json",
+      "abbildungen": {
+        "1.6.1": "abbildung/S01000000125_1.6.1_nach_1.7.0.json"
+      }
+    },
+    {
+      "schema": "S01000000126",
+      "version": "1.7.0",
+      "name": "Wohngeld – Lastenzuschuss, Erstantrag",
+      "datei": "schema/S01000000126V1.7.0.json",
+      "abbildungen": {
+        "1.6.1": "abbildung/S01000000126_1.6.1_nach_1.7.0.json"
+      },
+      "abbildungKorrekturen": {
+        "1.6.1": {
+          "F00000001827": "F60000000352",
+          "F00000002566": "F00000002566",
+          "G00000000241": "G60000000224"
+        }
+      }
+    },
+    {
+      "schema": "S01000000127",
+      "version": "1.7.0",
+      "name": "Wohngeld – Lastenzuschuss, Weiterleistungsantrag",
+      "datei": "schema/S01000000127V1.7.0.json",
+      "abbildungen": {
+        "1.6.1": "abbildung/S01000000127_1.6.1_nach_1.7.0.json"
+      }
+    },
+    {
+      "schema": "S01000000128",
+      "version": "1.7.0",
+      "name": "Wohngeld – Lastenzuschuss, Erhöhungsantrag",
+      "datei": "schema/S01000000128V1.7.0.json",
+      "abbildungen": {
+        "1.6.1": "abbildung/S01000000128_1.6.1_nach_1.7.0.json"
+      }
+    }
+  ],
+  "werteAbbildungen": {
+    "1.6.1": {
+      "F60000000352": {
+        "01": "001",
+        "02": "002",
+        "03": "003",
+        "04": "004",
+        "05": "005"
+      }
+    }
+  },
+  "personen": {
+    "antragsteller": {
+      "gruppe": "G01000001213",
+      "name": {
+        "pfad": [
+          "G01000001428"
+        ],
+        "nachname": "F60000000227",
+        "vorname": "F60000000228",
+        "geburtsname": "F60000000230"
+      },
+      "bezeichnung": "antragstellende Person"
+    },
+    "mitglieder": {
+      "gruppe": "G01000001218",
+      "name": {
+        "pfad": [
+          "G01000001427"
+        ],
+        "nachname": "F60000000227",
+        "vorname": "F60000000228",
+        "geburtsname": "F60000000230"
+      },
+      "bezeichnung": "Haushaltsmitglied"
+    }
+  },
+  "stichtag": "F01000002044",
+  "antragslage": [
+    "Mietverhältnis der antragstellenden Person: {F00000000560|code}",
+    "Eigentumsform: {F01000002199|code}",
+    "Weitere Personen in der Wohnung, die nicht zum Haushalt gehören (z. B. Untermieter): {F00000002597|code}",
+    "Weitere Personen im Wohnraum, die nicht zum Haushalt gehören (z. B. Mieter eines Zimmers): {F00000002647|code}"
+  ],
+  "wertetabellen": {
+    "einkommensart": {
+      "999": {
+        "kurz": "Sonstiges",
+        "typen": [
+          "other",
+          "provision"
+        ]
+      },
+      "001": {
+        "kurz": "Rente / Pension",
+        "typen": [
+          "pension",
+          "provision"
+        ]
+      },
+      "002": {
+        "kurz": "Lohn / Gehalt",
+        "typen": [
+          "salary"
+        ]
+      },
+      "003": {
+        "kurz": "Vermietung und Verpachtung",
+        "typen": [
+          "rent"
+        ]
+      },
+      "004": {
+        "kurz": "Land- und Forstwirtschaft",
+        "typen": [
+          "income_agri"
+        ]
+      },
+      "005": {
+        "kurz": "BAföG / Berufsausbildungsbeihilfe",
+        "typen": [
+          "student_support",
+          "vocational_allowance"
+        ]
+      },
+      "006": {
+        "kurz": "Ausbildungsvergütung",
+        "typen": [
+          "salary"
+        ]
+      },
+      "007": {
+        "kurz": "Selbständige Arbeit",
+        "typen": [
+          "income_freelance"
+        ]
+      },
+      "008": {
+        "kurz": "Arbeitslosengeld",
+        "typen": [
+          "unemployed"
+        ]
+      },
+      "009": {
+        "kurz": "Krankengeld",
+        "typen": [
+          "sickness"
+        ]
+      },
+      "010": {
+        "kurz": "Kapitalvermögen",
+        "typen": [
+          "interest"
+        ]
+      },
+      "011": {
+        "kurz": "Unterhalt / Unterhaltsvorschuss",
+        "typen": [
+          "alimony",
+          "alimony_aid"
+        ]
+      },
+      "012": {
+        "kurz": "Elterngeld / Mutterschaftsgeld",
+        "typen": [
+          "parental_allowance",
+          "maternity"
+        ]
+      },
+      "013": {
+        "kurz": "Ausländische Einkünfte",
+        "typen": []
+      },
+      "014": {
+        "kurz": "Sachleistungen",
+        "typen": [
+          "in_kind"
+        ]
+      },
+      "015": {
+        "kurz": "Gewerbebetrieb",
+        "typen": [
+          "income_freelance"
+        ]
+      },
+      "016": {
+        "kurz": "Zuwendungen von außerhalb des Haushalts",
+        "typen": [
+          "external_support"
+        ]
+      },
+      "017": {
+        "kurz": "Zuwendungen von Firmen oder Stiftungen",
+        "typen": [
+          "other"
+        ]
+      },
+      "018": {
+        "kurz": "Zuschuss zu Unterkunftskosten (SGB II)",
+        "typen": [
+          "housing_cost_subsidy"
+        ]
+      },
+      "019": {
+        "kurz": "Kurzarbeitergeld",
+        "typen": [
+          "short_time",
+          "salary"
+        ]
+      }
+    }
+  },
+  "nachweisarten": {
+    "miete_hoehe": {
+      "titel": "Mietnachweis",
+      "hinweis": "Ihr Mietvertrag oder eine Bescheinigung Ihres Vermieters. Ein Kontoauszug oder Zahlungsnachweis kann genügen, wenn die Höhe der Miete daraus hervorgeht.",
+      "quellen": {
+        "rent_contract": "genuegt",
+        "rent_certificate": "genuegt",
+        "rent_payment_proof": "pruefen",
+        "bank_statement": "pruefen",
+        "utility_statement": "ergaenzt",
+        "heating_statement": "ergaenzt",
+        "parking_service_proof": "ergaenzt"
+      }
+    },
+    "mietveraenderung": {
+      "titel": "Nachweis zur Veränderung der Miete",
+      "hinweis": "Das Mieterhöhungs- oder Mietminderungsschreiben.",
+      "quellen": {
+        "rent_change_notice": {
+          "rolle": "genuegt",
+          "groebere": {
+            "art": "miete_hoehe",
+            "rolle": "pruefen"
+          }
+        }
+      }
+    },
+    "mitbewohner": {
+      "titel": "Nachweis zu Mitbewohnern oder Untermiete",
+      "hinweis": "Ein Untermietvertrag oder eine Bestätigung über die Wohngemeinschaft.",
+      "quellen": {
+        "shared_accommodation_proof": "genuegt",
+        "sublease_proof": "genuegt"
+      }
+    },
+    "belastung": {
+      "titel": "Nachweis des Eigentums",
+      "hinweis": "Ein Nachweis Ihres Eigentums oder Ihres eigentumsähnlichen Rechts, zum Beispiel Grundbuchauszug, Kaufvertrag, Erbschein oder Erbbaurechtsvertrag.",
+      "quellen": {
+        "land_register_extract": "genuegt",
+        "purchase_contract": "genuegt",
+        "inheritance_certificate": "genuegt",
+        "gift_contract": "genuegt",
+        "ground_lease_proof": "genuegt"
+      }
+    },
+    "fremdmittel": {
+      "titel": "Nachweis zu einem Darlehen",
+      "hinweis": "Der Darlehensvertrag, der Zins- und Tilgungsplan oder ein Zahlungsnachweis.",
+      "quellen": {
+        "loan_contract": {
+          "rolle": "genuegt",
+          "groebere": "belastung"
+        },
+        "loan_amortization_plan": {
+          "rolle": "genuegt",
+          "groebere": "belastung"
+        },
+        "loan_payment_proof": {
+          "rolle": "genuegt",
+          "groebere": "belastung"
+        }
+      }
+    },
+    "zuschuss_belastung": {
+      "titel": "Nachweis eines Zuschusses zur Belastung",
+      "hinweis": "Der Bescheid oder die Zusage über den Zuschuss, zum Beispiel einer öffentlichen Stelle.",
+      "quellen": {
+        "public_grant_proof": "genuegt"
+      }
+    },
+    "aufwendung": {
+      "titel": "Nachweis einer weiteren Aufwendung",
+      "hinweis": "Zum Beispiel der Grundsteuerbescheid oder die Hausgeldabrechnung.",
+      "quellen": {
+        "property_tax_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "aufwendungsart": "003"
+          },
+          "groebere": "belastung"
+        },
+        "homeowner_fee_statement": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "aufwendungsart": "004"
+          },
+          "groebere": "belastung"
+        }
+      }
+    },
+    "belastung_veraenderung": {
+      "titel": "Nachweis zur Veränderung der Belastung",
+      "hinweis": "Zum Beispiel die Zinsanpassung der Bank, ein neuer Tilgungsplan, ein neuer Grundsteuerbescheid oder der neue Wirtschaftsplan.",
+      "quellen": {
+        "loan_contract": "pruefen",
+        "loan_amortization_plan": "pruefen",
+        "property_tax_notice": "pruefen",
+        "homeowner_fee_statement": "pruefen"
+      }
+    },
+    "wohnflaeche": {
+      "titel": "Nachweis der Wohnfläche",
+      "hinweis": "Eine Wohnflächenberechnung oder ein Grundriss.",
+      "quellen": {
+        "living_space_proof": "genuegt"
+      }
+    },
+    "garage_vermietung": {
+      "titel": "Nachweis zur Vermietung von Garage oder Stellplatz",
+      "hinweis": "Der Mietvertrag über die vermietete Garage oder den Stellplatz.",
+      "quellen": {
+        "parking_rental_contract": {
+          "rolle": "genuegt",
+          "groebere": "belastung"
+        }
+      }
+    },
+    "einnahmen": {
+      "titel": "Einkommensnachweis",
+      "hinweis": "Lohn- oder Gehaltsabrechnungen, eine Verdienstbescheinigung des Arbeitgebers oder je nach Einkommensart der Renten- oder Leistungsbescheid.",
+      "abdeckung": {
+        "einheit": "monat",
+        "mindestens": 3,
+        "fuer": [
+          "payslip"
+        ],
+        "beispiel": true,
+        "hoechstensAlt": 6
+      },
+      "quellen": {
+        "bank_statement": "ergaenzt",
+        "business_registration": {
+          "rolle": "ergaenzt",
+          "merkmale": {
+            "income_type": "income_freelance"
+          }
+        },
+        "employment_contract": {
+          "rolle": "pruefen",
+          "merkmale": {
+            "income_type": "salary"
+          }
+        },
+        "training_contract": {
+          "rolle": "pruefen",
+          "merkmale": {
+            "income_type": "salary"
+          }
+        },
+        "maintenance_payment_proof": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "alimony"
+          }
+        },
+        "maintenance_title": {
+          "rolle": "pruefen",
+          "merkmale": {
+            "income_type": "alimony"
+          }
+        },
+        "asset_proof": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "interest"
+          }
+        },
+        "citizen_benefit_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "housing_cost_subsidy"
+          }
+        },
+        "payslip": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "salary"
+          }
+        },
+        "income_certificate": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "salary"
+          }
+        },
+        "income_tax_statement": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "salary"
+          }
+        },
+        "minijob_proof": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "salary"
+          }
+        },
+        "self_employment_accounts": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": [
+              "income_freelance",
+              "income_agri"
+            ]
+          }
+        },
+        "tax_assessment": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": [
+              "income_freelance",
+              "income_agri"
+            ]
+          }
+        },
+        "pension_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "pension"
+          }
+        },
+        "company_pension_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "pension"
+          }
+        },
+        "unemployment_benefit_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "unemployed"
+          }
+        },
+        "sick_pay_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "sickness"
+          }
+        },
+        "parental_allowance_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "parental_allowance"
+          }
+        },
+        "maternity_benefit_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "maternity"
+          }
+        },
+        "provision_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "provision"
+          }
+        },
+        "wage_replacement_notice": "genuegt",
+        "rental_income_proof": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "rent"
+          }
+        },
+        "bafoeg_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "student_support"
+          }
+        },
+        "scholarship_proof": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "other"
+          }
+        },
+        "bab_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "vocational_allowance"
+          }
+        },
+        "advance_maintenance_notice": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "alimony_aid"
+          }
+        }
+      }
+    },
+    "werbungskosten": {
+      "titel": "Nachweis der Werbungskosten",
+      "hinweis": "Belege über Ihre Werbungskosten, zum Beispiel Fahrtkosten oder Arbeitsmittel.",
+      "quellen": {
+        "work_expenses_proof": "genuegt"
+      }
+    },
+    "einnahmen_veraenderung": {
+      "titel": "Nachweis zur Veränderung des Einkommens",
+      "hinweis": "Zum Beispiel die Kündigung, ein Änderungsvertrag oder die Bestätigung einer Arbeitszeitänderung.",
+      "quellen": {
+        "employment_termination": {
+          "rolle": "genuegt",
+          "merkmale": {
+            "income_type": "salary"
+          }
+        }
+      }
+    },
+    "einmalige_einnahmen": {
+      "titel": "Nachweis einmaliger Einnahmen",
+      "hinweis": "Zum Beispiel der Beleg über eine Prämie, eine Abfindung oder eine Nachzahlung.",
+      "quellen": {
+        "special_payment_proof": "genuegt"
+      }
+    },
+    "transferleistung": {
+      "titel": "Bescheid über eine Sozialleistung",
+      "hinweis": "Der aktuelle Bescheid, zum Beispiel über Bürgergeld, Grundsicherung oder Leistungen nach dem Asylbewerberleistungsgesetz.",
+      "quellen": {
+        "citizen_benefit_notice": "genuegt",
+        "social_assistance_notice": "genuegt",
+        "asylum_benefit_notice": "genuegt",
+        "bvg_assistance_notice": "genuegt",
+        "youth_welfare_notice": "genuegt"
+      }
+    },
+    "kinderbetreuung": {
+      "titel": "Nachweis der Kinderbetreuungskosten",
+      "hinweis": "Die Rechnung oder Bescheinigung der Betreuungseinrichtung.",
+      "quellen": {
+        "child_care_cost_proof": "genuegt"
+      }
+    },
+    "sorgerecht": {
+      "titel": "Nachweis zur Betreuung durch getrennt lebende Eltern",
+      "hinweis": "Ein Nachweis, wie die Betreuung des Kindes zwischen den Eltern geregelt ist, zum Beispiel ein Sorgerechts- oder Umgangsnachweis.",
+      "quellen": {
+        "birth_custody_certificate": "genuegt"
+      }
+    },
+    "schwerbehinderung": {
+      "titel": "Nachweis der Schwerbehinderung oder des Pflegegrads",
+      "hinweis": "Der Schwerbehindertenausweis, der Feststellungsbescheid oder der Bescheid über den Pflegegrad.",
+      "quellen": {
+        "disability_notice": "genuegt"
+      }
+    },
+    "unterhalt": {
+      "titel": "Nachweis zum Unterhalt",
+      "hinweis": "Nachweise über den gezahlten Unterhalt, zum Beispiel Kontoauszüge oder Überweisungsbelege. Gibt es einen Unterhaltstitel, eine Jugendamtsurkunde, eine notarielle Unterhaltsvereinbarung oder einen Bescheid, legen Sie ihn bei: Er bestimmt, bis zu welchem Betrag der Unterhalt abgezogen wird.",
+      "quellen": {
+        "maintenance_payment_proof": "genuegt",
+        "bank_statement": "pruefen",
+        "maintenance_title": "ergaenzt"
+      }
+    },
+    "vermoegen": {
+      "titel": "Vermögensnachweis",
+      "hinweis": "Zum Beispiel Kontoauszüge, ein Kapitalertragsnachweis oder ein Gutachten zu einer Immobilie.",
+      "quellen": {
+        "asset_proof": "genuegt",
+        "property_valuation": "genuegt",
+        "bank_statement": "pruefen"
+      }
+    },
+    "verpflichtungserklaerung": {
+      "titel": "Verpflichtungserklärung",
+      "hinweis": "Die Verpflichtungserklärung nach § 68 des Aufenthaltsgesetzes.",
+      "quellen": {
+        "obligation_declaration": "genuegt"
+      }
+    },
+    "ns_verfolgung": {
+      "titel": "Nachweis als Opfer nationalsozialistischer Verfolgung",
+      "hinweis": "Der Nachweis der Anerkennung nach dem Bundesentschädigungsgesetz.",
+      "quellen": {
+        "ns_persecution_proof": "genuegt"
+      }
+    },
+    "aufenthaltstitel": {
+      "titel": "Aufenthaltstitel",
+      "hinweis": "Der Aufenthaltstitel oder die Fiktionsbescheinigung.",
+      "quellen": {
+        "residence_permit": "genuegt"
+      }
+    },
+    "sterbefall": {
+      "titel": "Nachweis zum Todesfall",
+      "hinweis": "Die Sterbeurkunde.",
+      "quellen": {
+        "death_certificate": "genuegt"
+      }
+    },
+    "vollmacht": {
+      "titel": "Vollmacht",
+      "hinweis": "Die Vollmacht der bevollmächtigten Person.",
+      "quellen": {
+        "power_of_attorney": "genuegt"
+      }
+    }
+  },
+  "stellen": [
+    {
+      "id": "miete",
+      "art": "miete_hoehe",
+      "position": "G01000001422/F00000000567",
+      "bereich": "Wohnen",
+      "titel": "Höhe der Miete",
+      "aussage": "Gesamtmiete {F00000000240|eur} im Monat",
+      "nennt": {
+        "feld": "F00000000560",
+        "ja": [
+          "001",
+          "002",
+          "004",
+          "999"
+        ],
+        "nein": [
+          "003"
+        ]
+      },
+      "auffang": true,
+      "nurFrage": true
+    },
+    {
+      "id": "heimvertrag",
+      "art": "miete_hoehe",
+      "position": "G01000001422/F01000002184",
+      "bereich": "Wohnen",
+      "titel": "Heimvertrag",
+      "hinweis": "Der Heimvertrag, eine Bestätigung des Trägers der Einrichtung oder ein Nachweis als Selbstzahlerin oder Selbstzahler.",
+      "nennt": {
+        "feld": "F00000000560",
+        "ja": [
+          "003"
+        ]
+      },
+      "nurFrage": true
+    },
+    {
+      "id": "mietveraenderung",
+      "art": "mietveraenderung",
+      "position": "G01000001420/F60000000296",
+      "bereich": "Wohnen",
+      "titel": "Veränderung der Miete",
+      "nennt": {
+        "feld": "F00000003217",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      },
+      "auffang": true
+    },
+    {
+      "id": "mitbewohner",
+      "art": "mitbewohner",
+      "position": [
+        "G00000000326/F60000000296",
+        "G00000001547/F60000000296"
+      ],
+      "bereich": "Wohnen",
+      "titel": "Mitbewohner oder Untermiete",
+      "aussage": "{F60000000228} {F60000000227}",
+      "nennt": [
+        {
+          "feld": "F00000002597",
+          "ja": [
+            "002"
+          ],
+          "nein": [
+            "001"
+          ],
+          "spaeter": [
+            "003"
+          ]
+        },
+        {
+          "feld": "F00000002647",
+          "ja": [
+            "002"
+          ],
+          "nein": [
+            "001"
+          ],
+          "spaeter": [
+            "003"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "belastung",
+      "art": "belastung",
+      "position": [
+        "G01000001371/F60000000296",
+        "G01000001375/F60000000296"
+      ],
+      "bereich": "Wohnen",
+      "titel": "Eigentum am Wohnraum",
+      "nennt": "immer",
+      "auffang": true,
+      "aussage": "{F01000002199|code}"
+    },
+    {
+      "id": "fremdmittel",
+      "art": "fremdmittel",
+      "position": [
+        "G00000001559/F60000000296",
+        "G00000001580/F60000000296"
+      ],
+      "bereich": "Wohnen",
+      "titel": "Darlehen für die Immobilie",
+      "aussage": "{F00000002695}: ursprünglich {F00000002659|eur}, Restbetrag {F00000002660|eur}"
+    },
+    {
+      "id": "zuschuss_belastung",
+      "art": "zuschuss_belastung",
+      "position": "G00000001583/F60000000296",
+      "bereich": "Wohnen",
+      "titel": "Zuschuss zur Belastung",
+      "aussage": "von {F00000002700}"
+    },
+    {
+      "id": "aufwendung",
+      "art": "aufwendung",
+      "position": "G00000001569/F60000000296",
+      "bereich": "Wohnen",
+      "titel": "Weitere Aufwendung für den Wohnraum",
+      "aussage": "{F00000002671|code}: {F00000002670|eur}",
+      "merkmale": [
+        {
+          "name": "aufwendungsart",
+          "feld": "F00000002671"
+        }
+      ]
+    },
+    {
+      "id": "belastung_veraenderung",
+      "art": "belastung_veraenderung",
+      "position": "G00000002022/F60000000296",
+      "bereich": "Wohnen",
+      "titel": "Veränderung der Belastung",
+      "aussage": "künftig {F00000003215|eur} im Monat",
+      "nennt": {
+        "feld": "F00000003214",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      }
+    },
+    {
+      "id": "wohnflaeche",
+      "art": "wohnflaeche",
+      "position": "G00000001550/F60000000296",
+      "bereich": "Wohnen",
+      "titel": "Größe des Wohnraums",
+      "aussage": "{F00000002651} m²",
+      "nennt": {
+        "feld": "F00000002651",
+        "gefuellt": true
+      },
+      "auffang": true
+    },
+    {
+      "id": "garage_vermietung",
+      "art": "garage_vermietung",
+      "position": "G01000001368/F60000000296",
+      "bereich": "Wohnen",
+      "titel": "Vermietung von Garage oder Stellplatz"
+    },
+    {
+      "id": "einnahmen",
+      "art": "einnahmen",
+      "position": "G01000001392/F60000000296",
+      "bereich": "Einkommen",
+      "titel": "Einkommen",
+      "aussage": "{F00000000574|tabelle:einkommensart}: {F00000000575|eur} ({F00000001882|code})",
+      "merkmale": [
+        {
+          "name": "income_type",
+          "feld": "F00000000574",
+          "tabelle": "einkommensart"
+        },
+        {
+          "name": "betrag",
+          "feld": "F00000000575",
+          "als": "cent"
+        }
+      ]
+    },
+    {
+      "id": "werbungskosten",
+      "art": "werbungskosten",
+      "position": "G00000000348/F60000000296",
+      "bereich": "Einkommen",
+      "titel": "Werbungskosten",
+      "aussage": "{F00000002538|eur} im Monat",
+      "nennt": {
+        "feld": "F00000002580",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      },
+      "auffang": true,
+      "merkmale": [
+        {
+          "name": "income_type",
+          "feld": "F00000000574",
+          "tabelle": "einkommensart"
+        },
+        {
+          "name": "betrag",
+          "feld": "F00000000575",
+          "als": "cent"
+        }
+      ]
+    },
+    {
+      "id": "einnahmen_veraenderung",
+      "art": "einnahmen_veraenderung",
+      "position": "G01000001397/F60000000296",
+      "bereich": "Einkommen",
+      "titel": "Veränderung des Einkommens",
+      "nennt": {
+        "feld": "F00000002581",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      },
+      "auffang": true,
+      "merkmale": [
+        {
+          "name": "income_type",
+          "feld": "F00000000574",
+          "tabelle": "einkommensart"
+        },
+        {
+          "name": "betrag",
+          "feld": "F00000000575",
+          "als": "cent"
+        }
+      ]
+    },
+    {
+      "id": "einmalige_einnahmen",
+      "art": "einmalige_einnahmen",
+      "position": "G00000000336/F60000000296",
+      "bereich": "Einkommen",
+      "titel": "Einmalige Einnahme",
+      "nennt": {
+        "feld": "F00000002587",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      }
+    },
+    {
+      "id": "transferleistung",
+      "art": "transferleistung",
+      "position": "G01000001216/F60000000296",
+      "bereich": "Einkommen",
+      "titel": "Sozialleistung",
+      "nennt": {
+        "feld": "F00000002577",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      },
+      "auffang": true
+    },
+    {
+      "id": "unterhalt",
+      "art": "unterhalt",
+      "position": "G00000001144/F60000000296",
+      "bereich": "Einkommen",
+      "titel": "Unterhaltszahlung",
+      "nennt": {
+        "feld": "F00000002026",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      }
+    },
+    {
+      "id": "vermoegen",
+      "art": "vermoegen",
+      "position": "G00000001478/F60000000296",
+      "bereich": "Vermögen",
+      "titel": "Vermögen",
+      "nennt": {
+        "feld": "F00000000588",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      },
+      "auffang": true
+    },
+    {
+      "id": "kinderbetreuung",
+      "art": "kinderbetreuung",
+      "position": "G00000001056/F60000000296",
+      "bereich": "Haushalt",
+      "titel": "Kinderbetreuungskosten",
+      "aussage": "{F00000000302|eur} im Monat",
+      "nennt": {
+        "feld": "F00000002583",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      },
+      "auffang": true,
+      "einmal": true
+    },
+    {
+      "id": "sorgerecht",
+      "art": "sorgerecht",
+      "position": "G01000001427/F00000003219",
+      "bereich": "Haushalt",
+      "titel": "Betreuung durch getrennt lebende Eltern",
+      "nurFrage": true,
+      "auffang": true
+    },
+    {
+      "id": "schwerbehinderung",
+      "art": "schwerbehinderung",
+      "position": "G01000001441/F60000000296",
+      "bereich": "Besondere Umstände",
+      "titel": "Schwerbehinderung oder Pflegegrad",
+      "nennt": [
+        {
+          "feld": "F01000002192",
+          "ja": [
+            "true",
+            "002"
+          ],
+          "nein": [
+            "false",
+            "001"
+          ],
+          "spaeter": [
+            "003"
+          ]
+        },
+        {
+          "feld": "F00000002566",
+          "ja": [
+            "true",
+            "002"
+          ],
+          "nein": [
+            "false",
+            "001"
+          ],
+          "spaeter": [
+            "003"
+          ]
+        }
+      ],
+      "auffang": true
+    },
+    {
+      "id": "ns_verfolgung",
+      "art": "ns_verfolgung",
+      "position": "G00000000347/F60000000296",
+      "bereich": "Besondere Umstände",
+      "titel": "Opfer nationalsozialistischer Verfolgung",
+      "nennt": {
+        "feld": "F00000000381",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      },
+      "auffang": true
+    },
+    {
+      "id": "verpflichtungserklaerung",
+      "art": "verpflichtungserklaerung",
+      "position": "G00000001490/F60000000296",
+      "bereich": "Besondere Umstände",
+      "titel": "Verpflichtungserklärung",
+      "nennt": {
+        "feld": "F00000001173",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      },
+      "auffang": true
+    },
+    {
+      "id": "aufenthaltstitel",
+      "art": "aufenthaltstitel",
+      "position": "G00000001458/F00000002494",
+      "bereich": "Besondere Umstände",
+      "titel": "Aufenthaltstitel",
+      "nennt": {
+        "feld": "F00000002431",
+        "ja": [
+          "false",
+          "001"
+        ],
+        "nein": [
+          "true",
+          "002"
+        ]
+      },
+      "auffang": true
+    },
+    {
+      "id": "sterbefall",
+      "art": "sterbefall",
+      "position": "G01000001460/F60000000296",
+      "bereich": "Besondere Umstände",
+      "titel": "Todesfall im Haushalt",
+      "aussage": "{F60000000228} {F60000000227}",
+      "nennt": {
+        "feld": "F00000002593",
+        "ja": [
+          "002"
+        ],
+        "nein": [
+          "001"
+        ],
+        "spaeter": [
+          "003"
+        ]
+      }
+    },
+    {
+      "id": "vollmacht",
+      "art": "vollmacht",
+      "position": "G60000000220/F60000000351",
+      "bereich": "Besondere Umstände",
+      "titel": "Vollmacht",
+      "nennt": {
+        "feld": "F60000000352",
+        "ja": [
+          "004",
+          "005"
+        ],
+        "nein": [
+          "001"
+        ]
+      },
+      "auffang": true
+    },
+    {
+      "id": "betreuungsurkunde",
+      "art": "vollmacht",
+      "position": "G60000000220/F60000000350",
+      "bereich": "Besondere Umstände",
+      "titel": "Betreuungsurkunde",
+      "hinweis": "Die Betreuungsurkunde oder der Betreuerausweis der gesetzlichen Vertretung.",
+      "nennt": {
+        "feld": "F60000000352",
+        "ja": [
+          "002",
+          "003"
+        ]
+      }
+    }
+  ],
+  "bekanntOffen": {
+    "/F01000002054": "Der hochgeladene Antrag selbst (Upload OD), kein Nachweis.",
+    "G00000001512/F60000000296": "Aufforderung einer Behörde zur Beantragung von Wohngeld: Für dieses Schreiben führt der Katalog keinen Dokumenttyp.",
+    "G00000001565/F60000000296": "Rückzahlung von Fremdmitteln: Der Zahlungsnachweis steht beim Darlehen selbst (Stelle „fremdmittel“).",
+    "G00000001579/F60000000296": "Warmmiete und Nebenkosten der Mitbewohner im Lastenzuschuss: kein eigener Dokumenttyp; Belege stehen beim Mitbewohner.",
+    "G00000001563/F60000000296": "Ersetztes Fremdmittel (Folgeanträge): Die Unterlagen stehen beim Darlehen selbst (Stelle „fremdmittel“)."
+  }
+}

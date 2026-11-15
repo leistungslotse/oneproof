@@ -1,0 +1,208 @@
+{
+  "$schema": "urn:oneproof:format:wohngeld:1.0",
+  "standard": "oneproof-format",
+  "version": "1.0",
+  "nachricht": {
+    "nachrichtenUUID": "6c1d2f4e-8a3b-4c5d-9e7f-0a1b2c3d4e5f",
+    "nachrichtentyp": "antrag",
+    "erstellungszeitpunkt": "2026-08-13T09:09:46+02:00",
+    "autor": {
+      "name": "LeistungsLotse"
+    }
+  },
+  "leistung": {
+    "art": "wohngeld"
+  },
+  "antragstellung": {
+    "zeitpunkt": "2026-08-13T09:09:46+02:00"
+  },
+  "personen": [
+    {
+      "id": "p1",
+      "rolle": "antragsteller",
+      "name": {
+        "vorname": "Svenja",
+        "familienname": "Einstein"
+      },
+      "geburt": {
+        "datum": "1975-10-29"
+      },
+      "geschlecht": "female",
+      "familienstand": "married",
+      "erwerb": {
+        "status": "worker"
+      },
+      "kommunikation": {
+        "email": "beispiel@example.org",
+        "telefon": "0123456789"
+      }
+    },
+    {
+      "id": "p2",
+      "rolle": "haushaltsmitglied",
+      "name": {
+        "vorname": "Albert",
+        "familienname": "Einstein"
+      },
+      "geburt": {
+        "datum": "1974-01-24"
+      },
+      "geschlecht": "male",
+      "familienstand": "married",
+      "verhaeltnisZumAntragsteller": {
+        "art": "married"
+      },
+      "erwerb": {
+        "status": "worker"
+      }
+    }
+  ],
+  "fachdaten": {
+    "antrag": {
+      "aufforderungDurchAndereStelle": false
+    },
+    "wohnraum": {
+      "wohnverhaeltnis": "tenant",
+      "anschrift": {
+        "strasse": "Physikweg",
+        "hausnummer": "13",
+        "postleitzahl": "12503",
+        "ort": "Berlin"
+      },
+      "oeffentlichGefoerdert": false,
+      "wohnflaeche": 110,
+      "umzugOderAuszugGeplant": false,
+      "andereNutzung": {
+        "vorhanden": false
+      }
+    },
+    "personen": [
+      {
+        "person": "p1",
+        "einkommen": {
+          "vorhanden": true,
+          "eintraege": [
+            {
+              "art": "salary",
+              "betrag": 1789,
+              "zahlweise": "monthly",
+              "steuernGezahlt": true
+            }
+          ],
+          "rentenversicherungsbeitraegeGezahlt": true,
+          "krankenUndPflegeversicherungsbeitraegeGezahlt": true,
+          "werbungskostenJahr": 14760
+        },
+        "behinderung": {
+          "vorhanden": false
+        },
+        "transferleistung": {
+          "vorhanden": false
+        },
+        "nsVerfolgt": false
+      },
+      {
+        "person": "p2",
+        "einkommen": {
+          "vorhanden": true,
+          "eintraege": [
+            {
+              "art": "salary",
+              "betrag": 477,
+              "zahlweise": "monthly",
+              "steuernGezahlt": false
+            }
+          ],
+          "rentenversicherungsbeitraegeGezahlt": false,
+          "krankenUndPflegeversicherungsbeitraegeGezahlt": false,
+          "werbungskostenJahr": 14760
+        },
+        "behinderung": {
+          "vorhanden": false
+        },
+        "transferleistung": {
+          "vorhanden": false
+        }
+      }
+    ],
+    "haushalt": {
+      "verpflichtungserklaerung": {
+        "vorhanden": false
+      },
+      "mitbewohner": {
+        "vorhanden": false
+      },
+      "todesfall": {
+        "vorhanden": false
+      },
+      "aenderungHaushaltsgroesse": {
+        "vorhanden": false
+      }
+    },
+    "kinderUndUnterhalt": {
+      "kinderbetreuungskosten": {
+        "vorhanden": false
+      },
+      "unterhaltszahlungen": {
+        "vorhanden": false
+      },
+      "unterhaltsanspruch": {
+        "vorhanden": false
+      }
+    },
+    "einkommensentwicklung": {
+      "einmaligeZahlungen": {
+        "vorhanden": false
+      },
+      "einkommensaenderungen": {
+        "vorhanden": false
+      }
+    },
+    "vermoegen": {
+      "vorhanden": true,
+      "wertgegenstaende": 1500,
+      "sonstiges": 2950
+    },
+    "mietzuschuss": {
+      "stellung": "tenant",
+      "verwandtMitVermieter": false,
+      "miete": {
+        "gesamtmiete": 950
+      },
+      "zuschussDritter": {
+        "vorhanden": false
+      }
+    },
+    "zahlung": {
+      "empfaenger": "tenant_pay",
+      "person": "p1",
+      "iban": "DE02120300000000202051"
+    }
+  },
+  "anlagen": [
+    {
+      "dateiname": "verdienstbescheinigung-des-arbeitgebers-albert-einstein.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "income_certificate",
+      "person": "p2",
+      "bezuege": [
+        {
+          "stelle": "/fachdaten/personen/1/einkommen/eintraege/0"
+        }
+      ],
+      "mimeType": "application/pdf"
+    },
+    {
+      "dateiname": "vermogens-kapitalertragsnachweis-svenja-einstein.pdf",
+      "zweck": "nachweis",
+      "dokumentart": "asset_proof",
+      "person": "p1",
+      "bezuege": [
+        {
+          "stelle": "/fachdaten/vermoegen"
+        }
+      ],
+      "mimeType": "application/pdf"
+    }
+  ]
+}

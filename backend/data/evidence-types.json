@@ -1,0 +1,77 @@
+[
+  {
+    "id": "e4a9a8e6-7b68-4cef-9980-fd3c0bdef4ee",
+    "key": "birthCertificate",
+    "name": "Geburtsurkunde",
+    "registry": "Personenstandsregister",
+    "levelOfAssurance": "Low",
+    "format": "application/xml",
+    "local": true,
+    "provider": {
+      "id": "d4ab58a2-cdea-4495-a064-a17bdcd7cc55",
+      "name": "Standesamt Auenthal"
+    }
+  },
+  {
+    "id": "5926157e-dd70-4abc-b6f2-e2e6e31bbc1f",
+    "key": "residenceCertificate",
+    "name": "Meldebescheinigung",
+    "registry": "Melderegister",
+    "levelOfAssurance": "Substantial",
+    "format": "application/xml",
+    "local": true,
+    "provider": {
+      "id": "7c1e0a52-3f0b-4f6e-9a54-1b2f6d0c8e11",
+      "name": "Meldebehörde Auenthal"
+    }
+  },
+  {
+    "id": "2b6f4c1d-8e3a-4d57-b0c9-6a1e5f7d9c20",
+    "key": "pensionStatement",
+    "name": "Rentenbezugsbescheinigung",
+    "registry": "Rentenversicherung",
+    "levelOfAssurance": "High",
+    "format": "application/json",
+    "local": false,
+    "provider": {
+      "id": "0f9d3b7a-5c2e-4a81-8d6f-3e4b1a2c5d70",
+      "name": "Deutsche Rentenversicherung Auenthal"
+    }
+  },
+  {
+    "id": "9a3e7d52-1c4b-4f68-a2d0-5b8c6e1f7a31",
+    "key": "incomeTaxAssessment",
+    "name": "Einkommensteuerbescheid",
+    "registry": "Finanzverwaltung",
+    "levelOfAssurance": "High",
+    "format": "application/json",
+    "local": true,
+    "provider": {
+      "id": "4d8a1f63-9b2c-4e75-b1a0-7c6d5e4f3a82",
+      "name": "Finanzamt Auenthal"
+    }
+  },
+  {
+    "id": "b791cf08-afac-4899-a46e-9a9d03e3a425",
+    "key": "taxIdentificationNumber",
+    "name": "Steuerliche Identifikationsnummer",
+    "registry": "IdNr-Datenbank",
+    "levelOfAssurance": "High",
+    "format": "application/json",
+    "local": false,
+    "provider": {
+      "id": "48c12de1-75c2-46ae-9c5b-7595b7b2f90e",
+      "name": "Bundeszentralamt für Steuern"
+    }
+  },
+  {
+    "id": "6e2c9b14-7a5d-4c38-9f01-8d3b2a1c4e53",
+    "key": "childBenefitNotice",
+    "name": "Kindergeldbescheid",
+    "registry": "Familienkasse",
+    "levelOfAssurance": "Substantial",
+    "format": "application/json",
+    "local": false,
+    "provider": null
+  }
+]

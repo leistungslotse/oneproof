@@ -1,0 +1,1310 @@
+{
+  "identity_document": {
+    "label": "Ausweisdokument",
+    "description": "Personalausweis, Reisepass oder Reiseausweis, deutsch oder ausländisch; im Text meist „Personalausweis“, „Reisepass“, „Passport“ oder „Identity Card“. Weist die IDENTITÄT EINER Person aus — abzugrenzen vom Aufenthaltstitel (residence_permit), auch als Etikett im Pass, und von der Meldebescheinigung (registration_certificate), die Ausweisdaten nennen kann.",
+    "confusions": [
+      {
+        "type": "registration_certificate",
+        "requires": [
+          "meldebescheinigung",
+          "melderegisterauskunft",
+          "haushaltsbescheinigung",
+          "meldebestaetigung",
+          "meldebehoerde",
+          "einwohnermeldeamt"
+        ],
+        "unless": [
+          "personalausweis",
+          "reisepass",
+          "passport",
+          "identity card",
+          "aufenthaltstitel",
+          "fiktionsbescheinigung"
+        ]
+      },
+      {
+        "type": "residence_permit",
+        "requires": [
+          "aufenthalt",
+          "residence permit",
+          "fiktionsbescheinigung",
+          "duldung"
+        ],
+        "unless": [
+          "personalausweis",
+          "reisepass",
+          "passport",
+          "reiseausweis"
+        ]
+      }
+    ],
+    "fields": {
+      "vorname": "Vorname(n) der Person, auch „Given names“",
+      "nachname": "Nachname der Person, auch „Surname“",
+      "geburtsdatum": "Geburtsdatum der Person im Format TT.MM.JJJJ",
+      "anschrift": "Anschrift (meist auf der Rückseite), falls vorhanden",
+      "nationalitaet": "Staatsangehörigkeit/Nationalität als ganzer Name (z. B. türkisch statt TUR)",
+      "typ": "Personalausweis (deutsch), Personalausweis (Ausland), Reisepass (deutsch), Reisepass (Ausland) oder Reiseausweis",
+      "gueltig_bis": "Ablaufdatum (Gültig bis / Date of expiry), falls vorhanden"
+    },
+    "match_against": [
+      "vorname",
+      "nachname",
+      "geburtsdatum",
+      "anschrift",
+      "nationalitaet"
+    ]
+  },
+  "registration_certificate": {
+    "label": "Meldebescheinigung / Haushaltsbescheinigung",
+    "description": "Bescheinigung der Meldebehörde über die an einer Anschrift gemeldeten Personen (Meldebescheinigung, Melderegisterauskunft, Haushaltsbescheinigung, Meldebestätigung), mit Dienstsiegel. Belegt den Haushalt, nicht die Identität — abzugrenzen vom Ausweisdokument (identity_document) und von der Wohnungsgeberbestätigung (move_in_confirmation).",
+    "confusions": [
+      {
+        "type": "identity_document",
+        "requires": [
+          "personalausweis",
+          "reisepass",
+          "passport",
+          "identity card"
+        ],
+        "unless": [
+          "meldebescheinigung",
+          "melderegisterauskunft",
+          "haushaltsbescheinigung",
+          "meldebestaetigung",
+          "meldebehoerde",
+          "einwohnermeldeamt"
+        ]
+      }
+    ],
+    "fields": {
+      "personen": "Namen aller an der Anschrift gemeldeten Personen",
+      "anschrift": "Gemeldete Anschrift",
+      "wohnungsstatus": "Hauptwohnung oder Nebenwohnung, falls angegeben",
+      "einzugsdatum": "Datum des Einzugs/der Anmeldung, falls angegeben",
+      "ausgestellt_am": "Ausstellungsdatum",
+      "ausstellende_behoerde": "Ausstellende Meldebehörde"
+    },
+    "match_against": [
+      "personen",
+      "anschrift"
+    ]
+  },
+  "move_in_confirmation": {
+    "label": "Wohnungsgeberbestätigung",
+    "description": "Bestätigung des Wohnungsgebers (Vermieter, Eigentümer, Verwaltung) über Ein- oder Auszug nach § 19 Bundesmeldegesetz, ausgestellt für die Meldebehörde; nennt Anschrift, Datum und Personen, aber keine Miete. Abzugrenzen von der Mietbescheinigung (rent_certificate) und der Meldebescheinigung (registration_certificate).",
+    "fields": {
+      "wohnungsgeber": "Name des Wohnungsgebers bzw. der beauftragten Verwaltung",
+      "anschrift": "Anschrift der Wohnung",
+      "personen": "Namen der ein- oder ausziehenden Personen",
+      "art": "Einzug oder Auszug",
+      "datum": "Datum des Ein- oder Auszugs"
+    },
+    "match_against": [
+      "personen",
+      "anschrift"
+    ]
+  },
+  "power_of_attorney": {
+    "label": "Vollmacht / Betreuerausweis",
+    "description": "Vollmacht, mit der eine Person eine andere zur Vertretung ermächtigt (für einen Antrag oder als General- oder Vorsorgevollmacht), oder Betreuerausweis bzw. Bestellungsurkunde des Betreuungsgerichts über eine rechtliche Betreuung mit ihren Aufgabenkreisen.",
+    "fields": {
+      "art": "Vollmacht, Vorsorgevollmacht, Betreuerausweis oder Bestellungsurkunde",
+      "bevollmaechtigter": "Name der bevollmächtigten oder zur Betreuung bestellten Person bzw. Stelle",
+      "vollmachtgeber": "Name der betreuten/vollmachtgebenden Person",
+      "aufgabenkreise": "Aufgabenkreise der Betreuung bzw. Umfang der Vollmacht (z. B. Behörden-, Vermögensangelegenheiten)",
+      "gueltig_bis": "Gültig bis, falls angegeben"
+    }
+  },
+  "residence_permit": {
+    "label": "Aufenthaltstitel / Fiktionsbescheinigung",
+    "description": "Beleg über den Aufenthaltsstatus einer Person aus einem Staat außerhalb von EU, EWR und Schweiz: Aufenthaltstitel als Karte („Residence Permit“) oder Etikett im Pass, Fiktionsbescheinigung, Aufenthaltsgestattung, Duldung oder Aufenthaltskarte. Abzugrenzen vom Ausweisdokument (identity_document) und von der Verpflichtungserklärung (obligation_declaration).",
+    "fields": {
+      "vorname": "Vorname der Person, für die der Titel ausgestellt ist",
+      "nachname": "Nachname der Person",
+      "art": "Art des Titels mit Rechtsgrundlage, wie im Dokument genannt (z. B. Aufenthaltserlaubnis nach § 25 Abs. 2 AufenthG, Niederlassungserlaubnis, Duldung, Fiktionsbescheinigung)",
+      "gueltig_ab": "Gültig ab, falls angegeben",
+      "gueltig_bis": "Gültig bis; „unbefristet“, wenn keine Frist genannt ist",
+      "ausstellende_behoerde": "Ausstellende Ausländerbehörde"
+    }
+  },
+  "death_certificate": {
+    "label": "Sterbeurkunde",
+    "description": "Sterbeurkunde des Standesamts über den Tod einer Person mit Sterbedatum und -ort. Abzugrenzen von der Geburtsurkunde (birth_custody_certificate) und vom Erbschein (inheritance_certificate).",
+    "fields": {
+      "person": "Name der verstorbenen Person",
+      "datum": "Sterbedatum",
+      "geburtsdatum": "Geburtsdatum der verstorbenen Person, falls angegeben",
+      "ausstellende_behoerde": "Ausstellendes Standesamt"
+    }
+  },
+  "public_grant_proof": {
+    "label": "Nachweis Kostenübernahme / öffentlicher Zuschuss",
+    "description": "Bescheid oder Bestätigung, dass eine öffentliche Stelle Wohnkosten übernimmt oder bezuschusst — etwa Wohnraumförderung (z. B. EOF), Zins- oder Aufwendungszuschuss, kommunaler Mietzuschuss. Abzugrenzen von Sozialleistungsbescheiden (etwa citizen_benefit_notice, social_assistance_notice) und von der Verpflichtungserklärung einer PRIVATEN Person (obligation_declaration).",
+    "fields": {
+      "geber": "Stelle, die die Kosten übernimmt oder den Zuschuss gewährt",
+      "art": "Art des Zuschusses, so wie er im Dokument heißt",
+      "monatlicher_betrag": "Monatlich übernommener Betrag (€)",
+      "zeitraum": "Zeitraum der Übernahme, falls angegeben"
+    }
+  },
+  "housing_right_deed": {
+    "label": "Urkunde über Wohnrecht oder Nießbrauch",
+    "description": "Notarielle Urkunde, die ein Wohnungsrecht, ein Dauerwohnrecht oder einen Nießbrauch an einem Grundstück oder Wohnraum bestellt, oder die Bewilligung zu seiner Eintragung. Ein Übergabevertrag, der ein solches Recht nur vorbehält, gehört zu gift_contract; abzugrenzen auch vom Erbbaurechtsvertrag (ground_lease_proof) und vom Grundbuchauszug (land_register_extract).",
+    "fields": {
+      "beguenstigter": "Name der berechtigten Person",
+      "art": "Wohnungsrecht, Dauerwohnrecht oder Nießbrauch",
+      "anschrift": "Anschrift des Grundstücks oder Wohnraums, an dem das Recht besteht",
+      "entgelt": "Laufendes Entgelt oder übernommene Kosten (€ mit Turnus), falls vereinbart",
+      "ausgestellt_am": "Beurkundungsdatum"
+    }
+  },
+  "obligation_declaration": {
+    "label": "Verpflichtungserklärung (§ 68 AufenthG)",
+    "description": "Erklärung einer dritten Person gegenüber Ausländerbehörde oder Auslandsvertretung, den Lebensunterhalt einer einreisenden Person einschließlich Wohnraum zu tragen, meist auf dem bundeseinheitlichen Vordruck. Abzugrenzen von der formlosen Unterstützungserklärung (third_party_support_proof) und vom öffentlichen Zuschuss (public_grant_proof).",
+    "fields": {
+      "verpflichteter": "Name der sich verpflichtenden Person",
+      "beguenstigter": "Name der Person, für die die Verpflichtung gilt",
+      "uebernommene_kosten": "Übernommene Kosten (€ mit Turnus), etwa für Lebensunterhalt oder Wohnraum, falls beziffert",
+      "ausgestellt_am": "Ausstellungsdatum",
+      "ausstellende_behoerde": "Ausländerbehörde oder Auslandsvertretung"
+    }
+  },
+  "ns_persecution_proof": {
+    "label": "Nachweis Opfer nationalsozialistischer Verfolgung",
+    "description": "Bescheid oder Ausweis, der eine Person als Opfer nationalsozialistischer Verfolgung oder ihr gleichgestellt anerkennt, etwa nach dem Bundesentschädigungsgesetz (BEG), auch mit Entschädigungsrente. Abzugrenzen vom Versorgungsbescheid des sozialen Entschädigungsrechts (provision_notice).",
+    "fields": {
+      "person": "Name der anerkannten Person",
+      "monatlicher_betrag": "Laufende Entschädigungsrente pro Monat (€), falls genannt",
+      "ausgestellt_am": "Ausstellungsdatum",
+      "ausstellende_stelle": "Ausstellende Stelle"
+    }
+  },
+  "birth_custody_certificate": {
+    "label": "Geburtsurkunde / Sorgerechts- oder Umgangsnachweis",
+    "description": "Geburts- oder Abstammungsurkunde des Standesamts, Beschluss oder Vergleich des Familiengerichts zu Sorge oder Umgang, Umgangsvereinbarung der Eltern oder Bescheinigung des Jugendamts (z. B. Sorgeerklärung). Belegt Abstammung, Sorge und Betreuung eines Kindes — abzugrenzen vom Unterhaltstitel (maintenance_title).",
+    "fields": {
+      "kind": "Name des Kindes",
+      "geburtsdatum": "Geburtsdatum des Kindes",
+      "eltern": "Namen der Eltern",
+      "sorgerecht_umgang": "Regelung zu Sorge, Umgang und Betreuungsanteilen, wie im Dokument (z. B. Wechselmodell), falls einschlägig"
+    },
+    "match_against": [
+      "kind"
+    ]
+  },
+  "rent_contract": {
+    "label": "Mietvertrag",
+    "description": "Vereinbarung über die entgeltliche Überlassung von Wohnraum, in der eine Person des Antrags die MIETENDE Seite ist, auch formlos, als Wohnheim- oder Genossenschaftsvertrag; Nachträge gehören dazu, jüngere haben Vorrang. Ein Untermietvertrag, in dem sie untermietet, gehört HIERHER; vermietet sie selbst, ist es sublease_proof bzw. rental_income_proof. Eigene Typen: rent_certificate, rent_change_notice, care_home_contract.",
+    "fields": {
+      "mieter": "Namen aller Mietenden (oft im Vertragskopf) — bei einem Untermietvertrag die untermietende Person",
+      "vermieter": "Name der vermietenden Partei — bei einem Untermietvertrag die haupt- oder alleinmietende Person, die untervermietet",
+      "objekt_adresse": "Anschrift des Mietobjekts (Straße, Nr., PLZ, Ort)",
+      "mietbeginn": "Datum des Mietbeginns (kann in der Zukunft liegen; ggf. aus „ab sofort/nächstem Monat“ ableiten)",
+      "einzugsdatum": "Datum der Übergabe oder des Einzugs in die Wohnung, NUR wenn ausdrücklich genannt (z. B. „Übergabe der Wohnung am …“, „Einzug zum …“) — nicht aus dem Mietbeginn ableiten",
+      "grundmiete": "Grundmiete/Nettokaltmiete pro Monat (€), wie ausgewiesen — auch „Kaltmiete“, „Nettomiete“ oder „Miete“ ohne Nebenkosten",
+      "nebenkosten": "Monatliche Vorauszahlung oder Pauschale für die kalten Betriebskosten (€), wie ausgewiesen — OHNE Heizung und Warmwasser",
+      "heizkosten": "Monatliche Vorauszahlung oder Pauschale für Heizung/Warmwasser (€), wie ausgewiesen",
+      "gesamtmiete": "Im Vertrag ausgewiesene monatliche Gesamtmiete (€) — der Betrag, der insgesamt an die vermietende Partei gezahlt wird (oft „Gesamtmiete“, „Warmmiete“, „monatlich zu zahlen“). Nur übernehmen, wenn er als Summe dasteht; niemals selbst addieren.",
+      "kosten_stellplatz": "Monatliche Vergütung für Garage, Tiefgarage, Stellplatz oder Carport (€), falls vereinbart",
+      "wohnflaeche": "Überlassene Wohnfläche in m² (ohne Geschäfts-/Zubehörräume), falls angegeben",
+      "pauschbetrage": "true, wenn Kosten für Heizung/Warmwasser, Haushaltsstrom, Garage oder Zusatzleistungen in der Miete enthalten sind, ohne betragsmäßig ausgewiesen zu sein (z. B. eine Bruttowarmmiete ohne Aufschlüsselung)",
+      "forderung": "true, wenn der Vertrag eine Förderung aus öffentlichen Mitteln nennt, die die Miete senkt (z. B. Zuschuss aus der Wohnraumförderung)",
+      "mietende": "Datum des Mietendes, nur falls das Mietverhältnis befristet ist",
+      "miete_beendet": "true, wenn sich aus dem Vertrag ergibt, dass das Mietverhältnis bereits beendet ist"
+    },
+    "match_against": [
+      "gesamtmiete",
+      "objekt_adresse",
+      "mietbeginn",
+      "wohnflaeche"
+    ]
+  },
+  "care_home_contract": {
+    "label": "Heimvertrag / Wohn- und Betreuungsvertrag",
+    "description": "Heimvertrag oder Wohn- und Betreuungsvertrag (WBVG) über Wohnraum mit Pflege oder Betreuung in einem Heim oder einer besonderen Wohnform, auch Aufnahmebestätigung des Trägers oder Nachweis als Selbstzahler; meist mit getrennten Entgelten für Unterkunft, Verpflegung, Pflege und Investitionskosten. Ein eigener Mietvertrag im betreuten Wohnen bleibt rent_contract.",
+    "fields": {
+      "bewohner": "Name der aufgenommenen Person",
+      "einrichtung": "Name der Einrichtung bzw. ihres Trägers",
+      "objekt_adresse": "Anschrift der Einrichtung",
+      "aufnahme_ab": "Beginn des Aufenthalts bzw. Vertrags",
+      "entgelt_unterkunft": "Monatliches Entgelt für die Unterkunft (€), falls gesondert ausgewiesen",
+      "entgelt_gesamt": "Monatliches Gesamtentgelt (€), wie ausgewiesen — niemals selbst addieren",
+      "selbstzahler": "true, wenn die Person die Kosten selbst trägt; false, wenn ein Sozialhilfe- oder anderer Träger sie übernimmt"
+    },
+    "match_against": [
+      "entgelt_gesamt",
+      "objekt_adresse"
+    ]
+  },
+  "rent_certificate": {
+    "label": "Vermieter-/Mietbescheinigung",
+    "description": "Von der vermietenden Partei ausgefülltes und unterschriebenes Formular, meist Vordruck einer Leistungsbehörde („Mietbescheinigung“, „Vermieterbescheinigung“), mit Grundmiete, Betriebs- und Heizkosten und Gesamtmiete zum Stichtag. Abzugrenzen vom Mietvertrag (rent_contract), vom Mietänderungsschreiben (rent_change_notice) und von der Wohnungsgeberbestätigung (move_in_confirmation).",
+    "confusions": [
+      {
+        "type": "move_in_confirmation",
+        "requires": [
+          "wohnungsgeber",
+          "einzugsbestaetigung",
+          "bundesmeldegesetz"
+        ],
+        "unless": [
+          "grundmiete",
+          "kaltmiete",
+          "betriebskosten",
+          "nebenkosten",
+          "heizkosten"
+        ]
+      }
+    ],
+    "fields": {
+      "mieter": "Namen der Mietenden",
+      "vermieter": "Name der vermietenden Partei",
+      "objekt_adresse": "Anschrift der Wohnung",
+      "kaltmiete": "Monatliche Grundmiete/Nettokaltmiete (€), wie ausgewiesen",
+      "nebenkosten": "Monatliche Vorauszahlung für die kalten Betriebskosten (€) — OHNE Heizung und Warmwasser",
+      "heizkosten": "Monatliche Vorauszahlung für Heizung und Warmwasser (€), falls ausgewiesen",
+      "warmmiete": "Monatliche Gesamtmiete (€), wie ausgewiesen — niemals selbst addieren",
+      "wohnflaeche": "Wohnfläche in m², falls angegeben",
+      "ausgestellt_am": "Ausstellungsdatum",
+      "einzugsdatum": "Datum des Einzugs der Mietenden, falls angegeben",
+      "mietbeginn": "Beginn des Mietverhältnisses, falls angegeben",
+      "miete_seit": "Datum, seit dem die Miete in der bescheinigten Höhe gilt („Miete in dieser Höhe seit“), NUR wenn ausdrücklich angegeben — nicht aus dem Beginn des Mietverhältnisses ableiten"
+    },
+    "match_against": [
+      "kaltmiete",
+      "warmmiete",
+      "objekt_adresse"
+    ]
+  },
+  "rent_change_notice": {
+    "label": "Mietänderungs-/Mieterhöhungsschreiben",
+    "description": "Schreiben der vermietenden Partei über eine Änderung der Miete — Mieterhöhung (§§ 558 ff. BGB, Staffel- oder Indexmiete), Mietsenkung oder neue Betriebskostenvorauszahlung — mit alter und neuer Miete und dem Datum des Wirksamwerdens. Abzugrenzen von der Mietbescheinigung (rent_certificate) und von der Betriebskostenabrechnung (utility_statement).",
+    "fields": {
+      "objekt_adresse": "Anschrift der Wohnung",
+      "alte_miete": "Bisherige GESAMTMIETE pro Monat (€) — der Betrag, der bis zum Stichtag insgesamt gezahlt wurde (Nettokaltmiete plus Vorauszahlungen für Betriebs- und Heizkosten), NUR wenn das Schreiben ihn als Summe ausweist; niemals die bisherige Nettokaltmiete",
+      "neue_miete": "Neue GESAMTMIETE pro Monat (€) — der Betrag, der ab dem Stichtag insgesamt gezahlt wird (Nettokaltmiete plus Vorauszahlungen für Betriebs- und Heizkosten; oft „Gesamtmiete“, „Warmmiete“, „ab … zahlen Sie monatlich“). Nur übernehmen, wenn er als Summe dasteht; niemals die Nettokaltmiete, niemals eine Vorauszahlung allein und niemals selbst addieren — fehlt die Summe, bleibt das Feld leer",
+      "alte_grundmiete": "Bisherige Grundmiete/Nettokaltmiete pro Monat (€), wie ausgewiesen",
+      "neue_grundmiete": "Neue Grundmiete/Nettokaltmiete pro Monat (€), wie ausgewiesen — bei einer Mieterhöhung nach § 558 BGB der Betrag, auf den „erhöht“ wird",
+      "gueltig_ab": "Datum, ab dem die neue Miete gilt",
+      "grund": "Grund der Änderung, falls angegeben"
+    },
+    "match_against": [
+      "neue_miete"
+    ]
+  },
+  "utility_statement": {
+    "label": "Nebenkosten-/Betriebskostenabrechnung",
+    "description": "Jahresabrechnung der vermietenden Partei oder Hausverwaltung über die Betriebskosten (§ 556 BGB) mit Abrechnungszeitraum, Nachzahlung oder Guthaben, oft mit neuer Vorauszahlung; auch gemeinsam mit den Heizkosten. Abzugrenzen von der gesonderten Heizkostenabrechnung (heating_statement) und der Hausgeldabrechnung (homeowner_fee_statement).",
+    "fields": {
+      "objekt_adresse": "Anschrift der Wohnung",
+      "abrechnungszeitraum": "Abrechnungszeitraum",
+      "nachzahlung_guthaben": "Nachzahlung (positiv) oder Guthaben (negativ) in €",
+      "neue_vorauszahlung": "Neue monatliche Vorauszahlung (€), falls angegeben"
+    }
+  },
+  "heating_statement": {
+    "label": "Heizkosten-/Warmwasserabrechnung",
+    "description": "Gesonderte Abrechnung über Heizung und Warmwasser nach der Heizkostenverordnung, meist von einem Messdienst (Techem, ista, Brunata, Minol) mit Verbrauchswerten je Einheit. Abzugrenzen von der Betriebskostenabrechnung (utility_statement); eine gemeinsame Abrechnung gehört dorthin.",
+    "fields": {
+      "objekt_adresse": "Anschrift der Wohnung",
+      "abrechnungszeitraum": "Abrechnungszeitraum",
+      "nachzahlung_guthaben": "Nachzahlung (positiv) oder Guthaben (negativ) in €",
+      "neue_vorauszahlung": "Neue monatliche Vorauszahlung (€), falls angegeben"
+    }
+  },
+  "rent_payment_proof": {
+    "label": "Mietzahlungsnachweis / Dauerauftrag / Mietquittung",
+    "description": "Beleg über die tatsächlich GEZAHLTE Miete: Dauerauftragsbestätigung, Überweisungsbeleg, Banking-Ansicht einer Mietzahlung oder Mietquittung. Belegt die Zahlung, nicht die geschuldete Höhe — abzugrenzen vom Kontoauszug (bank_statement), der alle Buchungen eines Zeitraums zeigt.",
+    "fields": {
+      "mieter": "Name der zahlenden Person (wer das Konto führt bzw. den Auftrag erteilt) — niemals der Empfänger der Zahlung; steht die zahlende Person im Beleg nicht, bleibt das Feld leer",
+      "empfaenger": "Empfänger der Zahlung (vermietende Partei) — wer das Geld erhält; Namen im Verwendungszweck („Miete Meier/Müller“) sind die Mietenden, nicht der Empfänger",
+      "monatlicher_betrag": "Gezahlte Miete pro Monat (€)",
+      "zahlungsart": "Dauerauftrag, Überweisung oder Quittung",
+      "zeitraum": "Zeitraum/Datum der Zahlung(en)"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "parking_service_proof": {
+    "label": "Nachweis Garage, Stellplatz oder Servicepauschale",
+    "description": "Beleg über einen ZUSÄTZLICH zur Wohnung gezahlten Betrag für Garage, Stellplatz oder Servicepauschale (etwa im betreuten Wohnen): Vertrag, Nachtrag zum Mietvertrag oder Rechnung. Eine Person des Antrags zahlt hier — abzugrenzen von der selbst VERMIETETEN Garage (parking_rental_contract).",
+    "fields": {
+      "objekt_adresse": "Zugehörige Anschrift",
+      "art": "Garage, Stellplatz oder Servicepauschale",
+      "mieter": "Name der zahlenden Person — sie nutzt die Garage, den Stellplatz oder die Leistung",
+      "vermieter": "Name der Person, Hausverwaltung oder Genossenschaft, die den Betrag erhält",
+      "monatlicher_betrag": "Monatlicher Betrag (€)"
+    },
+    "match_against": [
+      "monatlicher_betrag",
+      "art"
+    ]
+  },
+  "shared_accommodation_proof": {
+    "label": "Nachweis Wohngemeinschaft",
+    "description": "Beleg über das Wohnen in einer Wohngemeinschaft: WG-Mietvertrag oder Bescheinigung der hauptmietenden Person über den Anteil, den eine Person des Antrags ihr erstattet. Sie ZAHLT an eine andere mietende Person — abzugrenzen von Untermieteinnahmen (sublease_proof) und vom eigenen Mietvertrag (rent_contract), zu dem auch eine Untermiete über nicht geteilten Wohnraum gehört.",
+    "fields": {
+      "objekt_adresse": "Anschrift der gemeinsamen Wohnung",
+      "hauptmieter": "Name der haupt- oder alleinmietenden Person, an die der Anteil gezahlt wird",
+      "bewohner": "Namen der in der WG gemeldeten Personen",
+      "eigener_mietanteil": "Monatlicher Mietanteil der Person des Antrags (€)"
+    },
+    "match_against": [
+      "eigener_mietanteil",
+      "objekt_adresse"
+    ]
+  },
+  "sublease_proof": {
+    "label": "Nachweis über Untermieteinnahmen",
+    "description": "Beleg darüber, dass eine Person des Antrags einen Teil ihres Wohnraums UNTERVERMIETET und dafür einnimmt: Untermietvertrag oder Bescheinigung, in der SIE die untervermietende Seite ist. Entscheidend ist die Rolle, nicht die Überschrift: Ist sie die UNTERMIETENDE Seite, gehört der Vertrag zu rent_contract, bei bloßem Anteil an einer geteilten Wohnung zu shared_accommodation_proof.",
+    "fields": {
+      "objekt_adresse": "Anschrift der Wohnung",
+      "untervermieter": "Name der untervermietenden Person (die den Wohnraum überlässt und die Untermiete einnimmt)",
+      "untermieter": "Name der untermietenden Person (die den Wohnraum nutzt und die Untermiete zahlt)",
+      "monatliche_untermiete": "Monatliche Untermiete (€)",
+      "zeitraum": "Zeitraum des Untermietverhältnisses"
+    },
+    "match_against": [
+      "monatliche_untermiete"
+    ]
+  },
+  "land_register_extract": {
+    "label": "Grundbuchauszug",
+    "description": "Auszug aus dem Grundbuch (Grundbuchamt beim Amtsgericht), auch einzelne Blätter: Bestandsverzeichnis (Lage, Größe), Abteilung I (Eigentum), II (Lasten wie Wohnungsrecht, Nießbrauch, Erbbaurecht), III (Grundschulden, Hypotheken). Nennt keinen Wert — abzugrenzen vom Immobilienwertgutachten (property_valuation).",
+    "fields": {
+      "lage": "Anschrift(en)/Lage der Grundstücke aus dem Bestandsverzeichnis (Spalte „Wirtschaftsart und Lage“)",
+      "eigentuemer": "Namen der Eigentümerinnen und Eigentümer aus Abteilung I (bei Firmen die Firmierung)",
+      "belastungen": "Eingetragene Rechte und Lasten aus Abteilung II und III, falls erkennbar"
+    }
+  },
+  "purchase_contract": {
+    "label": "Kaufvertrag (Immobilie)",
+    "description": "Notariell beurkundeter Vertrag über den Kauf eines Grundstücks, Hauses oder einer Eigentumswohnung, auch Bauträgervertrag, mit Parteien, Objekt und Kaufpreis. Abzugrenzen vom Schenkungs- oder Übergabevertrag (gift_contract), vom Erbschein (inheritance_certificate) und vom Wertgutachten (property_valuation).",
+    "fields": {
+      "kaeufer": "Namen der kaufenden Partei",
+      "verkaeufer": "Namen der verkaufenden Partei",
+      "objekt_adresse": "Anschrift des Objekts",
+      "kaufpreis": "Kaufpreis (€)",
+      "datum": "Datum des Vertrags"
+    }
+  },
+  "inheritance_certificate": {
+    "label": "Erbschein / Erbnachweis",
+    "description": "Erbschein des Nachlassgerichts oder anderer Erbnachweis (Europäisches Nachlasszeugnis, notarielles Testament oder Erbvertrag mit Eröffnungsniederschrift) über die Erben und ggf. ihre Quoten. Belegt, wer erbt, nicht den Wert des Nachlasses — abzugrenzen von der Sterbeurkunde (death_certificate).",
+    "fields": {
+      "erbe": "Namen der Erbinnen und Erben",
+      "erblasser": "Name der verstorbenen Person (Erblasser), falls angegeben",
+      "erbquote": "Erbquote/Anteil, falls angegeben",
+      "datum": "Ausstellungsdatum"
+    }
+  },
+  "gift_contract": {
+    "label": "Schenkungs- oder Übergabevertrag",
+    "description": "Notarieller oder privatschriftlicher Vertrag über die unentgeltliche Übertragung von Vermögen, meist Grundbesitz, auch Übergabe- oder Überlassungsvertrag (vorweggenommene Erbfolge), selbst wenn sich die übergebende Person ein Wohnrecht oder einen Nießbrauch vorbehält. Abzugrenzen vom Kaufvertrag (purchase_contract) und von der Urkunde, die allein ein solches Recht bestellt (housing_right_deed).",
+    "fields": {
+      "schenker": "Name der schenkenden bzw. übergebenden Person",
+      "beschenkter": "Name der beschenkten bzw. übernehmenden Person",
+      "objekt_adresse": "Anschrift des übertragenen Objekts bzw. übertragener Gegenstand",
+      "vorbehalte": "Vorbehaltene Rechte wie Wohnungsrecht oder Nießbrauch, falls vereinbart",
+      "wert": "Angegebener Wert der Zuwendung (€), falls genannt",
+      "datum": "Datum des Vertrags"
+    }
+  },
+  "loan_contract": {
+    "label": "Darlehens-/Kreditvertrag zur Immobilienfinanzierung",
+    "description": "Darlehensvertrag mit Bank, Bausparkasse oder Versicherung zur Finanzierung einer Immobilie (Kauf, Bau, Modernisierung), auch KfW- oder Förderdarlehen, mit Darlehensbetrag, Zinssatz, Laufzeit und meist der Rate. Abzugrenzen vom Zins- und Tilgungsplan (loan_amortization_plan) und vom Zahlungsnachweis (loan_payment_proof).",
+    "fields": {
+      "darlehensnehmer": "Namen der darlehensnehmenden Personen",
+      "darlehensgeber": "Name der Bank bzw. des Darlehensgebers",
+      "darlehensnummer": "Darlehens-/Kontonummer des Darlehens, falls angegeben",
+      "objekt_adresse": "Finanziertes Objekt",
+      "verwendungszweck": "Verwendungszweck des Darlehens, so wie er im Vertrag steht (z. B. Erwerb, Neubau, Modernisierung, freie Verwendung), falls angegeben",
+      "darlehensbetrag": "Darlehensbetrag/Nennbetrag (€)",
+      "zinssatz": "Zinssatz, falls angegeben",
+      "monatliche_rate": "Vereinbarte monatliche Rate (€) für Zins und Tilgung, falls angegeben — nicht die Jahresannuität"
+    },
+    "match_against": [
+      "darlehensbetrag",
+      "monatliche_rate",
+      "verwendungszweck"
+    ]
+  },
+  "loan_amortization_plan": {
+    "label": "Zins- und Tilgungsplan / Jahreskontoauszug Darlehen",
+    "description": "Tilgungsplan oder Jahreskontoauszug der Bank oder Bausparkasse zu einem laufenden Immobiliendarlehen: Zins- und Tilgungsanteil je Jahr, Restschuld, oft die monatliche Rate, häufig für mehrere Jahre. Ein Bausparvertrag in der SPARPHASE gehört zum Vermögensnachweis (asset_proof). Abzugrenzen von loan_contract und loan_payment_proof.",
+    "fields": {
+      "darlehensnehmer": "Namen der darlehensnehmenden Personen",
+      "darlehensgeber": "Name der Bank bzw. des Darlehensgebers, falls angegeben",
+      "darlehensnummer": "Darlehens-/Kontonummer des Darlehens, falls angegeben",
+      "darlehensbetrag": "Nennbetrag/Ursprungsbetrag des Darlehens (€), falls angegeben",
+      "jahr": "Bezugsjahr — bei mehreren Jahren für JEDES Jahr ein eigener Eintrag",
+      "zins_anteil": "Zinsanteil des Jahres (€), Format „JJJJ: Betrag“ — bei mehreren Jahren für JEDES Jahr ein eigener Eintrag",
+      "tilgung_anteil": "Tilgungsanteil des Jahres (€), Format „JJJJ: Betrag“ — bei mehreren Jahren für JEDES Jahr ein eigener Eintrag",
+      "nebenleistungen": "Laufende Nebenleistungen des Jahres (€) wie Verwaltungskosten- oder Kontoführungsbeiträge, Format „JJJJ: Betrag“, falls ausgewiesen",
+      "monatliche_belastung": "Monatliche Rate/Gesamtbelastung (€), falls angegeben — bei mehreren Jahren Format „JJJJ: Betrag“",
+      "restschuld": "Restschuld (€) zum Jahresende, Format „JJJJ: Betrag“ — bei mehreren Jahren für JEDES Jahr ein eigener Eintrag"
+    },
+    "match_against": [
+      "monatliche_belastung",
+      "zins_anteil",
+      "tilgung_anteil",
+      "nebenleistungen",
+      "restschuld",
+      "darlehensbetrag"
+    ]
+  },
+  "loan_payment_proof": {
+    "label": "Zahlungsnachweis Kapitaldienst / Dauerauftrag Darlehensrate",
+    "description": "Beleg über die tatsächlich GEZAHLTE Darlehensrate: Dauerauftrags- oder Lastschriftbestätigung, Überweisungsbeleg oder Bankbestätigung über geleistete Zins- und Tilgungszahlungen. Belegt die Zahlung, nicht die vereinbarte Höhe — abzugrenzen von loan_amortization_plan, loan_contract und vom Kontoauszug (bank_statement).",
+    "fields": {
+      "zahlungspflichtiger": "Name der zahlenden Person",
+      "empfaenger": "Empfänger der Zahlung (Bank/Darlehensgeber)",
+      "darlehensnummer": "Darlehens-/Kontonummer des Darlehens, falls angegeben",
+      "monatlicher_betrag": "Gezahlte Rate pro Monat (€)",
+      "zahlungsart": "Dauerauftrag, Lastschrift, Überweisung oder Bankbestätigung",
+      "zeitraum": "Zeitraum/Datum der Zahlung(en)"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "property_tax_notice": {
+    "label": "Grundsteuerbescheid",
+    "description": "Bescheid der Gemeinde über die JAHRES-Grundsteuer für das Objekt, oft als Grundbesitzabgabenbescheid mit Müll- oder Abwassergebühren; Fälligkeiten meist 15.02., 15.05., 15.08., 15.11. Abzugrenzen vom Grundsteuerwert- oder -messbescheid des Finanzamts ohne Zahlbetrag und von der Hausgeldabrechnung (homeowner_fee_statement).",
+    "fields": {
+      "eigentuemer": "Namen der Eigentümerinnen und Eigentümer",
+      "objekt_adresse": "Anschrift des Objekts",
+      "jahresbetrag": "Festgesetzte Grundsteuer pro Jahr (€) — nur die Grundsteuer, nicht die Summe aller Grundbesitzabgaben",
+      "jahr": "Bezugsjahr"
+    },
+    "match_against": [
+      "jahresbetrag"
+    ]
+  },
+  "homeowner_fee_statement": {
+    "label": "Hausgeldabrechnung / Wirtschaftsplan WEG",
+    "description": "Jahresabrechnung oder Wirtschaftsplan der WEG-Verwaltung über das Hausgeld einer Eigentumswohnung mit Posten wie Verwaltervergütung, Betriebskosten und Erhaltungsrücklage. Abzugrenzen von der Betriebskostenabrechnung eines Mietverhältnisses (utility_statement).",
+    "fields": {
+      "eigentuemer": "Namen der Eigentümerinnen und Eigentümer",
+      "objekt_adresse": "Anschrift/Einheit",
+      "monatliches_hausgeld": "Monatliches Hausgeld (€)",
+      "verwaltungskosten": "Auf die Einheit entfallende Verwaltungskosten (Verwaltervergütung) in € mit Zeitraum, wie ausgewiesen — nicht das ganze Hausgeld",
+      "abrechnungszeitraum": "Abrechnungs-/Planungszeitraum"
+    },
+    "match_against": [
+      "verwaltungskosten",
+      "monatliches_hausgeld"
+    ]
+  },
+  "ground_lease_proof": {
+    "label": "Erbbaurechtsvertrag / Erbbauzinsnachweis",
+    "description": "Erbbaurechtsvertrag oder Nachweis über den Erbbauzins (Zahlungsaufforderung, Anpassung), den die erbbauberechtigte Person an die Grundstückseigentümerin zahlt, oft Kirche, Gemeinde oder Stiftung. Abzugrenzen von der Urkunde über Wohnrecht oder Nießbrauch (housing_right_deed) und vom Grundbuchauszug (land_register_extract).",
+    "fields": {
+      "berechtigter": "Name der erbbauberechtigten Person",
+      "grundstueckseigentuemer": "Eigentümer des Grundstücks, an den der Erbbauzins geht",
+      "objekt_adresse": "Anschrift des Objekts",
+      "art": "Erbbaurechtsvertrag, Zahlungsaufforderung oder Erbbauzinsanpassung",
+      "betrag": "Erbbauzins (€) mit Turnus, wie ausgewiesen"
+    },
+    "match_against": [
+      "betrag"
+    ]
+  },
+  "living_space_proof": {
+    "label": "Wohnflächenberechnung / Grundriss",
+    "description": "Weist die Wohnfläche einer Wohnung oder eines Hauses aus: Wohnflächenberechnung nach WoFlV, bemaßter Grundriss, Teilungserklärung mit Flächenangabe oder Bauunterlagen. NICHT hierzu zählt ein Mietvertrag, der die Fläche nur nebenbei nennt.",
+    "fields": {
+      "objekt_adresse": "Anschrift des Objekts",
+      "wohnflaeche": "Ausgewiesene Wohnfläche in m²",
+      "berechnungsgrundlage": "Grundlage der Berechnung (z. B. WoFlV), falls angegeben"
+    }
+  },
+  "parking_rental_contract": {
+    "label": "Mietvertrag über vermietete Garage/Stellplatz",
+    "description": "Vertrag, mit dem eine Person des Antrags eine eigene Garage, einen Stellplatz oder einen Carport an Dritte VERMIETET — sie nimmt hier ein. Abzugrenzen vom Nachweis über eine selbst GEZAHLTE Stellplatzmiete (parking_service_proof).",
+    "fields": {
+      "mieter": "Name der mietenden Person (die den Stellplatz nutzt und zahlt)",
+      "vermieter": "Name der vermietenden Person — hier die Person des Antrags selbst",
+      "objekt_adresse": "Anschrift der Garage/des Stellplatzes",
+      "monatliche_einnahme": "Monatliche Mieteinnahme (€)",
+      "anzahl": "Anzahl der vermieteten Einheiten, falls angegeben"
+    },
+    "match_against": [
+      "monatliche_einnahme"
+    ]
+  },
+  "payslip": {
+    "label": "Lohn-/Gehaltsabrechnung",
+    "description": "Monatliche Abrechnung des Arbeitsentgelts mit Brutto, Abzügen und Netto, auch für Minijob und Ausbildung; heißt oft Entgelt-, Verdienst-, Lohn- oder Gehaltsabrechnung oder Bezügemitteilung. Name und Anschrift stets der beschäftigten Person entnehmen, nicht dem Arbeitgeber. Abzugrenzen von der Verdienstbescheinigung über mehrere Monate (income_certificate).",
+    "fields": {
+      "vorname": "Vorname der beschäftigten Person (aus dem Adressblock, nicht der Arbeitgeber)",
+      "nachname": "Nachname der beschäftigten Person",
+      "arbeitgeber": "Name des Arbeitgebers",
+      "monat": "Abrechnungsmonat (MM.JJJJ). Deckt das Dokument mehrere Monate ab, gib JEDEN Monat als eigenen Eintrag an",
+      "gesamtbrutto_pro_monat": "Gesamtbrutto des Abrechnungsmonats (€) — die Zeile „Gesamtbrutto“, „Bruttobezüge“, „Bruttoentgelt“ oder „Gesamtbruttolohn“. NICHT das Steuerbrutto oder SV-Brutto (sie sind um steuer-/beitragsfreie Bestandteile gemindert) und NICHT den Netto-, Auszahlungs- oder Überweisungsbetrag. Zu jedem angegebenen Abrechnungsmonat gehört ein eigener Eintrag",
+      "nettoverdienst_pro_monat": "Nettoverdienst des Abrechnungsmonats (€) — die Zeile „Nettoverdienst“, „Netto-Verdienst“, „Nettobezüge“, „Nettoentgelt“, „Nettolohn“, „Nettogehalt“, „Gesetzliches Netto“ oder „Netto“ (Gesamtbrutto abzüglich Steuern und Sozialversicherungsbeiträgen der oder des Beschäftigten). Weist die Abrechnung KEINE dieser Zeilen aus, sondern nur einen „Auszahlungsbetrag“ oder „Überweisungsbetrag“, nimm diesen — er gehört IMMER in dieses Feld, nie in „lohnersatz“, „zulagen“ oder „zuschusse“. Weist sie beides aus (etwa wegen Vorschüssen, vermögenswirksamer Leistungen oder Pfändungen), gilt der Nettoverdienst. NICHT kumulierte Jahreswerte. Zu jedem angegebenen Abrechnungsmonat gehört ein eigener Eintrag",
+      "gratifikationen": "Einmalige Sonderzahlungen DIESES Abrechnungsmonats (Urlaubsgeld, Weihnachtsgeld, Jahressonderzahlung, 13. Monatsgehalt, Prämie, Gratifikation) im Format „Art: Betrag“ (z. B. „Weihnachtsgeld: 1.500,00“), je Art ein eigener Eintrag. NICHT laufende monatliche Zulagen oder Zuschläge und NICHT kumulierte Jahreswerte",
+      "lohnersatz": "NUR vom Arbeitgeber ausgezahlte Lohnersatzleistungen: Kurzarbeitergeld (KUG), Saison-Kurzarbeitergeld/Schlechtwettergeld (S-KUG), Transferkurzarbeitergeld, Insolvenzgeld. Format „Art: Betrag“ (z. B. „Kurzarbeitergeld: 412,50“), je Art ein eigener Eintrag. NICHT die Beiträge zur Arbeitslosen-, Kranken-, Pflege- oder Rentenversicherung (AV/ALV, KV, PV, RV — das sind Abzüge), NICHT den Auszahlungs-, Netto- oder Überweisungsbetrag (er gehört in „nettoverdienst_pro_monat“), NICHT Sonderzahlungen wie Urlaubs- oder Weihnachtsgeld (sie gehören in „gratifikationen“) und NICHT den Arbeitgeberzuschuss zum Kurzarbeitergeld. Steht keine solche Leistung auf der Abrechnung, lass das Feld weg",
+      "zulagen": "Steuerfreie Zulagen/Sachbezüge in € (SFN-Zuschläge nach § 3b EStG, Beiträge an Pensionskasse/Direktversicherung, Sachbezüge). OHNE Lohnersatzleistungen — die gehören in „lohnersatz“",
+      "zuschusse": "Steuerfreie Zuschüsse (Fahrtkosten-, Verpflegungszuschuss, Auslösungen) in €",
+      "lohnsteuer": "true, wenn eine Position Lohnsteuer/LSt mit Betrag ausgewiesen ist",
+      "krankenversicherung": "true, wenn ein KV-Beitrag ausgewiesen ist",
+      "pflegeversicherung": "true, wenn ein PV-Beitrag ausgewiesen ist",
+      "rentenversicherung": "true, wenn ein RV-Beitrag ausgewiesen ist",
+      "mutterschaftsgeld": "true, wenn ein Arbeitgeberzuschuss zum Mutterschaftsgeld gezahlt wird",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "gesamtbrutto_pro_monat",
+      "arbeitgeber"
+    ]
+  },
+  "income_certificate": {
+    "label": "Verdienstbescheinigung des Arbeitgebers",
+    "description": "Bescheinigung des Arbeitgebers über den Verdienst MEHRERER Monate in einem Dokument, meist 12 Monate als Tabelle, oft auf dem Vordruck einer Leistungsbehörde („Einkommensbescheinigung“); weist neben dem Brutto Sonderzahlungen und steuerfreie Bezüge aus. Abzugrenzen von der monatlichen Abrechnung (payslip) und der Lohnsteuerbescheinigung (income_tax_statement).",
+    "fields": {
+      "vorname": "Vorname der beschäftigten Person (aus dem Adressblock, nicht der Arbeitgeber)",
+      "nachname": "Nachname der beschäftigten Person",
+      "arbeitgeber": "Name des Arbeitgebers",
+      "zeitraum": "Bescheinigter Zeitraum, so wie er im Dokument steht (z. B. „01.2025 – 12.2025“)",
+      "monatsbrutto": "Bruttoverdienst je bescheinigtem Monat (€), Format „MM.JJJJ: Betrag“ — für JEDEN aufgeführten Monat ein eigener Eintrag. Maßgeblich ist das Gesamtbrutto, nicht das Steuer-/SV-Brutto und nicht der Auszahlungsbetrag. Weist die Bescheinigung nur eine Summe aus, lass dieses Feld weg",
+      "monatsnetto": "Nettoverdienst je bescheinigtem Monat (€), Format „MM.JJJJ: Betrag“ — für JEDEN aufgeführten Monat ein eigener Eintrag, nur wenn die Bescheinigung neben dem Brutto auch ein Netto ausweist (Nettoverdienst, Nettoentgelt, Auszahlungsbetrag). Weist sie nur eine Summe aus, lass dieses Feld weg",
+      "gesamtbrutto_pro_monat": "Durchschnittliches Gesamtbrutto pro Monat (€): Jahres-/Mehrmonatssumme durch Monatszahl teilen",
+      "nettoverdienst_pro_monat": "Durchschnittlicher Nettoverdienst pro Monat (€): Jahres-/Mehrmonatssumme der Nettobeträge durch Monatszahl teilen, falls die Bescheinigung Nettobeträge ausweist",
+      "gratifikationen": "Urlaubs-/Weihnachtsgeld, Prämien, Gratifikationen im bescheinigten ZEITRAUM (p. a.), im Format „Art: Betrag“ (z. B. „Weihnachtsgeld: 1.500,00“), je Art ein eigener Eintrag. Das ist eine Jahres-/Zeitraumsumme und gehört zu keinem einzelnen Monat — NICHT in die Monatsbeträge einrechnen",
+      "lohnersatz": "NUR bescheinigte Lohnersatzleistungen (Kurzarbeitergeld, Saison-Kurzarbeitergeld/Schlechtwettergeld, Transferkurzarbeitergeld) im Format „Art: Betrag“, je Art ein eigener Eintrag — nicht in die steuerfreien Zulagen einrechnen. NICHT Sozialversicherungsbeiträge (auch nicht die zur Arbeitslosenversicherung), Auszahlungsbeträge oder Sonderzahlungen",
+      "zulagen": "Steuerfreie Zulagen/Sachbezüge p. a. (€), ohne Lohnersatzleistungen — die gehören in „lohnersatz“",
+      "zuschusse": "Steuerfreie Zuschüsse p. a. (€)",
+      "zuschuss_zum_mutterschaftsgeld": "Arbeitgeberzuschuss zum Mutterschaftsgeld p. a. (€)",
+      "lohnsteuer": "true, wenn Lohnsteuer/LSt ausgewiesen oder bestätigt ist",
+      "krankenversicherung": "true, wenn Pflichtbeiträge zur gesetzlichen KV ausgewiesen/bestätigt sind",
+      "pflegeversicherung": "true, wenn Pflichtbeiträge zur gesetzlichen PV ausgewiesen/bestätigt sind",
+      "rentenversicherung": "true, wenn Pflichtbeiträge zur gesetzlichen RV ausgewiesen/bestätigt sind",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "gesamtbrutto_pro_monat",
+      "arbeitgeber"
+    ]
+  },
+  "employment_contract": {
+    "label": "Arbeitsvertrag",
+    "description": "Vertrag über ein Beschäftigungsverhältnis (Arbeitgeber, Tätigkeit, Arbeitszeit, Entgelt), auch formlos, befristet, für Werkstudierende oder Praktika. Abzugrenzen vom Änderungsvertrag (employment_termination), vom Minijob-Vertrag (minijob_proof) und vom Ausbildungsvertrag (training_contract); Werk- und Honorarverträge gehören nicht hierher.",
+    "fields": {
+      "vorname": "Vorname der beschäftigten Person",
+      "nachname": "Nachname der beschäftigten Person",
+      "arbeitgeber": "Name des Arbeitgebers",
+      "gesamtbrutto": "Vereinbartes Bruttoentgelt (€) ohne Sonderzahlungen wie Prämien, Urlaubs- oder Weihnachtsgeld",
+      "turnus": "Turnus des Entgelts: monatlich, jährlich, stündlich oder täglich",
+      "arbeitszeit": "Vereinbarte Arbeitszeit, wie angegeben (z. B. „20 Stunden/Woche“)",
+      "beginn": "Beginn des Arbeitsverhältnisses, falls angegeben",
+      "befristet_bis": "Ende der Befristung, falls befristet",
+      "zusatzvereinbarungen": "true, wenn Vereinbarungen über Gratifikationen/Prämien/Urlaubs-/Weihnachtsgeld bestehen",
+      "beendet": "true, wenn das Arbeitsverhältnis ausweislich des Vertrags bereits beendet ist"
+    }
+  },
+  "employment_termination": {
+    "label": "Kündigung / Aufhebungs- oder Änderungsvertrag",
+    "description": "Schreiben, das ein Beschäftigungsverhältnis beendet oder ab einem Datum ändert: Kündigung durch Arbeitgeber oder beschäftigte Person, Aufhebungsvertrag, Änderungsvertrag oder Nachtrag zu Arbeitszeit oder Entgelt, Ende einer Befristung. Belegt eine Einkommensänderung — abzugrenzen vom Arbeitsvertrag (employment_contract).",
+    "fields": {
+      "arbeitnehmer": "Name der beschäftigten Person",
+      "arbeitgeber": "Name des Arbeitgebers",
+      "art": "Kündigung, Aufhebungsvertrag, Änderungsvertrag oder Ende der Befristung",
+      "wirksam_ab": "Datum, ab dem die Änderung wirksam ist",
+      "neues_bruttoentgelt": "Künftiges Bruttoentgelt (€) mit Turnus, falls genannt",
+      "neue_arbeitszeit": "Künftige Arbeitszeit, falls genannt"
+    }
+  },
+  "income_tax_statement": {
+    "label": "Lohnsteuerbescheinigung",
+    "description": "Ausdruck der elektronischen Lohnsteuerbescheinigung des Arbeitgebers für ein abgelaufenes Kalenderjahr mit Bruttoarbeitslohn, Lohnsteuer und Sozialversicherungsbeiträgen, mit eTIN oder Steuer-ID. Abzugrenzen von der monatlichen Abrechnung (payslip) und vom Einkommensteuerbescheid (tax_assessment).",
+    "fields": {
+      "arbeitnehmer": "Name der beschäftigten Person",
+      "jahr": "Bezugsjahr",
+      "bruttoarbeitslohn": "Bruttoarbeitslohn des Jahres (€), Zeile 3",
+      "lohnsteuer": "Einbehaltene Lohnsteuer (€)",
+      "sozialversicherung": "SV-Beiträge des Jahres (€), falls angegeben"
+    }
+  },
+  "minijob_proof": {
+    "label": "Minijob-Vertrag / Minijob-Bescheinigung",
+    "description": "Vertrag oder Bescheinigung des Arbeitgebers über eine geringfügige Beschäftigung (Minijob, § 8 SGB IV), auch im Privathaushalt. Monatliche Lohnabrechnungen eines Minijobs gehören zu payslip, Verträge über eine sozialversicherungspflichtige Beschäftigung zu employment_contract.",
+    "fields": {
+      "arbeitnehmer": "Name der beschäftigten Person",
+      "arbeitgeber": "Name des Arbeitgebers",
+      "monatlicher_verdienst": "Vereinbarter oder bescheinigter monatlicher Bruttoverdienst (€)",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_verdienst"
+    ]
+  },
+  "special_payment_proof": {
+    "label": "Nachweis Sonderzahlung (Prämie, Urlaubs-/Weihnachtsgeld)",
+    "description": "Beleg über eine EINMALIGE Zahlung des Arbeitgebers — Urlaubs- oder Weihnachtsgeld, Prämie, Abfindung, Jubiläumszuwendung — mit Betrag und Auszahlungsmonat, etwa als Mitteilung oder Vereinbarung. Steht die Zahlung auf einer Monatsabrechnung, bleibt diese payslip.",
+    "fields": {
+      "arbeitnehmer": "Name der beschäftigten Person",
+      "art": "Urlaubsgeld, Weihnachtsgeld, Prämie o. Ä.",
+      "betrag": "Betrag (€)",
+      "monat": "Monat der Zahlung (MM.JJJJ)"
+    }
+  },
+  "self_employment_accounts": {
+    "label": "EÜR / BWA / Gewinn- und Verlustrechnung",
+    "description": "Gewinnermittlung einer selbstständigen, gewerblichen oder land- und forstwirtschaftlichen Tätigkeit: Einnahmen-Überschuss-Rechnung (EÜR), betriebswirtschaftliche Auswertung (BWA), Gewinn- und Verlustrechnung, Jahresabschluss oder Gewinnprognose. Maßgeblich ist der GEWINN, nicht der Umsatz — abzugrenzen vom Einkommensteuerbescheid (tax_assessment).",
+    "fields": {
+      "person": "Name der selbstständigen Person",
+      "unterlagenart": "EÜR, BWA, GuV, Jahresabschluss oder Prognose",
+      "zeitraum": "Zeitraum/Geschäftsjahr",
+      "gewinn": "Gewinn (nicht Umsatz) in €",
+      "umsatz": "Umsatz/Einnahmen (€), falls angegeben",
+      "prognose": "Gewinnprognose (€), falls es sich um eine Prognose handelt"
+    },
+    "match_against": [
+      "gewinn"
+    ]
+  },
+  "business_registration": {
+    "label": "Gewerbeanmeldung / Gewerbeabmeldung",
+    "description": "Gewerbeanmeldung, -ummeldung oder -abmeldung nach § 14 GewO auf dem amtlichen Vordruck (GewA 1, 2 oder 3). Belegt, DASS ein Gewerbe besteht oder endet, nicht seinen Ertrag — abzugrenzen von der Gewinnermittlung (self_employment_accounts).",
+    "fields": {
+      "person": "Name der gewerbetreibenden Person",
+      "gewerbe": "Bezeichnung des Gewerbes",
+      "art": "Anmeldung, Ummeldung oder Abmeldung",
+      "datum": "Datum des Beginns bzw. der Aufgabe der Tätigkeit"
+    }
+  },
+  "tax_assessment": {
+    "label": "Einkommensteuerbescheid",
+    "description": "Einkommensteuerbescheid des Finanzamts für ein Veranlagungsjahr mit Einkünften je Einkunftsart, zu versteuerndem Einkommen und festgesetzter Steuer. Beschreibt ein abgelaufenes Jahr — abzugrenzen von der Gewinnermittlung (self_employment_accounts) und der Lohnsteuerbescheinigung (income_tax_statement).",
+    "fields": {
+      "person": "Namen der steuerpflichtigen Personen",
+      "jahr": "Veranlagungsjahr",
+      "zu_versteuerndes_einkommen": "Zu versteuerndes Einkommen (€)",
+      "einkuenfte_arten": "Einkünfte je Einkunftsart (€), Format „Art: Betrag“ (z. B. „Vermietung und Verpachtung: 4.200,00“)",
+      "festgesetzte_steuer": "Festgesetzte Einkommensteuer (€)"
+    }
+  },
+  "work_expenses_proof": {
+    "label": "Werbungskostennachweis",
+    "description": "Beleg über Werbungskosten (§ 9 EStG) über dem Pauschbetrag: Fahrtkostenaufstellung, Rechnungen über Arbeitsmittel, Beitragsbescheinigung von Gewerkschaft oder Berufsverband, Nachweis eines häuslichen Arbeitszimmers. Abzugrenzen vom Einkommensteuerbescheid (tax_assessment), der die anerkannte Summe ausweist.",
+    "fields": {
+      "person": "Name der Person",
+      "art": "Art der Werbungskosten (Fahrtkosten, Arbeitsmittel, Beiträge etc.)",
+      "betrag": "Geltend gemachter Betrag (€)",
+      "zeitraum": "Zeitraum, falls angegeben"
+    },
+    "match_against": [
+      "betrag"
+    ]
+  },
+  "insurance_contribution_proof": {
+    "label": "Beitragsnachweis Kranken-/Pflege-/Altersvorsorge",
+    "description": "Bescheinigung einer Kranken- oder Pflegekasse, eines Versicherers oder Versorgungswerks über laufende EIGENE Beiträge zur Kranken-, Pflege- oder Altersvorsorge, etwa bei privater oder freiwilliger Versicherung. Abzugrenzen von payslip und pension_notice, die Beiträge nur abziehen, und vom Rückkaufswert einer Versicherung (asset_proof).",
+    "fields": {
+      "versicherte_person": "Name der versicherten Person",
+      "versicherer": "Name der Kasse, des Versicherers oder Versorgungswerks",
+      "versicherungsart": "Kranken-, Pflege-, Renten- oder Lebensversicherung, wie angegeben",
+      "beitrag": "Laufender Beitrag (€) mit Turnus, wie ausgewiesen",
+      "zeitraum": "Bezugszeitraum, falls angegeben"
+    }
+  },
+  "pension_notice": {
+    "label": "Renten- oder Pensionsbescheid",
+    "description": "Bescheid der gesetzlichen Rentenversicherung oder eines berufsständischen Versorgungswerks über Rentenbeginn oder -anpassung, auch bei teilweiser Ablehnung, oder Festsetzung einer Beamtenpension; weist die BRUTTOrente aus. Nicht: Renteninformation oder Rentenauskunft (unverbindlich, other_document), Übergangsgeld (wage_replacement_notice), Betriebsrente (company_pension_notice).",
+    "confusions": [
+      {
+        "type": "other_document",
+        "requires": [
+          "renteninformation",
+          "rentenauskunft"
+        ],
+        "unless": [
+          "rentenbescheid",
+          "bescheid ueber",
+          "rente beginnt",
+          "zahlbetrag"
+        ]
+      }
+    ],
+    "fields": {
+      "vorname": "Vorname der rentenberechtigten Person (Adresszeile im Briefkopf)",
+      "nachname": "Nachname der rentenberechtigten Person",
+      "rentenbeginn": "Datum aus „Die Rente beginnt am …“ (TT.MM.JJJJ)",
+      "rentenart": "Art der Rente, wie der Bescheid sie nennt: Altersrente/Regelaltersrente, Altersrente für schwerbehinderte Menschen, Rente wegen voller oder teilweiser Erwerbsminderung, große oder kleine Witwen-/Witwerrente, Erziehungsrente, Waisenrente oder Ruhegehalt (Pension)",
+      "bruttorente_pro_monat": "Monatliche Bruttorente bzw. Bruttoversorgungsbezüge (€), etwa aus „Ihre monatliche Rente ab dem …“",
+      "zahlbetrag_pro_monat": "Monatlicher Zahlbetrag (€) nach Abzug der Beiträge zur Kranken- und Pflegeversicherung, wie im Bescheid ausgewiesen („Zahlbetrag“, „Monatlicher Zahlbetrag“, „auszuzahlender Betrag“, „Auszahlungsbetrag“, „Überweisungsbetrag“), falls angegeben",
+      "rentennachzahlung": "Im Bescheid ausgewiesene (Brutto-)Rentennachzahlung (€), falls vorhanden",
+      "krankenversicherung": "true, wenn Beiträge zur gesetzlichen KV einbehalten/abgeführt werden",
+      "pflegeversicherung": "true, wenn Beiträge zur Pflegeversicherung ausgewiesen sind",
+      "grundrentenzuschlag": "true, wenn der Bescheid einen „Zuschlag an Entgeltpunkten für langjährige Versicherung“ (Grundrentenzuschlag) ausweist — in der Rentenberechnung oder ihrer Anlage; false, wenn er ausdrücklich sagt, dass kein Zuschlag gezahlt wird; sonst weglassen",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "bruttorente_pro_monat"
+    ]
+  },
+  "company_pension_notice": {
+    "label": "Betriebsrenten-/Zusatzversorgungsbescheid",
+    "description": "Mitteilung einer Pensionskasse, eines Pensionsfonds oder Direktversicherers, einer Zusatzversorgungskasse (VBL, ZVK) oder des früheren Arbeitgebers über eine Betriebsrente, oft mit Zahlbetrag nach Abzug von Beiträgen und Steuern. Gesetzliche Renten, Renten berufsständischer Versorgungswerke und Beamtenpensionen gehören zu pension_notice.",
+    "fields": {
+      "empfaenger": "Name der empfangenden Person",
+      "versorgungstraeger": "Versorgungsträger bzw. auszahlende Stelle",
+      "bruttobetrag": "Monatlicher Bruttobetrag (€) vor Abzügen, falls ausgewiesen",
+      "monatlicher_betrag": "Monatlicher Zahlbetrag (€) nach Abzügen",
+      "beginn": "Beginn der Zahlung",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "bruttobetrag",
+      "monatlicher_betrag"
+    ]
+  },
+  "unemployment_benefit_notice": {
+    "label": "Arbeitslosengeld-I-Bescheid",
+    "description": "Bescheid der Agentur für Arbeit über Arbeitslosengeld nach dem SGB III, auch bei beruflicher Weiterbildung, mit Bemessungsentgelt, täglichem Leistungsbetrag und Anspruchsdauer. Abzugrenzen vom Bescheid des Jobcenters nach dem SGB II (citizen_benefit_notice: Grundsicherungsgeld, früher Bürgergeld, Arbeitslosengeld II).",
+    "confusions": [
+      {
+        "type": "citizen_benefit_notice",
+        "requires": [
+          "jobcenter",
+          "bedarfsgemeinschaft",
+          "grundsicherungsgeld",
+          "buergergeld"
+        ],
+        "unless": [
+          "bemessungsentgelt",
+          "sgb iii",
+          "drittes buch"
+        ]
+      }
+    ],
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "monatlicher_betrag": "Monatlicher Leistungsbetrag (€); ist nur ein Tagessatz angegeben, mit 30 multiplizieren",
+      "abgelehnt": "true, wenn der Antrag abgelehnt wurde und kein ALG I gezahlt wird",
+      "startdatum": "Anspruchsbeginn („von“); frühestes Datum bei mehreren Zeiträumen",
+      "enddatum": "Anspruchsende („bis“); leer lassen, wenn „bis auf weiteres“",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "sick_pay_notice": {
+    "label": "Krankengeld-/Kinderkrankengeldbescheid",
+    "description": "Bescheid oder Mitteilung der Krankenkasse über Krankengeld (§ 44 SGB V) oder Kinderkrankengeld (§ 45 SGB V), meist mit kalendertäglichem Brutto- und Nettobetrag. Abzugrenzen von der Entgeltfortzahlung auf der Lohnabrechnung (payslip) und von Übergangs- oder Verletztengeld (wage_replacement_notice).",
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "art": "Krankengeld oder Kinderkrankengeld",
+      "monatlicher_betrag": "Monatlicher Netto-Betrag (€) abzgl. SV; Tagessatz ggf. mit 30 multiplizieren",
+      "abgelehnt": "true, wenn der Antrag abgelehnt wurde und kein Krankengeld gezahlt wird",
+      "startdatum": "Beginn der Zahlung (frühestes Datum)",
+      "enddatum": "Ende der Zahlung, falls bestimmt",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "parental_allowance_notice": {
+    "label": "Elterngeldbescheid",
+    "description": "Bescheid der Elterngeldstelle über Elterngeld nach dem BEEG (Basiselterngeld, ElterngeldPlus, Partnerschaftsbonus) mit Beträgen je Lebensmonat des Kindes. Abzugrenzen vom Mutterschaftsgeld (maternity_benefit_notice).",
+    "fields": {
+      "vorname": "Vorname des berechtigten Elternteils",
+      "nachname": "Nachname des berechtigten Elternteils",
+      "monatlicher_betrag": "Monatliches Elterngeld (€); bei gestaffelten Beträgen der aktuell gültige",
+      "abgelehnt": "true, wenn der Antrag abgelehnt wurde und kein Elterngeld gezahlt wird",
+      "bezugszeitraum": "Bezugszeitraum/Lebensmonate",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "maternity_benefit_notice": {
+    "label": "Mutterschaftsgeldbescheid",
+    "description": "Bescheid oder Bescheinigung über Mutterschaftsgeld der Krankenkasse oder des Bundesamts für Soziale Sicherung. Abzugrenzen vom Arbeitgeberzuschuss zum Mutterschaftsgeld auf der Lohnabrechnung (payslip) und vom Elterngeld (parental_allowance_notice).",
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "monatlicher_betrag": "Monatlicher Betrag (€); Tagessatz ggf. mit 30 multiplizieren",
+      "startdatum": "Beginn der Zahlung",
+      "enddatum": "Ende der Zahlung, falls bestimmt",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "provision_notice": {
+    "label": "Versorgungsbescheid (BVG/SGB XIV)",
+    "description": "Bescheid des Versorgungsamts über laufende Leistungen des sozialen Entschädigungsrechts nach SGB XIV oder früher BVG (auch über OEG oder IfSG), z. B. Beschädigten- oder Hinterbliebenenrente, Berufsschadensausgleich. Abzugrenzen von Hilfe zum Lebensunterhalt nach demselben Recht (bvg_assistance_notice) und vom GdB-Bescheid (disability_notice).",
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "monatlicher_betrag": "Monatlicher Versorgungsbetrag (€)",
+      "startdatum": "Beginn der Leistung, falls angegeben",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "wage_replacement_notice": {
+    "label": "Übergangs-/Verletzten-/Kurzarbeitergeldbescheid",
+    "description": "Bescheid oder Mitteilung über Übergangsgeld (Rentenversicherung, Agentur für Arbeit), Verletztengeld (Berufsgenossenschaft, Unfallkasse), Insolvenz- oder Kurzarbeitergeld, meist als kalendertäglicher Nettobetrag. Kurzarbeitergeld auf der Lohnabrechnung bleibt payslip, Krankengeld gehört zu sick_pay_notice.",
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "art": "Übergangsgeld, Verletztengeld, Insolvenzgeld oder Kurzarbeitergeld",
+      "monatlicher_betrag": "Monatlicher Netto-Betrag (€); Tagessatz ggf. mit 30 multiplizieren",
+      "abgelehnt": "true, wenn der Antrag abgelehnt wurde und keine Leistung gezahlt wird",
+      "startdatum": "Beginn der Zahlung (frühestes Datum)",
+      "enddatum": "Ende der Zahlung, falls bestimmt",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "rental_income_proof": {
+    "label": "Nachweis über Mieteinnahmen",
+    "description": "Beleg über Einnahmen aus Vermietung und Verpachtung: Mietvertrag einer VERMIETETEN Einheit, Mieteingangsaufstellung, Betriebskostenabrechnung an Mietende oder Anlage V. Eine Person des Antrags NIMMT hier ein — abzugrenzen vom Mietvertrag der eigenen Wohnung (rent_contract), von Untermieteinnahmen (sublease_proof) und der vermieteten Garage (parking_rental_contract).",
+    "fields": {
+      "vermieter": "Name der vermietenden Person — hier die Person des Antrags selbst",
+      "mieter": "Name der mietenden Person (die die Einheit nutzt und die Miete zahlt)",
+      "objekt_adresse": "Anschrift der vermieteten Einheit",
+      "monatliche_einnahme": "Monatliche Mieteinnahme (€)",
+      "zeitraum": "Zeitraum des Mietverhältnisses, falls angegeben"
+    },
+    "match_against": [
+      "monatliche_einnahme"
+    ]
+  },
+  "housing_benefit_notice": {
+    "label": "Wohngeldbescheid / Wohngeld-Negativbescheinigung",
+    "description": "Bescheid einer Wohngeldbehörde über Wohngeld (Miet- oder Lastenzuschuss) — Bewilligung, Ablehnung, Änderung, Rückforderung — oder Bescheinigung, dass kein Wohngeld bezogen wird. Abzugrenzen vom SGB-II-Bescheid (citizen_benefit_notice), von der Bestätigung zum Nebenwohnsitz (secondary_residence_certificate) und vom Wohnberechtigungsschein (other_document).",
+    "fields": {
+      "empfaenger": "Name der wohngeldberechtigten Person",
+      "bescheidart": "Bewilligung, Ablehnung, Änderung, Rückforderung oder Negativbescheinigung",
+      "monatlicher_betrag": "Monatliches Wohngeld (€), falls bewilligt",
+      "bewilligungszeitraum": "Bewilligungszeitraum, falls angegeben"
+    }
+  },
+  "request_to_apply": {
+    "label": "Aufforderung zur Beantragung vorrangiger Leistungen",
+    "description": "Schreiben einer Behörde, meist Jobcenter oder Sozialamt, das zur Beantragung einer vorrangigen Leistung wie Kinderzuschlag oder Rente auffordert (etwa nach § 12a SGB II), oft mit Frist. Bewilligt selbst nichts — abzugrenzen von Leistungsbescheiden wie citizen_benefit_notice oder social_assistance_notice.",
+    "fields": {
+      "person": "Name der aufgeforderten Person",
+      "behoerde": "Auffordernde Behörde",
+      "leistungen": "Leistungen, die beantragt werden sollen (z. B. Kinderzuschlag, Rente)",
+      "frist": "Frist für die Antragstellung, falls genannt",
+      "datum": "Datum des Schreibens"
+    }
+  },
+  "citizen_benefit_notice": {
+    "label": "Grundsicherungsgeld-/Bürgergeld-Bescheid (SGB II)",
+    "description": "Bescheid des Jobcenters über Leistungen nach dem SGB II (Grundsicherungsgeld, früher Bürgergeld, Arbeitslosengeld II, Sozialgeld): Bewilligung, Änderung, Ablehnung, Aufhebung oder Bescheinigung über den Nichtbezug, meist mit Nummer der Bedarfsgemeinschaft. Abzugrenzen von Arbeitslosengeld I (unemployment_benefit_notice) und Sozialhilfe nach dem SGB XII (social_assistance_notice).",
+    "confusions": [
+      {
+        "type": "request_to_apply",
+        "requires": [
+          "12a sgb ii",
+          "vorrangige leistung",
+          "vorrangiger leistung"
+        ],
+        "unless": [
+          "bewilligungszeitraum",
+          "regelbedarf",
+          "abgelehnt",
+          "aufgehoben"
+        ]
+      },
+      {
+        "type": "unemployment_benefit_notice",
+        "requires": [
+          "bemessungsentgelt"
+        ],
+        "unless": [
+          "jobcenter",
+          "bedarfsgemeinschaft",
+          "regelbedarf"
+        ]
+      }
+    ],
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "monatlicher_betrag": "Monatlicher Gesamtbetrag (€), meist weiter oben im Bescheid",
+      "unterkunftskosten": "Im Bedarf berücksichtigte Kosten der Unterkunft und Heizung pro Monat (€), falls ausgewiesen",
+      "abgelehnt": "true, wenn der Antrag abgelehnt oder die Leistung aufgehoben ist oder keine Leistung bezogen wird",
+      "startdatum": "Beginn des Bewilligungszeitraums („von“)",
+      "enddatum": "Ende des Bewilligungszeitraums („bis“); leer lassen bei „bis auf weiteres“",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag",
+      "abgelehnt"
+    ]
+  },
+  "social_assistance_notice": {
+    "label": "Sozialhilfebescheid (SGB XII)",
+    "description": "Bescheid des Sozialamts über Leistungen nach dem SGB XII — Hilfe zum Lebensunterhalt, Grundsicherung im Alter und bei Erwerbsminderung, Hilfe zur Pflege oder andere Hilfen —, auch Ablehnung oder Aufhebung. Abzugrenzen vom SGB-II-Bescheid des Jobcenters (citizen_benefit_notice) und von Hilfe zum Lebensunterhalt nach dem Entschädigungsrecht (bvg_assistance_notice).",
+    "fields": {
+      "empfaenger": "Name der leistungsbeziehenden Person",
+      "leistungsart": "Art der Leistung, wie genannt (z. B. Grundsicherung im Alter und bei Erwerbsminderung, Hilfe zum Lebensunterhalt, Hilfe zur Pflege)",
+      "monatlicher_betrag": "Monatlicher Leistungsbetrag (€)",
+      "abgelehnt": "true, wenn der Antrag abgelehnt oder die Leistung aufgehoben ist",
+      "bewilligungszeitraum": "Bewilligungszeitraum",
+      "behoerde": "Ausstellendes Sozialamt",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "leistungsart",
+      "monatlicher_betrag"
+    ]
+  },
+  "asylum_benefit_notice": {
+    "label": "Bescheid nach AsylbLG",
+    "description": "Bescheid der Leistungsbehörde (meist Sozialamt oder Landesaufnahmebehörde) über Leistungen nach dem Asylbewerberleistungsgesetz, Grund- oder Analogleistungen (§§ 3, 2 AsylbLG). Abzugrenzen von Aufenthaltsgestattung oder Duldung (residence_permit) und von Sozialhilfe (social_assistance_notice).",
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "monatlicher_betrag": "Monatlicher Leistungsbetrag (€), ohne Nachzahlungen für vergangene Zeiträume",
+      "abgelehnt": "true, wenn der Antrag abgelehnt wurde und keine AsylbLG-Leistung gezahlt wird",
+      "startdatum": "Beginn des Bewilligungszeitraums („von“)",
+      "enddatum": "Ende des Bewilligungszeitraums („bis“); leer lassen bei „bis auf weiteres“",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "bvg_assistance_notice": {
+    "label": "Leistungen zum Lebensunterhalt nach SGB XIV / BVG",
+    "description": "Bescheid über Leistungen zum Lebensunterhalt nach dem sozialen Entschädigungsrecht — seit 2024 SGB XIV, in Altfällen ergänzende Hilfe zum Lebensunterhalt nach dem BVG (Kriegsopferfürsorge). Abzugrenzen von Sozialhilfe nach dem SGB XII (social_assistance_notice) und vom Versorgungsbescheid über eine Entschädigungsrente (provision_notice).",
+    "fields": {
+      "empfaenger": "Name der leistungsbeziehenden Person",
+      "monatlicher_betrag": "Monatlicher Leistungsbetrag (€)",
+      "bewilligungszeitraum": "Bewilligungszeitraum, falls angegeben",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "youth_welfare_notice": {
+    "label": "Bescheid Kinder- und Jugendhilfe (SGB VIII)",
+    "description": "Bescheid des Jugendamts über Hilfen nach dem SGB VIII — etwa Hilfe zur Erziehung, Vollzeitpflege mit Pflegegeld, Heimerziehung, betreutes Wohnen, Eingliederungshilfe oder Hilfe für junge Volljährige. NICHT hierher: Kita-, Hort- oder Tagespflegegebühren (child_care_cost_proof) und Unterhaltsvorschuss (advance_maintenance_notice).",
+    "confusions": [
+      {
+        "type": "child_care_cost_proof",
+        "requires": [
+          "kindertages",
+          "kinderkrippe",
+          "kindergarten",
+          " kita"
+        ],
+        "unless": [
+          "hilfe zur erziehung",
+          "vollzeitpflege",
+          "heimerziehung",
+          "pflegegeld",
+          "eingliederungshilfe"
+        ]
+      }
+    ],
+    "fields": {
+      "empfaenger": "Name der leistungsbeziehenden Person/des Kindes",
+      "leistungsart": "Art der Hilfe, wie genannt (z. B. Vollzeitpflege nach § 33 SGB VIII)",
+      "monatlicher_betrag": "Monatlicher Leistungsbetrag (€), falls angegeben",
+      "bewilligungszeitraum": "Bewilligungszeitraum, falls angegeben",
+      "behoerde": "Ausstellendes Jugendamt"
+    }
+  },
+  "school_certificate": {
+    "label": "Schulbescheinigung",
+    "description": "Bescheinigung einer allgemeinbildenden oder beruflichen Schule über den Schulbesuch mit Schuljahr oder Klasse. Abzugrenzen von der Immatrikulationsbescheinigung (enrollment_certificate) und der Ausbildungsbescheinigung eines Betriebs (training_certificate).",
+    "fields": {
+      "kind": "Name der Schülerin oder des Schülers",
+      "schule": "Name der Schule",
+      "schuljahr": "Schuljahr/Klasse, falls angegeben",
+      "ausgestellt_am": "Ausstellungsdatum"
+    }
+  },
+  "child_care_cost_proof": {
+    "label": "Nachweis Kinderbetreuungskosten",
+    "description": "Beleg über Kosten der Betreuung eines Kindes in Kita, Krippe, Hort oder Kindertagespflege: Gebühren- oder Kostenbeitragsbescheid, auch des Jugendamts, Betreuungsvertrag, Rechnung oder Zahlungsbeleg. Abzugrenzen von der Schulbescheinigung (school_certificate) und von anderen Hilfen des Jugendamts (youth_welfare_notice).",
+    "fields": {
+      "kind": "Name des betreuten Kindes",
+      "einrichtung": "Name der Einrichtung bzw. der Tagespflegeperson",
+      "monatlicher_betrag": "Monatlicher Betreuungsbetrag (€)",
+      "startdatum": "Beginn der Betreuung bzw. des Gebührenzeitraums",
+      "enddatum": "Ende des Zeitraums, falls angegeben"
+    },
+    "match_against": [
+      "kind",
+      "monatlicher_betrag"
+    ]
+  },
+  "enrollment_certificate": {
+    "label": "Immatrikulations-/Studienbescheinigung",
+    "description": "Immatrikulations- oder Studienbescheinigung einer Hochschule für ein Semester, meist mit Matrikelnummer, Studiengang und Fachsemester. Abzugrenzen vom BAföG-Bescheid (bafoeg_notice) und von der Schulbescheinigung (school_certificate).",
+    "fields": {
+      "student": "Name der studierenden Person",
+      "hochschule": "Name der Hochschule",
+      "studiengang": "Studiengang",
+      "semester": "Aktuelles Fachsemester, falls angegeben",
+      "ausgestellt_am": "Ausstellungsdatum"
+    }
+  },
+  "bafoeg_notice": {
+    "label": "BAföG-Bescheid (auch Ablehnung/Negativbescheinigung)",
+    "description": "Bescheid des Amts für Ausbildungsförderung (Studierendenwerk oder Kommune) über BAföG für Studium oder Schule — Bewilligung mit Förderbetrag, Ablehnung oder Negativbescheinigung. Abzugrenzen von der Immatrikulationsbescheinigung (enrollment_certificate) und von Stipendium oder Studienkredit (scholarship_proof).",
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "monatlicher_betrag": "Monatlicher Förderbetrag/Gesamtbedarf (€); bei Staffelung der aktuell gültige",
+      "abgelehnt": "true, wenn der Antrag abgelehnt wurde und kein BAföG gezahlt wird",
+      "ablehnungsgrund": "Grund einer Ablehnung, wie genannt — vor allem, ob dem Grunde nach kein Anspruch besteht (z. B. Fachrichtungswechsel, Altersgrenze) oder nur der Höhe nach (Einkommen, Vermögen)",
+      "startdatum": "Beginn des Bewilligungszeitraums („von“)",
+      "enddatum": "Ende des Bewilligungszeitraums („bis“)",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "abgelehnt"
+    ]
+  },
+  "scholarship_proof": {
+    "label": "Stipendien- oder Studienkreditnachweis",
+    "description": "Bewilligung oder Nachweis eines Stipendiums (z. B. Begabtenförderungswerk, Deutschlandstipendium) oder Studienkredits (z. B. KfW-Studienkredit, Bildungskredit) mit Betrag und Zeitraum. Abzugrenzen vom BAföG-Bescheid (bafoeg_notice).",
+    "fields": {
+      "student": "Name der geförderten Person",
+      "art": "Stipendium oder Studienkredit",
+      "geber": "Stipendiengeber oder Kreditinstitut",
+      "monatlicher_betrag": "Monatlicher Betrag (€), falls angegeben",
+      "zeitraum": "Förderzeitraum, falls angegeben"
+    }
+  },
+  "training_contract": {
+    "label": "Ausbildungsvertrag",
+    "description": "Berufsausbildungsvertrag (oft auf dem Vordruck von IHK oder Handwerkskammer) oder Vertrag über eine schulische Ausbildung mit Vergütung, meist nach Ausbildungsjahren gestaffelt; Nachträge gehören dazu. Abzugrenzen vom Arbeitsvertrag (employment_contract) und von der Ausbildungsbescheinigung (training_certificate).",
+    "fields": {
+      "vorname": "Vorname der auszubildenden Person",
+      "nachname": "Nachname der auszubildenden Person",
+      "ausbildungsbetrieb": "Name des Ausbildungsbetriebs bzw. Trägers",
+      "gesamtbrutto": "Vereinbarte monatliche Ausbildungsvergütung (€) ohne Sonderzahlungen; bei Staffelung je Ausbildungsjahr ein Eintrag „1. Jahr: Betrag“",
+      "turnus": "Turnus der Vergütung: monatlich, stündlich oder täglich",
+      "ausbildungsbeginn": "Beginn der Ausbildung",
+      "ausbildungsende": "Vereinbartes Ende der Ausbildung",
+      "zusatzvereinbarungen": "true, wenn Vereinbarungen über Gratifikationen/Prämien/Urlaubs-/Weihnachtsgeld bestehen",
+      "beendet": "true, wenn das Ausbildungsverhältnis ausweislich des Vertrags bereits beendet ist"
+    }
+  },
+  "training_certificate": {
+    "label": "Ausbildungsbescheinigung",
+    "description": "Bescheinigung des Ausbildungsbetriebs oder der Schule über ein LAUFENDES Ausbildungsverhältnis mit Beginn, voraussichtlichem Ende und oft der Vergütung. Abzugrenzen vom Ausbildungsvertrag (training_contract) und der Schulbescheinigung (school_certificate).",
+    "fields": {
+      "auszubildender": "Name der auszubildenden Person",
+      "ausbildungsbetrieb": "Name des Ausbildungsbetriebs/der Einrichtung",
+      "ausbildungsverguetung": "Monatliche Ausbildungsvergütung (€) als BRUTTObetrag, falls angegeben",
+      "ausbildungsbeginn": "Beginn der Ausbildung",
+      "ausbildungsende": "Voraussichtliches Ende der Ausbildung"
+    },
+    "match_against": [
+      "ausbildungsverguetung"
+    ]
+  },
+  "bab_notice": {
+    "label": "BAB-/Ausbildungsgeldbescheid (auch Ablehnung)",
+    "description": "Bescheid der Agentur für Arbeit über Berufsausbildungsbeihilfe (BAB, §§ 56 ff. SGB III) oder Ausbildungsgeld für Menschen mit Behinderungen (§ 122 SGB III), Bewilligung mit Betrag oder Ablehnung. Abzugrenzen vom BAföG-Bescheid (bafoeg_notice).",
+    "fields": {
+      "vorname": "Vorname der berechtigten/auszubildenden Person",
+      "nachname": "Nachname der berechtigten/auszubildenden Person",
+      "monatlicher_betrag": "Monatliche BAB-Zahlung (€); bei Staffelung der aktuell gültige Betrag",
+      "abgelehnt": "true, wenn der Antrag abgelehnt wurde und kein BAB gezahlt wird",
+      "ablehnungsgrund": "Grund einer Ablehnung, wie genannt — dem Grunde nach oder nur der Höhe nach (Einkommen)",
+      "startdatum": "Beginn des Zeitraums („von“)",
+      "enddatum": "Ende des Zeitraums („bis“); leer lassen bei „bis auf weiteres“",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "abgelehnt"
+    ]
+  },
+  "child_benefit_notice": {
+    "label": "Kindergeldbescheid",
+    "description": "Bescheid oder Bescheinigung der Familienkasse über Kindergeld (§§ 62 ff. EStG, selten BKGG) mit Kindergeldnummer und berücksichtigten Kindern; das Kindergeld ist für jedes Kind gleich hoch (2026: 259 € im Monat, § 66 EStG). Abzugrenzen vom Kinderzuschlag (child_supplement_notice).",
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "kinder": "Namen der berücksichtigten Kinder",
+      "monatlicher_betrag": "Monatliches Kindergeld gesamt (€); regelmäßig ein Vielfaches des einheitlichen Kindergeldsatzes je Kind",
+      "abgelehnt": "true, wenn der Antrag abgelehnt wurde und kein Kindergeld gezahlt wird",
+      "enddatum": "Ende („bis“), falls angegeben; leer lassen bei „bis auf weiteres“",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "child_supplement_notice": {
+    "label": "Kinderzuschlagsbescheid",
+    "description": "Bescheid der Familienkasse über Kinderzuschlag (KiZ, § 6a BKGG): Bewilligung, Ablehnung oder Aufhebung. Abzugrenzen vom Kindergeld (child_benefit_notice).",
+    "fields": {
+      "vorname": "Vorname der berechtigten Person",
+      "nachname": "Nachname der berechtigten Person",
+      "monatlicher_betrag": "Monatlicher Kinderzuschlag (KiZ) in €, ohne Nachzahlungen",
+      "abgelehnt": "true, wenn kein Kinderzuschlag gezahlt wird — auch wenn der Bescheid einen errechneten Anspruch nennt, den Antrag aber ablehnt (z. B. weil die Hilfebedürftigkeit nicht vermieden wird)",
+      "startdatum": "Beginn („von“), falls angegeben",
+      "enddatum": "Ende („bis“); leer lassen bei „bis auf weiteres“",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "advance_maintenance_notice": {
+    "label": "Unterhaltsvorschussbescheid",
+    "description": "Bescheid des Jugendamts (Unterhaltsvorschusskasse) über Unterhaltsvorschuss für ein Kind, das vom anderen Elternteil keinen oder zu wenig Unterhalt erhält. Tritt an die Stelle des Unterhalts — abzugrenzen vom Unterhaltstitel (maintenance_title) und vom Zahlungsnachweis (maintenance_payment_proof).",
+    "fields": {
+      "kind": "Name des Kindes",
+      "monatlicher_betrag": "Monatlicher Unterhaltsvorschuss (€)",
+      "bewilligungszeitraum": "Bewilligungszeitraum",
+      "behoerde": "Ausstellendes Jugendamt",
+      "iban": "IBAN der leistungsbeziehenden Person, nur wenn vollständig — nie die der auszahlenden Stelle"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "maintenance_title": {
+    "label": "Unterhaltstitel / Jugendamtsurkunde / notarielle Vereinbarung",
+    "description": "Vollstreckbare Festlegung einer Unterhaltspflicht mit dem TITULIERTEN Monatsbetrag: Beschluss, Urteil oder Vergleich des Familiengerichts, Jugendamtsurkunde oder notarielle Vereinbarung. Sagt, was geschuldet wird, nicht was gezahlt wurde — abzugrenzen vom Zahlungsnachweis (maintenance_payment_proof).",
+    "fields": {
+      "zahlungspflichtiger": "Name der unterhaltszahlenden Person",
+      "empfaenger": "Name der unterhaltsberechtigten Person (bei Kindesunterhalt das Kind)",
+      "monatlicher_betrag": "Titulierter monatlicher Unterhalt (€); bei dynamischem Titel (z. B. „100 % des Mindestunterhalts“) die Angabe wörtlich",
+      "art": "Kindes- oder Ehegattenunterhalt",
+      "titelart": "Beschluss bzw. Urteil, gerichtlicher Vergleich, Jugendamtsurkunde oder notarielle Vereinbarung"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "maintenance_payment_proof": {
+    "label": "Zahlungsnachweis Unterhalt (erhalten/geleistet)",
+    "description": "Beleg über TATSÄCHLICH gezahlten oder erhaltenen Unterhalt: Überweisungs- oder Dauerauftragsbelege, Zahlungsaufstellung oder Empfangsbestätigung. Sagt, was geflossen ist, nicht was geschuldet wird — abzugrenzen vom Unterhaltstitel (maintenance_title) und von freiwilliger Unterstützung Dritter (third_party_support_proof).",
+    "fields": {
+      "zahlungspflichtiger": "Name der zahlenden Person",
+      "empfaenger": "Name der Person, an die gezahlt wird (wer die Gutschrift erhält)",
+      "berechtigter": "Name der unterhaltsberechtigten Person, für die der Unterhalt bestimmt ist — bei Kindesunterhalt das Kind, auch wenn an einen Elternteil gezahlt wird",
+      "art": "Kindes- oder Ehegattenunterhalt",
+      "monatlicher_betrag": "Monatlich gezahlter Unterhalt (€)",
+      "richtung": "erhalten oder geleistet",
+      "zeitraum": "Zeitraum der Zahlungen"
+    },
+    "match_against": [
+      "monatlicher_betrag",
+      "richtung"
+    ]
+  },
+  "third_party_support_proof": {
+    "label": "Unterstützungserklärung / Zuwendungen Dritter",
+    "description": "Erklärung oder Beleg einer Person außerhalb des Haushalts (etwa Eltern), dass sie eine Person des Antrags regelmäßig mit Geld oder durch Übernahme von Kosten wie der Miete unterstützt, formlos oder auf einem Behördenvordruck. Abzugrenzen von Unterhalt (maintenance_title, maintenance_payment_proof) und Verpflichtungserklärung (obligation_declaration).",
+    "fields": {
+      "unterstuetzende_person": "Name der unterstützenden Person",
+      "beguenstigter": "Name der unterstützten Person",
+      "art": "Geldzahlung, übernommene Kosten (welche) oder Sachleistung",
+      "monatlicher_betrag": "Monatlicher Betrag bzw. Wert der Unterstützung (€), falls beziffert",
+      "zeitraum": "Beginn bzw. Zeitraum der Unterstützung, falls angegeben"
+    },
+    "match_against": [
+      "monatlicher_betrag"
+    ]
+  },
+  "asset_proof": {
+    "label": "Vermögens-/Kapitalertragsnachweis",
+    "description": "Beleg über Vermögen oder seinen Ertrag zu einem Stichtag: Kontostands- oder Saldenbestätigung, Sparbuch, Depotauszug, Bausparvertrag in der Sparphase, Rückkaufswert einer Lebens- oder Rentenversicherung, Jahressteuerbescheinigung über Kapitalerträge. Abzugrenzen vom Kontoauszug (bank_statement) und vom Immobilienwertgutachten (property_valuation).",
+    "fields": {
+      "inhaber": "Name der berechtigten Person",
+      "vermoegensart": "Art (Sparguthaben, Wertpapiere, Bausparvertrag, Lebensversicherung usw.)",
+      "bestand": "Aktueller Bestand/Wert (€)",
+      "kapitalertrag": "Jährlicher Kapitalertrag (Zinsen/Dividenden) in €, falls angegeben",
+      "stichtag": "Stichtag des Nachweises"
+    },
+    "match_against": [
+      "bestand",
+      "kapitalertrag"
+    ]
+  },
+  "property_valuation": {
+    "label": "Immobilienwertgutachten",
+    "description": "Gutachten oder Wertermittlung über den Verkehrswert eines Grundstücks, Hauses oder einer Eigentumswohnung (Sachverständige, Gutachterausschuss, Bank, Makler) mit Objekt, Wert und Wertermittlungsstichtag. Abzugrenzen vom Kaufvertrag (purchase_contract), vom Grundbuchauszug (land_register_extract) und vom Vermögensnachweis über Geldbestände (asset_proof).",
+    "fields": {
+      "eigentuemer": "Namen der Eigentümerinnen und Eigentümer",
+      "objekt_adresse": "Anschrift des bewerteten Objekts",
+      "verkehrswert": "Ermittelter Verkehrswert (€)",
+      "stichtag": "Wertermittlungsstichtag"
+    },
+    "match_against": [
+      "verkehrswert"
+    ]
+  },
+  "disability_notice": {
+    "label": "Schwerbehindertenausweis / GdB-Bescheid / Pflegegradbescheid",
+    "description": "Schwerbehindertenausweis mit GdB, Merkzeichen und Gültigkeit, Feststellungsbescheid des Versorgungsamts über GdB und Merkzeichen oder Bescheid der Pflegekasse bzw. privaten Pflegeversicherung über den Pflegegrad. GdB: 20 bis 100 in Zehnerschritten; Pflegegrad: 1 bis 5. Abzugrenzen vom Versorgungsbescheid (provision_notice).",
+    "fields": {
+      "vorname": "Vorname der betroffenen Person",
+      "nachname": "Nachname der betroffenen Person",
+      "nachweisart": "Schwerbehindertenausweis, Feststellungsbescheid (GdB) oder Pflegegradbescheid",
+      "gdb": "Grad der Behinderung (GdB), Zahl zwischen 20 und 100 in Zehnerschritten, falls angegeben",
+      "merkzeichen": "Merkzeichen (z. B. G, aG, H, Bl, Gl, B, TBl, RF, 1. Kl; Sonderzeichen EB, VB, HS, T), je einzeln",
+      "pflegegrad": "Pflegegrad 1–5 (nur Pflegegradbescheid), falls festgestellt",
+      "gueltig_bis": "Gültig-bis-Datum, falls befristet",
+      "unbefristet": "true, wenn der Ausweis/Bescheid „unbefristet“ ausgestellt ist",
+      "abgelehnt": "true, wenn kein GdB/Pflegegrad festgestellt bzw. der Antrag abgelehnt wurde"
+    },
+    "match_against": [
+      "gdb",
+      "pflegegrad"
+    ]
+  },
+  "bank_statement": {
+    "label": "Kontoauszug",
+    "description": "Kontoauszug eines Kreditinstituts über die Buchungen eines Zeitraums (Kontoinhaber, IBAN, Kontostand, Umsätze), auch als PDF, Ausdruck oder Screenshot aus dem Onlinebanking. Einzelbelege zu Miete, Darlehen oder Unterhalt gehören zu rent_payment_proof, loan_payment_proof bzw. maintenance_payment_proof, eine Saldenbestätigung zu asset_proof.",
+    "extract": "transactions",
+    "transaction_fields": {
+      "richtung": "Abbuchung oder Gutschrift",
+      "datum": "Buchungsdatum",
+      "verwendungszweck": "Vollständiger Verwendungszweck/Buchungstext",
+      "betrag": "Betrag in € (positiv bei Gutschrift, negativ bei Abbuchung)",
+      "gegenseite": "Name des Empfängers bzw. Auftraggebers, falls erkennbar"
+    }
+  },
+  "secondary_residence_certificate": {
+    "label": "Bescheinigung über einen Nebenwohnsitz",
+    "description": "Bestätigung einer Behörde am Ort einer weiteren Wohnung, dass eine Person dort nur mit Nebenwohnsitz lebt, etwa einer Leistungsbehörde oder als Zweitwohnungsteuerbescheid der Gemeinde. Eine Meldebescheinigung, auch über eine Nebenwohnung, gehört zu registration_certificate; die Bescheinigung über den Nichtbezug einer Leistung zum Bescheid dieser Leistung (etwa housing_benefit_notice).",
+    "fields": {
+      "vorname": "Vorname der Person, für die die Bescheinigung ausgestellt wurde",
+      "nachname": "Nachname der Person",
+      "adresse": "Anschrift der Nebenwohnung",
+      "bestaetigt": "true, wenn bestätigt wird, dass dort nur ein Nebenwohnsitz (kein Hauptwohnsitz) besteht",
+      "ausstellende_stelle": "Ausstellende Behörde"
+    }
+  },
+  "other_document": {
+    "label": "Sonstiger Nachweis",
+    "description": "Auffangtyp für ein Dokument, das zum Antrag gehört, aber keinem Katalogtyp entspricht — etwa ein selbst ausgefülltes Antragsformular, eine Erklärung ohne Bestätigung Dritter, eine Renteninformation oder ein Wohnberechtigungsschein. NUR wählen, wenn wirklich kein spezifischer Typ passt: Eine Einordnung hier nimmt dem Nachweis jede Soll-Zuordnung und jeden Wertabgleich.",
+    "fields": {
+      "dokumenttyp": "Erkannte Art des Dokuments",
+      "person": "Betroffene Person, falls erkennbar",
+      "kerninformation": "Wichtigste für den Antrag relevante Information"
+    }
+  }
+}

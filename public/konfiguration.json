@@ -1,0 +1,21 @@
+{
+  "hinweis": "Welche KI-Modelle die Nachweisprüfung nutzt. Mit \"modell\" lässt sich eine Modell-ID festlegen, genau so, wie IONOS sie unter /v1/models nennt. Bleibt \"modell\" leer (null), wird unter den verfügbaren Modellen gesucht: Es gewinnt das Modell mit dem kürzesten Namen, der alle Wörter aus \"suche\" als ganze Namensteile enthält (Groß- und Kleinschreibung und Satzzeichen zählen nicht; \"qwen38\" passt zu \"Qwen3.8\", \"27b\" aber nicht zu \"A27B\"). Optional nennt \"kontextfenster\" die Größe des Kontextfensters in Token, falls /v1/models sie nicht angibt. \"ocr.parallel\" ist die Zahl der Seiten, die gleichzeitig gelesen werden.",
+  "ionos": {
+    "ocr": {
+      "modell": null,
+      "suche": [
+        "lightonocr2"
+      ]
+    },
+    "text": {
+      "modell": null,
+      "suche": [
+        "qwen38",
+        "27b"
+      ]
+    }
+  },
+  "ocr": {
+    "parallel": 3
+  }
+}

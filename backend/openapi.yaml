@@ -1,0 +1,521 @@
+openapi: 3.1.0
+info:
+  title: NOOTS-Mock
+  version: 0.1.0
+  summary: Nachweisabruf über das NOOTS, nachgestellt
+  description: |
+    Antwortet wie ein Anschluss an das Nationale Once-Only-Technical-System, ohne eines zu sein. Jeder Aufruf auf
+    dieser Seite lässt sich mit **Test Request** direkt abschicken. Personen, Behörden und Nachweise sind erfunden
+    und liegen als JSON unter `data/`.
+
+    | Schnittstelle | Vorbild |
+    |---|---|
+    | **SAK-DC** `/sakdc/api/v3` | [Consumer-API v3.0.0 des BVA](https://gitlab.opencode.de/noots/public/ad-noots/sak-apis): Pfade, Felder, Problemtypen, XNachweis 2 |
+    | **DCA facade** `/dca/v1` | Für den DCA der FITKO ist nichts veröffentlicht außer [Folien](https://docs.fitko.de/fit/assets/pdf/fit-ab_dokumente/28sitzung/TOP8_DCA_NOOTS.pdf). Pfade und Felder sind eine eigene Annahme. |
+
+    Nicht nachgestellt: Prüfung des Anfragetokens, mTLS, Abruf mit IDNr, EU-Abrufe.
+security: []
+tags:
+  - name: DCA facade
+    description: Ein Aufruf des Online-Dienstes für mehrere Nachweise. Die Beispiele decken jeden Ausgang ab.
+  - name: SAK-DC
+    description: |
+      Der nationale Abruf in drei Schritten:
+
+      1. `POST /token` abschicken und das `access_token` oben unter **Authentication** als Bearer-Token eintragen.
+      2. `POST /de/jurisdiction` abschicken. Die Antwort ist das Zuständigkeitstoken.
+      3. `POST /de/evidence` abschicken, mit dem Zuständigkeitstoken aus Schritt 2 als `jurisdiction_token`.
+  - name: Mock
+    description: Nur im Mock. Keine echte Schnittstelle hat das.
+paths:
+  /dca/v1/evidence-types:
+    get:
+      tags: [DCA facade]
+      operationId: listEvidenceTypes
+      summary: Nachweistypen auflisten
+      responses:
+        '200':
+          description: Nachweistypen und ob ihr Register angeschlossen ist
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/EvidenceType' }
+  /dca/v1/evidence-requests:
+    post:
+      tags: [DCA facade]
+      operationId: requestEvidence
+      summary: Nachweise zu einer Person abrufen
+      description: Jeder Abruf steht für sich. Fällt ein Register aus, kommen die anderen trotzdem.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EvidenceRequest' }
+            examples:
+              delivered:
+                summary: Drei Nachweise, ein Register nicht angeschlossen
+                value:
+                  dataConsumer: { name: Wohngeldstelle Auenthal, componentId: 550e8400-e29b-41d4-a716-446655440000 }
+                  administrativeService: { id: '99107023000000', name: Wohngeld beantragen }
+                  legalBasis: WoGG § 23
+                  consent: true
+                  subject: { givenName: Nora, familyName: Feldmann, dateOfBirth: '1994-03-14' }
+                  evidence:
+                    - evidenceType: residenceCertificate
+                    - evidenceType: incomeTaxAssessment
+                    - evidenceType: childBenefitNotice
+              pension:
+                summary: Rentenbezug und Meldebescheinigung
+                value:
+                  dataConsumer: { name: Wohngeldstelle Auenthal }
+                  legalBasis: WoGG § 23
+                  consent: true
+                  subject: { givenName: Helga, familyName: Schmidt, dateOfBirth: '1951-02-09' }
+                  evidence:
+                    - evidenceType: pensionStatement
+                    - evidenceType: residenceCertificate
+              ambiguous:
+                summary: Person im Register nicht eindeutig (0402)
+                value:
+                  dataConsumer: { name: Wohngeldstelle Auenthal }
+                  legalBasis: WoGG § 23
+                  consent: true
+                  subject: { givenName: Alex, familyName: Doppelt, dateOfBirth: '1985-01-01' }
+                  evidence:
+                    - evidenceType: residenceCertificate
+              notFound:
+                summary: Person in keinem Register (0403)
+                value:
+                  dataConsumer: { name: Wohngeldstelle Auenthal }
+                  legalBasis: WoGG § 23
+                  consent: true
+                  subject: { givenName: Jonas, familyName: Unbekannt, dateOfBirth: '1990-01-01' }
+                  evidence:
+                    - evidenceType: birthCertificate
+              levelOfAssuranceTooLow:
+                summary: Vertrauensniveau der Anmeldung zu niedrig (0305)
+                value:
+                  dataConsumer: { name: Wohngeldstelle Auenthal }
+                  legalBasis: WoGG § 23
+                  consent: true
+                  levelOfAssurance: Substantial
+                  subject: { givenName: Nora, familyName: Feldmann, dateOfBirth: '1994-03-14' }
+                  evidence:
+                    - evidenceType: incomeTaxAssessment
+              registryUnreachable:
+                summary: Register nicht erreichbar (502)
+                value:
+                  dataConsumer: { name: Wohngeldstelle Auenthal }
+                  legalBasis: WoGG § 23
+                  consent: true
+                  scenario: registry-unreachable
+                  subject: { givenName: Nora, familyName: Feldmann, dateOfBirth: '1994-03-14' }
+                  evidence:
+                    - evidenceType: residenceCertificate
+              noConsent:
+                summary: Ohne Zustimmung (409)
+                value:
+                  dataConsumer: { name: Wohngeldstelle Auenthal }
+                  legalBasis: WoGG § 23
+                  consent: false
+                  subject: { givenName: Nora, familyName: Feldmann, dateOfBirth: '1994-03-14' }
+                  evidence:
+                    - evidenceType: residenceCertificate
+      responses:
+        '200':
+          description: Ergebnis je Nachweistyp
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EvidenceResult' }
+              example:
+                {
+                  'requestId': '6feb0c77-4106-4e47-b4ed-0b4474e2c930',
+                  'timestamp': '2026-11-15T13:46:02.248Z',
+                  'subject': { 'givenName': 'Nora', 'familyName': 'Feldmann', 'dateOfBirth': '1994-03-14' },
+                  'takeover': 'pending',
+                  'results':
+                    [
+                      {
+                        'evidenceType':
+                          { 'id': '9a3e7d52-1c4b-4f68-a2d0-5b8c6e1f7a31', 'key': 'incomeTaxAssessment', 'name': 'Einkommensteuerbescheid' },
+                        'registry': 'Finanzverwaltung',
+                        'status': 'delivered',
+                        'evidence':
+                          {
+                            'id': 'urn:uuid:10a8692b-7fa0-4251-99cc-e6de3296344f',
+                            'issuingAuthority': { 'id': '4d8a1f63-9b2c-4e75-b1a0-7c6d5e4f3a82', 'name': 'Finanzamt Auenthal' },
+                            'issuedOn': '2026-11-15',
+                            'format': 'application/json',
+                            'content': "{\n  \"sample\": true,\n  \"evidenceType\": \"Einkommensteuerbescheid\",\n  \"issuingAuthority\": \"Finanzamt Auenthal\",\n  \"person\": \"Nora Feldmann\",\n  \"dateOfBirth\": \"1994-03-14\",\n  \"issuedOn\": \"2026-11-15\",\n  \"assessmentYear\": 2025,\n  \"noticeDate\": \"2026-06-18\",\n  \"grossWagesCents\": 4104000,\n  \"totalIncomeCents\": 3981000,\n  \"taxableIncomeCents\": 3602400\n}",
+                          },
+                        'xnachweis': 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0i…',
+                        'steps':
+                          [
+                            { 'step': 'POST /de/jurisdiction', 'status': 200, 'dataProvider': 'Finanzamt Auenthal' },
+                            { 'step': 'POST /de/evidence', 'status': 200, 'messageType': 'evidenceResponse' },
+                          ],
+                      },
+                      {
+                        'evidenceType':
+                          { 'id': '6e2c9b14-7a5d-4c38-9f01-8d3b2a1c4e53', 'key': 'childBenefitNotice', 'name': 'Kindergeldbescheid' },
+                        'registry': 'Familienkasse',
+                        'status': 'registry_not_connected',
+                        'error':
+                          {
+                            'source': 'RDN',
+                            'code': 'urn:noots:no_data_provider.found',
+                            'detail': 'Zu den Eingabedaten konnte in der RDN kein zuständiger Data Provider ermittelt werden.',
+                          },
+                        'steps': [{ 'step': 'POST /de/jurisdiction', 'status': 404, 'problem': 'urn:noots:no_data_provider.found' }],
+                      },
+                    ],
+                }
+        '409':
+          description: Die Zustimmung der antragstellenden Person fehlt
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '422':
+          description: Pflichtangaben fehlen oder sind ungültig
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+  /sakdc/api/v3/token:
+    post:
+      tags: [SAK-DC]
+      operationId: token
+      summary: Zugriffstoken anfordern
+      description: Das Anfragetoken braucht `sub` (Komponenten-ID als UUID) und `aud` = `NOOTS IAM`. Sein Siegel prüft der Mock nicht.
+      parameters: [{ $ref: '#/components/parameters/traceparent' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [request_token]
+              properties:
+                request_token: { type: string, description: Anfragetoken als JWS in Compact Serialization }
+            example:
+              request_token: eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJDPURFLCBPPVdvaG5nZWxkc3RlbGxlIEF1ZW50aGFsIiwic3ViIjoiNTUwZTg0MDAtZTI5Yi00MWQ0LWE3MTYtNDQ2NjU1NDQwMDAwIiwiYXVkIjoiTk9PVFMgSUFNIiwidmVyIjoidjIiLCJub25jZSI6MX0.bmljaHQtZ2VwcnVlZnQ
+      responses:
+        '200':
+          description: Zugriffstoken, 300 Sekunden gültig
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: { type: string }
+                  token_type: { const: Bearer }
+                  expires_in: { type: integer, example: 300 }
+        '400': { $ref: '#/components/responses/Problem' }
+  /sakdc/api/v3/de/jurisdiction-parameters/{evidence-type}:
+    get:
+      tags: [SAK-DC]
+      operationId: jurisdictionParameters
+      summary: Zuständigkeitsparameter eines Nachweistyps
+      security: [{ BearerToken: [] }]
+      parameters:
+        - $ref: '#/components/parameters/traceparent'
+        - in: path
+          name: evidence-type
+          required: true
+          schema: { type: string, format: uuid }
+          example: 5926157e-dd70-4abc-b6f2-e2e6e31bbc1f
+      responses:
+        '200':
+          description: Parameter und bekannte Werte. Beide Listen sind leer, wenn der Nachweistyp keine örtliche Zuständigkeit kennt.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jurisdiction_parameters: { type: array, items: { type: object } }
+                  jurisdiction_values: { type: array, items: { type: object } }
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '404': { $ref: '#/components/responses/Problem' }
+  /sakdc/api/v3/de/jurisdiction:
+    post:
+      tags: [SAK-DC]
+      operationId: jurisdiction
+      summary: Zuständigen Data Provider ermitteln
+      security: [{ BearerToken: [] }]
+      parameters: [{ $ref: '#/components/parameters/traceparent' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [evidence_type]
+              properties:
+                evidence_type: { type: string, format: uuid }
+                jurisdiction_value:
+                  type: object
+                  additionalProperties: { type: string }
+                  description: Wert je Zuständigkeitsparameter, hier der Regionalschlüssel
+            examples:
+              residenceCertificate:
+                summary: Meldebescheinigung, Gemeinde Auenthal
+                value:
+                  evidence_type: 5926157e-dd70-4abc-b6f2-e2e6e31bbc1f
+                  jurisdiction_value: { dcbf01c3-3664-4453-a237-c227112ba52d: '990010000000' }
+              pensionStatement:
+                summary: Rentenbezugsbescheinigung, ohne örtliche Zuständigkeit
+                value:
+                  evidence_type: 2b6f4c1d-8e3a-4d57-b0c9-6a1e5f7d9c20
+              notConnected:
+                summary: Kindergeldbescheid, kein Register angeschlossen (404)
+                value:
+                  evidence_type: 6e2c9b14-7a5d-4c38-9f01-8d3b2a1c4e53
+      responses:
+        '200':
+          description: Zuständigkeitstoken der Registerdatennavigation
+          content:
+            application/jwt:
+              schema: { type: string }
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '404': { $ref: '#/components/responses/Problem' }
+        '422': { $ref: '#/components/responses/Problem' }
+  /sakdc/api/v3/de/evidence:
+    post:
+      tags: [SAK-DC]
+      operationId: evidence
+      summary: Nachweis vom Data Provider anfordern
+      description: |
+        Kann das Register nicht liefern, kommt HTTP 200 mit `message_type: evidenceErrorResponse` und einem Fehlercode
+        in der XNachweis-Nachricht (`0305`, `0402`, `0403`). HTTP-Fehler stehen nur für Störungen auf dem Weg.
+      security: [{ BearerToken: [] }]
+      parameters:
+        - $ref: '#/components/parameters/traceparent'
+        - in: header
+          name: x-mock-scenario
+          description: Nur im Mock. Löst eine Störung auf dem Weg zum Register aus.
+          schema: { type: string, enum: [registry-unreachable, timeout] }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [jurisdiction_token, evidence_request, legal_basis]
+              properties:
+                jurisdiction_token: { type: string, description: Antwort von `POST /de/jurisdiction` }
+                legal_basis: { type: string }
+                adm_services:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id: { type: string }
+                      name: { type: string }
+                evidence_request:
+                  type: object
+                  required: [mime_type, specification_identifier, message_type, use_idnr, data]
+                  properties:
+                    mime_type: { const: application/xml }
+                    specification_identifier: { const: 'urn:xoev-de:bva:standard:xnachweis_2' }
+                    message_type: { enum: [evidenceRequest, DE.EvidenceRequest.0101, DE.EvidenceRequest.0301] }
+                    use_idnr: { const: false }
+                    data: { type: string, contentEncoding: base64, contentMediaType: application/xml, description: XNachweis-Anfrage }
+            example:
+              jurisdiction_token: Antwort von POST /de/jurisdiction für die Meldebescheinigung
+              legal_basis: WoGG § 23
+              adm_services: [{ id: '99107023000000', name: Wohngeld beantragen }]
+              evidence_request:
+                mime_type: application/xml
+                specification_identifier: urn:xoev-de:bva:standard:xnachweis_2
+                message_type: evidenceRequest
+                use_idnr: false
+                data: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHhuLWRlOmV2aWRlbmNlUmVxdWVzdCBwcm9kdWt0PSJOT09UUy1Nb2NrIiBwcm9kdWt0aGVyc3RlbGxlcj0iTGVpc3R1bmdzTG90c2UiIHByb2R1a3R2ZXJzaW9uPSIwLjEuMCIgc3RhbmRhcmQ9InVybjp4b2V2LWRlOmJ2YTpzdGFuZGFyZDp4bmFjaHdlaXMiIHZlcnNpb249IjIiCiAgICB4bWxuczp4bi1kZT0idXJuOnhvZXYtZGU6YnZhOnN0YW5kYXJkOnhuYWNod2VpczpzY2hlbWE6bmFjaHJpY2h0ZW50eXBlbi5kZV8yIgogICAgeG1sbnM6eG4tYms9InVybjp4b2V2LWRlOmJ2YTpzdGFuZGFyZDp4bmFjaHdlaXM6c2NoZW1hOmJhdWthc3Rlbi5kZV8yIgogICAgeG1sbnM6Ym4tZzJnPSJodHRwOi8veG9ldi5kZS9zY2hlbWF0YS9iYXNpc25hY2hyaWNodC9nMmcvMV8xIgogICAgeG1sbnM6bnMwPSJodHRwOi8veG9ldi5kZS9zY2hlbWF0YS9iYXNpc25hY2hyaWNodC9iZWhvZXJkZS8xXzEiCiAgICB4bWxuczp4bi1lZG09InVybjp4b2V2LWRlOmJ2YTpzdGFuZGFyZDp4bmFjaHdlaXM6c2NoZW1hOmJhdWthc3Rlbi5lZG1fMiIKICAgIHhtbG5zOnhuLWJkdD0idXJuOnhvZXYtZGU6YnZhOnN0YW5kYXJkOnhuYWNod2VpczpzY2hlbWE6YmFzaXNkYXRlbnR5cGVuXzIiPgogIDx4bi1iazpuYWNocmljaHRlbmtvcGY+CiAgICA8eG4tYms6aWRlbnRpZmlrYXRpb24ubmFjaHJpY2h0PgogICAgICA8eG4tYms6bmFjaHJpY2h0ZW5VVUlEPjYwZTExNWI5LWEyOWQtNDk1Yi1hY2Y3LWQ0OTBmOTM4Y2YwZjwveG4tYms6bmFjaHJpY2h0ZW5VVUlEPgogICAgICA8eG4tYms6bmFjaHJpY2h0ZW50eXA+PGNvZGU+ZXZpZGVuY2VSZXF1ZXN0PC9jb2RlPjwveG4tYms6bmFjaHJpY2h0ZW50eXA+CiAgICAgIDx4bi1iazplcnN0ZWxsdW5nc3plaXRwdW5rdD4yMDI2LTExLTE1VDEyOjAwOjAwWjwveG4tYms6ZXJzdGVsbHVuZ3N6ZWl0cHVua3Q+CiAgICA8L3huLWJrOmlkZW50aWZpa2F0aW9uLm5hY2hyaWNodD4KICAgIDxibi1nMmc6bGVzZXI+PG5zMDp2ZXJ6ZWljaG5pc2RpZW5zdCBsaXN0VmVyc2lvbklEPSJ1cm46eG9ldi1kZTprb3NpdDpjb2RlbGlzdGU6dmVyemVpY2huaXNkaWVuc3RfNCI+PGNvZGU+SUFNLUZCPC9jb2RlPjwvbnMwOnZlcnplaWNobmlzZGllbnN0PjxuczA6a2VubnVuZz43YzFlMGE1Mi0zZjBiLTRmNmUtOWE1NC0xYjJmNmQwYzhlMTE8L25zMDprZW5udW5nPjxuczA6bmFtZT5NZWxkZWJlaMO2cmRlIEF1ZW50aGFsPC9uczA6bmFtZT48L2JuLWcyZzpsZXNlcj4KICAgIDxibi1nMmc6YXV0b3I+PG5zMDp2ZXJ6ZWljaG5pc2RpZW5zdCBsaXN0VmVyc2lvbklEPSJ1cm46eG9ldi1kZTprb3NpdDpjb2RlbGlzdGU6dmVyemVpY2huaXNkaWVuc3RfNCI+PGNvZGU+SUFNLUZCPC9jb2RlPjwvbnMwOnZlcnplaWNobmlzZGllbnN0PjxuczA6a2VubnVuZz41NTBlODQwMC1lMjliLTQxZDQtYTcxNi00NDY2NTU0NDAwMDA8L25zMDprZW5udW5nPjxuczA6bmFtZT5Xb2huZ2VsZHN0ZWxsZSBBdWVudGhhbDwvbnMwOm5hbWU+PC9ibi1nMmc6YXV0b3I+CiAgPC94bi1iazpuYWNocmljaHRlbmtvcGY+CiAgPHhuLWJrOlNwZWNpZmljYXRpb25JZGVudGlmaWVyPnVybjp4b2V2LWRlOmJ2YTpzdGFuZGFyZDp4bmFjaHdlaXNfMjwveG4tYms6U3BlY2lmaWNhdGlvbklkZW50aWZpZXI+CiAgPHhuLWJrOklzc3VlRGF0ZVRpbWU+MjAyNi0xMS0xNVQxMjowMDowMFo8L3huLWJrOklzc3VlRGF0ZVRpbWU+CiAgPHhuLWJrOmxhbmcgbGlzdFZlcnNpb25JRD0idXJuOnhvZXYtZGU6eG5hY2h3ZWlzOmNvZGVsaXN0ZTpzcHJhY2hlbi1pc28tNjM5LTFfMjAyMy0xMiI+PGNvZGU+ZGU8L2NvZGU+PC94bi1iazpsYW5nPgogIDx4bi1iazpEYXRhUHJvdmlkZXI+PHhuLWJrOklkZW50aWZpZXIgc2NoZW1lSUQ9InVybjpvYXNpczpuYW1lczp0YzplYmNvcmU6cGFydHlpZC10eXBlOnVucmVnaXN0ZXJlZDpERSI+N2MxZTBhNTItM2YwYi00ZjZlLTlhNTQtMWIyZjZkMGM4ZTExPC94bi1iazpJZGVudGlmaWVyPjx4bi1iazpOYW1lPjx4bi1iZHQ6dmFsdWU+TWVsZGViZWjDtnJkZSBBdWVudGhhbDwveG4tYmR0OnZhbHVlPjx4bi1iZHQ6bGFuZyBsaXN0VmVyc2lvbklEPSJ1cm46eG9ldi1kZTp4bmFjaHdlaXM6Y29kZWxpc3RlOnNwcmFjaGVuLWlzby02MzktMV8yMDIzLTEyIj48Y29kZT5kZTwvY29kZT48L3huLWJkdDpsYW5nPjwveG4tYms6TmFtZT48L3huLWJrOkRhdGFQcm92aWRlcj4KICA8eG4tYms6RGF0YUNvbnN1bWVyPjx4bi1iazpJZGVudGlmaWVyIHNjaGVtZUlEPSJ1cm46b2FzaXM6bmFtZXM6dGM6ZWJjb3JlOnBhcnR5aWQtdHlwZTp1bnJlZ2lzdGVyZWQ6REUiPjU1MGU4NDAwLWUyOWItNDFkNC1hNzE2LTQ0NjY1NTQ0MDAwMDwveG4tYms6SWRlbnRpZmllcj48eG4tYms6TmFtZT48eG4tYmR0OnZhbHVlPldvaG5nZWxkc3RlbGxlIEF1ZW50aGFsPC94bi1iZHQ6dmFsdWU+PHhuLWJkdDpsYW5nIGxpc3RWZXJzaW9uSUQ9InVybjp4b2V2LWRlOnhuYWNod2Vpczpjb2RlbGlzdGU6c3ByYWNoZW4taXNvLTYzOS0xXzIwMjMtMTIiPjxjb2RlPmRlPC9jb2RlPjwveG4tYmR0Omxhbmc+PC94bi1iazpOYW1lPjwveG4tYms6RGF0YUNvbnN1bWVyPgogIDx4bi1kZTpWZXJhcmJlaXR1bmdzendlY2s+QmVzY2hlaWRlcnN0ZWxsdW5nPC94bi1kZTpWZXJhcmJlaXR1bmdzendlY2s+CiAgPHhuLWRlOlJlY2h0c2dydW5kbGFnZT5Xb0dHIMKnIDIzPC94bi1kZTpSZWNodHNncnVuZGxhZ2U+CiAgPHhuLWRlOlF1ZXJ5PgogICAgPHhuLWVkbTpRdWVyeURlZmluaXRpb24+RG9jdW1lbnRRdWVyeTwveG4tZWRtOlF1ZXJ5RGVmaW5pdGlvbj4KICAgIDx4bi1lZG06TGVnYWxPck5hdHVyYWxQZXJzb24+CiAgICAgIDx4bi1lZG06TmF0dXJhbFBlcnNvbj4KICAgICAgICAgIDx4bi1lZG06RGF0ZU9mQmlydGg+MTk5NC0wMy0xNDwveG4tZWRtOkRhdGVPZkJpcnRoPgogICAgICAgICAgPHhuLWVkbTpGYW1pbHlOYW1lPkZlbGRtYW5uPC94bi1lZG06RmFtaWx5TmFtZT4KICAgICAgICAgIDx4bi1lZG06R2l2ZW5OYW1lPk5vcmE8L3huLWVkbTpHaXZlbk5hbWU+CiAgICAgICAgICA8eG4tZWRtOkxldmVsT2ZBc3N1cmFuY2UgbGlzdFZlcnNpb25JRD0idXJuOnhvZXYtZGU6eG5hY2h3ZWlzOmNvZGVsaXN0ZTpsb2FfMS4wLjAiPjxjb2RlPkhpZ2g8L2NvZGU+PC94bi1lZG06TGV2ZWxPZkFzc3VyYW5jZT4KICAgICAgPC94bi1lZG06TmF0dXJhbFBlcnNvbj4KICAgIDwveG4tZWRtOkxlZ2FsT3JOYXR1cmFsUGVyc29uPgogICAgPHhuLWVkbTpSZXF1ZXN0ZWRFdmlkZW5jZVR5cGU+CiAgICAgIDx4bi1lZG06VGl0bGU+PHhuLWJkdDp2YWx1ZT5NZWxkZWJlc2NoZWluaWd1bmc8L3huLWJkdDp2YWx1ZT48eG4tYmR0OmxhbmcgbGlzdFZlcnNpb25JRD0idXJuOnhvZXYtZGU6eG5hY2h3ZWlzOmNvZGVsaXN0ZTpzcHJhY2hlbi1pc28tNjM5LTFfMjAyMy0xMiI+PGNvZGU+ZGU8L2NvZGU+PC94bi1iZHQ6bGFuZz48L3huLWVkbTpUaXRsZT4KICAgICAgPHhuLWVkbTpJZGVudGlmaWVyPjU5MjYxNTdlLWRkNzAtNGFiYy1iNmYyLWUyZTZlMzFiYmMxZjwveG4tZWRtOklkZW50aWZpZXI+CiAgICAgIDx4bi1lZG06RGlzdHJpYnV0ZWRBcz48eG4tZWRtOkZvcm1hdCBsaXN0VmVyc2lvbklEPSJ1cm46eG9ldi1kZTp4bmFjaHdlaXM6Y29kZWxpc3RlOm9vdHNtZWRpYXR5cGVzXzEuMC4wIj48Y29kZT5hcHBsaWNhdGlvbi94bWw8L2NvZGU+PC94bi1lZG06Rm9ybWF0PjwveG4tZWRtOkRpc3RyaWJ1dGVkQXM+CiAgICA8L3huLWVkbTpSZXF1ZXN0ZWRFdmlkZW5jZVR5cGU+CiAgPC94bi1kZTpRdWVyeT4KPC94bi1kZTpldmlkZW5jZVJlcXVlc3Q+
+      responses:
+        '200':
+          description: XNachweis-Antwort mit dem Nachweis, oder XNachweis-Fehlerantwort
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mime_type: { const: application/xml }
+                  specification_identifier: { type: string }
+                  message_type: { enum: [evidenceResponse, evidenceErrorResponse] }
+                  data: { type: string, contentEncoding: base64, contentMediaType: application/xml }
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '403': { $ref: '#/components/responses/Problem' }
+        '502': { $ref: '#/components/responses/Problem' }
+        '504': { $ref: '#/components/responses/Problem' }
+  /mock/persons:
+    get:
+      tags: [Mock]
+      operationId: listPersons
+      summary: Personen, die die Register kennen
+      description: Liest `data/persons/*.json`. Eine neue Datei dort ist eine neue Person.
+      responses:
+        '200':
+          description: Personen mit den Nachweistypen, zu denen ein Register etwas führt
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    givenName: { type: string }
+                    familyName: { type: string }
+                    dateOfBirth: { type: string, format: date }
+                    ambiguous: { type: boolean, description: Das Register antwortet mit Fehler `0402` }
+                    evidence: { type: array, items: { type: string }, description: Schlüssel der Nachweistypen }
+  /health:
+    get:
+      tags: [Mock]
+      operationId: health
+      summary: Lebenszeichen
+      responses:
+        '200':
+          description: Der Mock läuft
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { const: ok }
+components:
+  securitySchemes:
+    BearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Das `access_token` aus `POST /token`
+  parameters:
+    traceparent:
+      in: header
+      name: traceparent
+      required: true
+      description: W3C Trace Context, Pflicht bei jedem Aufruf der SAK-API
+      schema: { type: string }
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+  responses:
+    Problem:
+      description: NOOTS-Fehler nach RFC 9457
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+          example:
+            type: urn:noots:no_data_provider.found
+            title: Kein zuständiger Data Provider gefunden
+            status: 404
+            detail: Zu den Eingabedaten konnte in der RDN kein zuständiger Data Provider ermittelt werden.
+            instance: /api/v3/de/jurisdiction
+            timestamp: '2026-11-15T12:00:00.000Z'
+            trace_id: 0af7651916cd43dd8448eb211c80319c
+            error_source: RDN
+  schemas:
+    Problem:
+      type: object
+      properties:
+        type: { type: string, description: '`urn:noots:…` aus dem Fehlerkatalog des BVA' }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string }
+        timestamp: { type: string, format: date-time }
+        trace_id: { type: string }
+        error_source: { enum: [SAK-DC, SAK-DP, IAM, IDM-P, RDN, VS, DP] }
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+        fields: { type: array, items: { type: string } }
+    EvidenceType:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        key: { type: string, example: residenceCertificate }
+        name: { type: string, example: Meldebescheinigung }
+        registry: { type: string }
+        formats: { type: array, items: { type: string } }
+        levelOfAssurance: { enum: [Low, Substantial, High] }
+        localJurisdiction: { type: boolean }
+        connected: { type: boolean }
+    EvidenceRequest:
+      type: object
+      required: [dataConsumer, subject, legalBasis, consent, evidence]
+      properties:
+        dataConsumer:
+          type: object
+          properties:
+            name: { type: string }
+            componentId: { type: string, format: uuid }
+        administrativeService:
+          type: object
+          required: [id, name]
+          properties:
+            id: { type: string, description: LeiKa-Schlüssel }
+            name: { type: string }
+        legalBasis: { type: string, minLength: 2 }
+        consent: { type: boolean, description: Zustimmung der antragstellenden Person zum Abruf }
+        levelOfAssurance: { enum: [Low, Substantial, High], default: High }
+        subject:
+          type: object
+          required: [givenName, familyName, dateOfBirth]
+          properties:
+            givenName: { type: string }
+            familyName: { type: string }
+            dateOfBirth: { type: string, format: date }
+        jurisdiction:
+          type: object
+          required: [regionalKey]
+          properties:
+            regionalKey: { type: string, example: '990010000000' }
+        evidence:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [evidenceType]
+            properties:
+              evidenceType: { type: string, description: ID oder Schlüssel des Nachweistyps }
+        scenario: { enum: [registry-unreachable, timeout], description: Nur im Mock }
+    EvidenceResult:
+      type: object
+      properties:
+        requestId: { type: string, format: uuid }
+        timestamp: { type: string, format: date-time }
+        subject: { type: object }
+        takeover: { const: pending, description: Vorschau und Übernahme bleiben beim Online-Dienst }
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              evidenceType: { type: object }
+              registry: { type: string }
+              status:
+                enum:
+                  [
+                    delivered,
+                    not_found,
+                    ambiguous,
+                    level_of_assurance_too_low,
+                    registry_not_connected,
+                    registry_unreachable,
+                    rejected,
+                    unknown_evidence_type,
+                    error,
+                  ]
+              evidence:
+                type: object
+                properties:
+                  id: { type: string }
+                  issuingAuthority: { type: object }
+                  issuedOn: { type: string, format: date }
+                  format: { type: string }
+                  content: { type: string, description: Der Nachweis im genannten Format }
+              xnachweis: { type: string, contentEncoding: base64, description: Die vollständige XNachweis-Antwort }
+              error: { type: object }
+              steps: { type: array, items: { type: object } }

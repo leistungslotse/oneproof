@@ -1,0 +1,16 @@
+{
+  "givenName": "Miriam",
+  "familyName": "Berger",
+  "dateOfBirth": "1990-06-21",
+  "evidence": {
+    "residenceCertificate": {
+      "address": {
+        "street": "Marktgasse 4",
+        "postalCode": "12503",
+        "city": "Auenthal"
+      },
+      "movedIn": "2019-09-15",
+      "household": ["Miriam Berger", "Daniel Berger", "Lina Berger"]
+    }
+  }
+}

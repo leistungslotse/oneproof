@@ -1,0 +1,10 @@
+{
+  "profile": [
+    {
+      "id": "wohngeld",
+      "name": "Wohngeld",
+      "aktuell": "2026-11-15",
+      "versionen": ["2026-11-07", "2026-11-15"]
+    }
+  ]
+}

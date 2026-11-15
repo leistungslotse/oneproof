@@ -1,0 +1,30 @@
+{
+  "givenName": "Nora",
+  "familyName": "Feldmann",
+  "dateOfBirth": "1994-03-14",
+  "evidence": {
+    "birthCertificate": {
+      "registerNumber": "G 214/1994",
+      "placeOfBirth": "Auenthal"
+    },
+    "residenceCertificate": {
+      "address": {
+        "street": "Lindenweg 12",
+        "postalCode": "12503",
+        "city": "Auenthal"
+      },
+      "movedIn": "2023-05-01",
+      "household": ["Nora Feldmann", "Mila Feldmann"]
+    },
+    "incomeTaxAssessment": {
+      "assessmentYear": 2025,
+      "noticeDate": "2026-06-18",
+      "grossWagesCents": 4104000,
+      "totalIncomeCents": 3981000,
+      "taxableIncomeCents": 3602400
+    },
+    "taxIdentificationNumber": {
+      "identificationNumber": "04 452 397 687"
+    }
+  }
+}

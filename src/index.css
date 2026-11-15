@@ -1,0 +1,680 @@
+/*
+ * Load order matters: Tailwind first, KERN second. KERN ships its own reset and
+ * component rules and must win wherever the two overlap. Tailwind is used for
+ * layout only (flex, grid, gap, spacing) — never for colour or typography, which
+ * belong to the KERN tokens.
+ */
+@import 'tailwindcss';
+
+@import '@kern-ux/native/dist/fonts/fira-sans.css';
+@import '@kern-ux/native/dist/kern.min.css';
+
+/*
+ * KERN follows `prefers-color-scheme` and would flip to its dark palette on a
+ * device set to dark. A public administration service is shown in one fixed
+ * appearance, so `data-kern-theme="light"` on the document element pins the
+ * light token set; `color-scheme` keeps native controls and scrollbars in step.
+ */
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--kern-color-layout-background-hued);
+}
+
+/* The page column follows the KERN reading measure. */
+.op-page {
+  max-width: var(--kern-768);
+  margin-inline: auto;
+  padding-inline: var(--kern-metric-space-default);
+}
+
+/*
+ * A requirement whose status just changed gets a brief highlight so the change is
+ * noticeable during a live walkthrough. Respects reduced-motion preferences.
+ */
+@keyframes op-settle {
+  from {
+    background-color: var(--kern-color-layout-background-hued);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+.op-settled {
+  animation: op-settle 1.4s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .op-settled {
+    animation: none;
+  }
+}
+
+/* Native file inputs are hidden; the KERN button in front of them is the control. */
+.op-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * KERN stretches buttons inside a card footer to share the row. In this dummy the
+ * footer holds a single upload control, which should keep its natural width.
+ */
+.op-actions .kern-btn {
+  flex: 0 0 auto;
+}
+
+/*
+ * Compact two-column key/value list. `display: contents` on the item lets the
+ * KERN term and value participate in the grid directly, so labels align across
+ * all rows without giving up the KERN typography classes.
+ */
+.op-meta {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: var(--kern-metric-space-large);
+  row-gap: var(--kern-metric-space-2x-small);
+  width: 100%;
+}
+
+.op-meta .kern-description-list-item {
+  display: contents;
+}
+
+/*
+ * KERN sets `word-break: break-word` on a description-list item. With
+ * `display: contents` that value is inherited by the term, and a `max-content`
+ * grid column then collapses it to one character per line.
+ */
+.op-meta .kern-description-list-item__key {
+  word-break: normal;
+  white-space: nowrap;
+}
+
+.op-meta .kern-description-list-item__value {
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+/*
+ * Service bar. KERN 2.8 documents a header component but ships no styles for
+ * it, so this is composed from KERN tokens rather than invented values.
+ */
+.op-servicebar {
+  background: var(--kern-color-layout-background-default);
+  border-bottom: var(--kern-metric-border-width-light) solid
+    var(--kern-color-decorative-border-default);
+}
+
+.op-servicebar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kern-metric-space-default);
+  padding-block: var(--kern-metric-space-default);
+}
+
+.op-servicebar__links {
+  display: flex;
+  gap: var(--kern-metric-space-large);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Programmatic focus on a heading tells a screen reader that the view has changed. No ring needed. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+/*
+ * The files chosen for the check: one row each, with the size and a way to take the file out.
+ */
+.op-dateiliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kern-metric-space-x-small);
+  padding: 0;
+  list-style: none;
+}
+
+.op-dateiliste li {
+  display: flex;
+  align-items: center;
+  gap: var(--kern-metric-space-small);
+  padding: var(--kern-metric-space-x-small) var(--kern-metric-space-small);
+  background: var(--kern-color-layout-background-default);
+  border: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+  border-radius: var(--kern-metric-border-radius-default);
+}
+
+.op-dateiliste__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The documents that prove a statement, one under the other inside a description-list value. */
+.op-belege {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kern-metric-space-x-small);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The steps of a running check. */
+.op-schritte {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kern-metric-space-small);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.op-schritt {
+  display: flex;
+  align-items: center;
+  gap: var(--kern-metric-space-small);
+}
+
+@keyframes op-dreht {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.op-schritt__dreht {
+  animation: op-dreht 1.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .op-schritt__dreht {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* The department's page: manage the profiles of the evidence check                            */
+/* ------------------------------------------------------------------------------------------ */
+
+/* A list and an editor side by side need more room than the reading measure. */
+.op-page--breit {
+  max-width: var(--kern-1248);
+}
+
+/* Profile and draft: what it is, and what can be done with it. */
+.op-kopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--kern-metric-space-default);
+}
+
+.op-kopf__aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kern-metric-space-small);
+}
+
+/* The statements on the left, what is set for the chosen one on the right. One column on a narrow screen. */
+.op-verwaltung {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--kern-metric-space-2x-large);
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .op-verwaltung {
+    grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr);
+  }
+
+  /* The list stays in view while the editor is long. */
+  .op-verwaltung > nav {
+    position: sticky;
+    top: var(--kern-metric-space-default);
+    max-height: calc(100vh - 2 * var(--kern-metric-space-default));
+    overflow-y: auto;
+  }
+}
+
+.op-angaben {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.op-angabe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kern-metric-space-2x-small);
+  padding: var(--kern-metric-space-small) var(--kern-metric-space-default);
+  border-left: var(--kern-metric-border-width-bold) solid transparent;
+  color: inherit;
+  text-decoration: none;
+}
+
+.op-angabe:hover {
+  background: var(--kern-color-layout-background-default);
+}
+
+.op-angabe[aria-current='true'] {
+  background: var(--kern-color-layout-background-default);
+  border-left-color: var(--kern-color-action-default);
+}
+
+.op-angabe:focus-visible {
+  outline: var(--kern-metric-border-width-bold) solid var(--kern-color-action-focus-default);
+  outline-offset: 0;
+}
+
+/* Search and view above the kinds of document; also the two fields of the period. */
+.op-filter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--kern-metric-space-default);
+  align-items: end;
+}
+
+/* One kind of document per row: its name on the left, the choice on the right. */
+.op-zeilen {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+}
+
+.op-zeile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--kern-metric-space-small) var(--kern-metric-space-default);
+  padding: var(--kern-metric-space-small);
+  border-bottom: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+}
+
+/* A row that differs from the released version. */
+.op-zeile--geaendert {
+  background: var(--kern-color-feedback-info-background);
+}
+
+.op-zeile__text {
+  flex: 1 1 16rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.op-zeile__wahl {
+  flex: 0 0 15rem;
+  max-width: 100%;
+}
+
+/* A date fits in a short field. */
+.op-feld-schmal {
+  max-width: var(--kern-192);
+}
+
+/* The changes of a draft, statement by statement. */
+.op-aenderungen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kern-metric-space-small);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * A dialog. The reset of the page takes the automatic margin the browser gives a modal dialog, which
+ * leaves it in the top left corner, so it is centred here. KERN turns it into a sheet at the bottom
+ * on a narrow screen and leaves the width to the content on a wide one, which then jumps around.
+ * The header and the buttons stay where they are; what is in between scrolls.
+ */
+.op-dialog {
+  max-height: calc(100dvh - 2 * var(--kern-metric-space-default));
+}
+
+.op-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.op-dialog .kern-dialog__body {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+@media (min-width: 769px) {
+  .op-dialog {
+    margin: auto;
+    width: min(48rem, calc(100% - 2 * var(--kern-metric-space-default)));
+  }
+}
+
+@media (max-width: 768px) {
+  .op-dialog {
+    margin: auto 0 0;
+  }
+}
+
+/*
+ * The names of kinds of document run like "Nebenkosten-/Betriebskostenabrechnung". After a hyphen and a
+ * slash a line cannot break, so on a phone such a name is wider than the screen. Where the catalogue's
+ * names are listed (the documents that prove a statement, and which are accepted) they may break anywhere
+ * if nothing else is left.
+ */
+.kern-details__body li,
+.op-belege li {
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------------------------------ */
+/* Conditions per application type (profile format 2)                                          */
+/* ------------------------------------------------------------------------------------------ */
+
+/* A step of making an application type from its schema. A step that is not reachable yet is greyed. */
+.op-import {
+  padding: var(--kern-metric-space-default) var(--kern-metric-space-large);
+  background: var(--kern-color-layout-background-default);
+  border: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+  border-radius: var(--kern-metric-border-radius-default);
+}
+
+.op-import[data-gesperrt='true'] {
+  opacity: 0.55;
+}
+
+.op-import__kopf {
+  display: flex;
+  align-items: center;
+  gap: var(--kern-metric-space-small);
+}
+
+/* The file chosen, with what can be done with it. */
+.op-datei {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kern-metric-space-small) var(--kern-metric-space-default);
+  padding: var(--kern-metric-space-default) var(--kern-metric-space-large);
+  border: var(--kern-metric-border-width-default) dashed var(--kern-color-decorative-border-default);
+  border-radius: var(--kern-metric-border-radius-default);
+}
+
+.op-datei__name {
+  flex: 1 1 14rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* What reading the schema found, as figures. */
+.op-kacheln {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--kern-metric-space-small);
+}
+
+.op-kachel {
+  display: flex;
+  flex-direction: column;
+  padding: var(--kern-metric-space-small) var(--kern-metric-space-default);
+  border: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+  border-radius: var(--kern-metric-border-radius-default);
+}
+
+.op-kachel b {
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+/* An id of the schema (G…, F…, a code), short and in a fixed font. */
+.op-code {
+  padding: 0 0.3rem;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  white-space: nowrap;
+  background: var(--kern-color-layout-background-default);
+  border-radius: var(--kern-metric-border-radius-small);
+}
+
+/* How far the conditions are decided, and the filter by state. */
+.op-fortschritt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--kern-metric-space-default) var(--kern-metric-space-x-large);
+  padding: var(--kern-metric-space-default) var(--kern-metric-space-large);
+  background: var(--kern-color-layout-background-default);
+  border: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+  border-radius: var(--kern-metric-border-radius-default);
+}
+
+@media (min-width: 48rem) {
+  .op-fortschritt {
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    align-items: end;
+  }
+}
+
+.op-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--kern-metric-space-x-small);
+}
+
+.op-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--kern-metric-space-x-small);
+  min-height: 2.25rem;
+  padding: 0 var(--kern-metric-space-default);
+  font: inherit;
+  color: var(--kern-color-layout-text-default);
+  background: #fff;
+  border: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.op-chip:hover {
+  border-color: var(--kern-color-action-default);
+}
+
+.op-chip[aria-pressed='true'] {
+  color: #fff;
+  background: var(--kern-color-action-default);
+  border-color: var(--kern-color-action-default);
+}
+
+.op-chip:focus-visible {
+  outline: var(--kern-metric-border-width-bold) solid var(--kern-color-action-focus-default);
+  outline-offset: 2px;
+}
+
+/* "Applies when" and "tell apart by": a card with a coloured edge; green where it was set by hand. */
+.op-karte {
+  padding: var(--kern-metric-space-default) var(--kern-metric-space-large);
+  background: var(--kern-color-layout-background-default);
+  border: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+  border-left: 4px solid #0b4fb3;
+  border-radius: var(--kern-metric-border-radius-default);
+}
+
+.op-karte--hand {
+  border-left-color: #136c2e;
+}
+
+/* The condition as a sentence: „Art der Einnahmen = Lohn / Gehalt“. */
+.op-satz {
+  padding: var(--kern-metric-space-small) var(--kern-metric-space-default);
+  overflow-wrap: anywhere;
+  background: #eef4ff;
+  border-radius: var(--kern-metric-border-radius-default);
+}
+
+/* A rule of the schema in its own words. */
+.op-regelsatz {
+  padding: var(--kern-metric-space-small) var(--kern-metric-space-default);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  background: #f4f5fb;
+  border-radius: var(--kern-metric-border-radius-small);
+}
+
+/* Where the condition of a place comes from: a numbered step of the ladder. */
+.op-herkunft {
+  --farbe: #3b4166;
+  --grund: #ececf4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0.65rem 0.15rem 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--farbe);
+  background: var(--grund);
+  border-radius: 2rem;
+}
+
+.op-herkunft--regel {
+  --farbe: #0b4fb3;
+  --grund: #e4eeff;
+}
+
+.op-herkunft--fremd {
+  --farbe: #8a4b00;
+  --grund: #fff0d1;
+}
+
+.op-herkunft--abschnitt {
+  --farbe: #0a6a63;
+  --grund: #dcf4f0;
+}
+
+.op-herkunft--hand {
+  --farbe: #136c2e;
+  --grund: #e3f4e8;
+  padding-left: 0.65rem;
+}
+
+.op-herkunft__nr {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--farbe);
+  border-radius: 50%;
+}
+
+/* The conditions of a place, each a card with an edge in the colour of its state. */
+.op-bedingungen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kern-metric-space-small);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.op-bedingung {
+  background: var(--kern-color-layout-background-default);
+  border: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+  border-left-width: 4px;
+  border-radius: var(--kern-metric-border-radius-default);
+}
+
+.op-bedingung[data-status='festgelegt'] {
+  border-left-color: #136c2e;
+}
+
+.op-bedingung[data-status='vorschlag'] {
+  border-left-color: #0b4fb3;
+}
+
+.op-bedingung[data-status='offen'] {
+  border-left-color: #b26a00;
+}
+
+.op-bedingung[data-offen='true'] {
+  box-shadow: 0 0 0 2px var(--kern-color-action-default);
+}
+
+.op-bedingung__kopf {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--kern-metric-space-x-small) var(--kern-metric-space-default);
+  align-items: start;
+  padding: var(--kern-metric-space-small) var(--kern-metric-space-default);
+}
+
+.op-bedingung__titel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kern-metric-space-small);
+  overflow-wrap: anywhere;
+}
+
+.op-bedingung__zeile {
+  grid-column: 1 / -1;
+}
+
+/* What is set: opened below the card, on a lighter ground. */
+.op-bedingung__editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kern-metric-space-2x-large);
+  padding: var(--kern-metric-space-large) var(--kern-metric-space-default) var(--kern-metric-space-x-large);
+  background: #fff;
+  border-top: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+  border-radius: 0 0 var(--kern-metric-border-radius-default) 0;
+}
+
+.op-bedingung__aktionen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--kern-metric-space-small) var(--kern-metric-space-default);
+  padding-top: var(--kern-metric-space-default);
+  border-top: var(--kern-metric-border-width-light) solid var(--kern-color-decorative-border-default);
+}
+
+/* The period a condition asks for, as a tag next to its documents. */
+.op-zeitraum {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0 0.5rem;
+  font-size: 0.85rem;
+  background: #fff6d1;
+  border: var(--kern-metric-border-width-light) solid #e8cf73;
+  border-radius: var(--kern-metric-border-radius-small);
+}

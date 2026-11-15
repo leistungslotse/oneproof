@@ -1,0 +1,19 @@
+{
+  "parameter": {
+    "id": "dcbf01c3-3664-4453-a237-c227112ba52d",
+    "name": {
+      "de": "Amtlicher Regionalschlüssel",
+      "en": "Official regional key"
+    },
+    "description": {
+      "de": "Zwölfstelliger Schlüssel der Gemeinde, deren Register den Nachweis führt.",
+      "en": "Twelve-digit key of the municipality whose register holds the evidence."
+    }
+  },
+  "values": [
+    {
+      "value": "990010000000",
+      "name": "Auenthal"
+    }
+  ]
+}
